@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学四法闯关乐园</title>
+<style>
+:root{
+  --bg:#f3f6fb; --card:#ffffff; --line:#e3e9f2; --ink:#22314d; --mut:#7b89a3;
+  --c1:#2f6fd0; --c2:#0f8a6d; --c3:#d85a30; --c4:#ba7517; --c5:#7f77dd;
+  --ok:#1d9e75; --no:#e24b4a; --gold:#f2a90a; --soft:#eef3fb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:16px}
+#app{max-width:900px;margin:0 auto;padding:12px 14px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 2px 12px}
+.logo{font-size:20px;font-weight:700;letter-spacing:.5px}
+.logo small{font-size:12px;color:var(--mut);font-weight:400;margin-left:6px}
+.hd-right{display:flex;align-items:center;gap:8px}
+.player-chips{display:flex;gap:6px}
+.pchip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 13px;font-size:14px;cursor:pointer;color:var(--mut)}
+.pchip.on{background:var(--c1);border-color:var(--c1);color:#fff;font-weight:600}
+.icon-btn{border:1.5px solid var(--line);background:var(--card);border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer;line-height:1}
+nav{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.nav-tab{border:0;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:9px 16px;font-size:15px;cursor:pointer;color:var(--mut);flex:1;min-width:86px;white-space:nowrap}
+.nav-tab.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+section.view{display:none}
+section.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.muted{color:var(--mut)}
+.h2{font-size:17px;font-weight:700;margin:0 0 4px}
+.sub{font-size:13px;color:var(--mut);margin:0 0 14px}
+.grid-hall{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.gcard{position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px 12px;cursor:pointer;text-align:center;transition:transform .12s}
+.gcard:hover{transform:translateY(-3px)}
+.gcard.locked{opacity:.55;cursor:not-allowed}
+.gcard .ico{font-size:38px;line-height:1.2}
+.gcard .nm{font-size:16px;font-weight:700;margin:6px 0 2px}
+.gcard .ds{font-size:12px;color:var(--mut)}
+.gcard .best{margin-top:8px;font-size:12px;color:#a87800;letter-spacing:1px}
+.gcard .lock-tag{position:absolute;top:8px;right:8px;font-size:11px;background:#eef1f6;color:var(--mut);border-radius:999px;padding:2px 8px}
+.gcard .lvl-row{display:flex;justify-content:center;gap:4px;margin-top:8px}
+.lvl-dot{width:22px;height:22px;border-radius:7px;background:#eef1f6;color:#aab4c6;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.lvl-dot.ok{background:#e8f6ef;color:var(--ok)}
+.lvl-dot.full{background:#fdf0d5;color:#a87800}
+.lvl-dot.free{cursor:pointer;transition:transform .1s,box-shadow .1s}
+.lvl-dot.free:hover{transform:scale(1.15);box-shadow:0 0 0 2px color-mix(in srgb,var(--c1) 30%,transparent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;padding:12px 22px;font-size:16px;font-weight:600;cursor:pointer;background:var(--c1);color:#fff;transition:transform .1s}
+.btn:active{transform:scale(.96)}
+.btn.big{font-size:18px;padding:14px 30px;width:100%}
+.btn.ghost{background:var(--card);border:1.5px solid var(--line);color:var(--ink)}
+.btn.orange{background:var(--c3)}
+.btn.green{background:var(--c2)}
+.btn.gold{background:var(--gold);color:#5c3d00}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.center{justify-content:center}
+.grow{flex:1}
+.qbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;margin:10px 0}
+.qtext{font-size:42px;font-weight:700;letter-spacing:2px;margin:6px 0;font-variant-numeric:tabular-nums}
+.qstep{font-size:15px;color:var(--mut);margin-bottom:6px}
+.tenrow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dot{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:15px}
+.dot.b{background:var(--c1)} .dot.o{background:var(--c3)} .dot.g{background:var(--ok)} .dot.y{background:var(--gold)}
+.dot.ghost-dot{background:#edf0f6;color:#b6bfd0;border:2px dashed #cdd6e5}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:280px;margin:10px auto}
+.pad button{height:52px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;font-size:22px;font-weight:700;cursor:pointer}
+.pad button:active{background:var(--soft)}
+.pad button.pd-ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.pad button.pd-del{background:#fdeceb;color:var(--no);border-color:#f7d3d1}
+.ansline{font-size:26px;font-weight:700;margin:6px 0;min-height:40px;font-variant-numeric:tabular-nums}
+.opt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:420px;margin:14px auto}
+.opt{height:64px;border:2px solid var(--line);background:var(--card);border-radius:14px;font-size:26px;font-weight:700;cursor:pointer;color:var(--ink)}
+.opt:active{transform:scale(.95)}
+.opt.good{background:#e8f6ef;border-color:var(--ok);color:var(--ok)}
+.opt.bad{background:#fdeceb;border-color:var(--no);color:var(--no)}
+.progress{height:8px;background:#e8edf5;border-radius:99px;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--c1);border-radius:99px;transition:width .3s}
+.timer{font-size:26px;font-weight:800;color:var(--c3);font-variant-numeric:tabular-nums}
+.cal-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:10px 0;font-size:34px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:3px}
+.cal-box .ten{color:#b6bfd0}
+.cal-box .borrow{color:var(--no);font-size:22px;position:relative}
+.vert{display:flex;flex-direction:column;align-items:center;gap:4px}
+.numrow{display:flex;gap:10px;justify-content:center;align-items:center}
+.fillin{display:inline-flex;align-items:center;gap:6px;font-size:26px;font-weight:700}
+.fillin input{width:70px;height:52px;border:2px solid var(--c1);border-radius:12px;text-align:center;font-size:26px;font-weight:700;color:var(--ink)}
+.fillin input.ok{background:#e8f6ef;border-color:var(--ok);color:var(--ok)}
+.fillin input.bad{background:#fdeceb;border-color:var(--no);color:var(--no)}
+.hint-bar{background:#fdf6e3;border:1px solid #f2dd9b;border-radius:12px;padding:10px 14px;font-size:14px;color:#7a5b12;margin:8px 0}
+.m-class-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.m-tab{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-size:14px;cursor:pointer;color:var(--mut)}
+.m-tab.on{background:var(--c1);color:#fff;border-color:var(--c1);font-weight:600}
+.step-list{margin:10px 0;padding:0;list-style:none}
+.step-list li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.step-list li .sn{flex:0 0 26px;height:26px;border-radius:8px;background:var(--soft);color:var(--c1);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
+.step-list li.hl{background:#fbf4e2;border-radius:10px;padding:10px 8px;border-bottom-color:transparent}
+.ach-grid{display:grid;grid-template-columns:120px repeat(4,1fr);gap:6px;font-size:13px}
+.ach-grid .hd{font-weight:600;color:var(--mut);font-size:12px;align-self:center}
+.ach-cell{border-radius:10px;padding:7px 3px;text-align:center;min-height:52px;display:flex;flex-direction:column;justify-content:center;background:#f1f4f9;color:#b6bfd0}
+.ach-cell.on{background:var(--soft);color:var(--ink)}
+.ach-cell .st{font-size:14px;color:#a87800;letter-spacing:1px}
+.ach-cell .dt{font-size:11px;color:var(--mut);margin-top:2px}
+.rank-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.rtab{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--mut)}
+.rtab.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+table.rank{width:100%;border-collapse:collapse;font-size:15px}
+table.rank th{text-align:left;font-weight:600;color:var(--mut);font-size:13px;padding:8px 6px;border-bottom:1px solid var(--line)}
+table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
+.rk1{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#fdf0d5;color:#a87800;font-weight:800;align-items:center;justify-content:center}
+.rk2{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#eef1f6;color:#7b89a3;font-weight:700;align-items:center;justify-content:center}
+.stk-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:8px;margin:12px 0}
+.stk{width:100%;aspect-ratio:1;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold)}
+.stk.empty{background:#f1f4f9;color:#cdd6e5;font-size:18px}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.set-row:last-child{border-bottom:0}
+.switch{position:relative;width:52px;height:30px;background:#dfe5ef;border-radius:99px;cursor:pointer;transition:background .2s;flex:0 0 auto}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:left .2s}
+.switch.on{background:var(--ok)}
+.switch.on::after{left:25px}
+.modal-bg{position:fixed;inset:0;background:rgba(30,40,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--card);border-radius:20px;padding:24px;max-width:400px;width:100%;text-align:center;animation:fade .25s}
+.stars-big{font-size:40px;letter-spacing:6px;color:var(--gold);margin:6px 0}
+.congrats{font-size:18px;font-weight:700;margin:4px 0}
+.stat-line{font-size:14px;color:var(--mut);margin:4px 0}
+.unlock-tip{background:#e8f6ef;border-radius:12px;padding:10px;margin:12px 0;font-size:14px;color:var(--ok);font-weight:600}
+.badge-gold{display:inline-block;background:#fdf0d5;color:#a87800;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:700}
+.shop-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:10px 0}
+.shop-item{border:1.5px solid var(--line);border-radius:14px;padding:10px;text-align:center;background:#fffdf6}
+.shop-item .pico{display:flex;justify-content:center;flex-wrap:wrap;gap:2px;font-size:24px;min-height:34px}
+.shop-item .pnm{font-size:13px;font-weight:600;margin:4px 0 2px}
+.shop-item .ppr{font-size:14px;color:var(--c3);font-weight:700}
+.receipt{background:#fffdf6;border:1px solid #f2e6c8;border-radius:14px;padding:12px 16px;margin:10px 0;font-size:15px}
+.receipt .rline{display:flex;justify-content:space-between;padding:3px 0}
+.receipt .rsep{border-top:1px dashed #e5d9b8;margin:6px 0}
+.flowbar{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);margin-bottom:8px;flex-wrap:wrap}
+.flowbar b{color:var(--ink)}
+.face-ok{color:var(--ok);font-weight:700}
+.face-no{color:var(--no);font-weight:700}
+.login-bg{position:fixed;inset:0;background:linear-gradient(160deg,#eef3fb,#fdf6e3);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}
+.login-bg.on{display:flex}
+.login-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:32px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(40,60,100,.12)}
+.login-title{font-size:20px;font-weight:700;margin:8px 0 2px}
+.login-sub{font-size:13px;color:var(--mut);margin-bottom:16px}
+.login-inp{width:100%;height:50px;border:2px solid var(--line);border-radius:12px;padding:0 14px;font-size:17px;margin-bottom:10px;text-align:center;outline:none;background:#fff;color:var(--ink)}
+.login-inp:focus{border-color:var(--c1)}
+.login-err{color:var(--no);font-size:13px;min-height:18px;margin-bottom:6px}
+.login-tip{font-size:12px;color:var(--mut);margin-top:12px;line-height:1.7}
+.user-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.user-row:last-child{border-bottom:0}
+.user-row .del{background:#fdeceb;color:var(--no);border:1px solid #f7d3d1;border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer}
+@media print{
+  body *{visibility:hidden}
+  #stkPrint,*:empty{visibility:visible}
+  #stkPrint{position:absolute;left:0;top:0;width:100%}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="logo">🧮 数学四法闯关乐园<small>凑十 · 破十 · 平十 · 借十</small></div>
+  <div class="hd-right">
+    <div class="player-chips" id="playerChips"></div>
+    <button class="icon-btn" onclick="go('settings')" title="设置">⚙️</button>
+  </div>
+</header>
+<nav id="navBar"></nav>
+
+<section class="view" id="view-hall"></section>
+<section class="view" id="view-class"></section>
+<section class="view" id="view-game"></section>
+<section class="view" id="view-achieve"></section>
+<section class="view" id="view-rank"></section>
+<section class="view" id="view-sticker"></section>
+<section class="view" id="view-settings"></section>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalBox"></div></div>
+<div id="stkPrint" style="display:none"></div>
+
+<div class="login-bg" id="loginOverlay">
+  <div class="login-card">
+    <div style="font-size:44px">🧮</div>
+    <div class="login-title">数学四法闯关乐园</div>
+    <div class="login-sub">先登录再开始 · 成绩与解锁按账号分开保存</div>
+    <input class="login-inp" id="loginUser" type="text" placeholder="用户名（中文/英文字母）" maxlength="12" autocomplete="off">
+    <input class="login-inp" id="loginPass" type="password" placeholder="密码（仅管理员需要）" autocomplete="off">
+    <div class="login-err" id="loginErr"></div>
+    <button class="btn big" onclick="doLogin()">进入乐园 🎉</button>
+    <div class="login-tip">新用户名将自动创建账号，无需密码<br>管理员账号：admin</div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ 常量与数据层 ============ */
+var STORE_KEY="calcPark_v1";
+var PROFILES_KEY="calcPark_users_v1";
+var SESS_KEY="calcPark_session_v1";
+var ADMIN_USER="admin",ADMIN_PASS="yucheng198";
+var GAMES=[
+ {id:1,name:"凑十小火车",icon:"🚂",desc:"加法 · 凑十法",color:"#2f6fd0"},
+ {id:2,name:"减法双通道",icon:"🛤️",desc:"退位减 · 破十平十",color:"#0f8a6d"},
+ {id:3,name:"借十银行",icon:"🏦",desc:"两位数退位减",color:"#d85a30"},
+ {id:4,name:"口算闪电战",icon:"⚡",desc:"四法提速 30秒",color:"#ba7517"},
+ {id:5,name:"超市小掌柜",icon:"🛒",desc:"综合应用",color:"#7f77dd"}
+];
+var LEVELS=["L1","L2","L3","L4"];
+/* 每个游戏的难度档数：游戏1/2/3 只有 3 档 */
+var GLEV={1:3,2:3,3:3,4:4,5:4};
+var GLEV_DESC={
+ 1:["两个个位数","十位+个位","两个十位数"],
+ 2:["十几减一位数","二十几~四十几减一位数","两位数减两位数"],
+ 3:["两位数减一位数","两位数减两位数","连减两步"],
+ 4:["两个个位数","十位+个位","两个十位数","混合 · 多步"],
+ 5:["个位单价求和","两位数单价求和","求和与找零","买几件算找零"]};
+function lvlDesc(g,l){return (GLEV_DESC[g]&&GLEV_DESC[g][l])||"";}
+var GOODS=[
+ ["棒棒糖","🍭"],["果汁","🧃"],["曲奇饼","🍪"],["苹果","🍎"],["小蛋糕","🧁"],["面包","🍞"],
+ ["牛奶","🥛"],["爆米花","🍿"],["冰淇淋","🍦"],["香蕉","🍌"],["鸡蛋","🥚"],["橙子","🍊"]
+];
+var GNAME={1:"凑十法",2:"破十/平十法",3:"借十法",4:"四法综合",5:"四法应用"};
+var HINTS={
+ "1":"凑十：看大数拆小数，凑成十再加余数",
+ "2":"退位减：个位不够减，用破十或平十",
+ "3":"借十：个位不够减，向十位借 1 个十",
+ "4":"先算个位再算十位，细心不出错",
+ "5":"算对价格才能当金牌掌柜哦"
+};
+
+function defState(){return {freeMode:false,perRound:8,changed:0};}
+var S;
+function load(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){var d=JSON.parse(raw);if(d&&typeof d==="object")return d;}}catch(e){}return defState();}
+function save(){S.changed=Date.now();localStorage.setItem(STORE_KEY,JSON.stringify(S));}
+S=load();
+
+/* 用户档案：PROFILES = { 用户名: {records:[], stickers:{}, created:ts} } */
+var PROFILES={},CUR=null;
+function loadProfiles(){
+  try{var raw=localStorage.getItem(PROFILES_KEY);if(raw){var d=JSON.parse(raw);if(d&&typeof d==="object"&&Object.keys(d).length)return d;}}catch(e){}
+  try{var old=localStorage.getItem(STORE_KEY);if(old){var o=JSON.parse(old);if(o&&o.records&&o.records.length){var m={};m["孩子"]={records:o.records,stickers:o.stickers||{},created:Date.now()};localStorage.setItem(PROFILES_KEY,JSON.stringify(m));return m;}}}catch(e2){}
+  return {};}
+function saveProfiles(){localStorage.setItem(PROFILES_KEY,JSON.stringify(PROFILES));}
+function ensureProfile(p){if(!PROFILES[p])PROFILES[p]={records:[],stickers:{},created:Date.now()};}
+function curRec(){ensureProfile(CUR);return PROFILES[CUR].records;}
+function curStk(){ensureProfile(CUR);return PROFILES[CUR].stickers;}
+function profileRec(p){ensureProfile(p);return PROFILES[p].records;}
+function profileStk(p){ensureProfile(p);return PROFILES[p].stickers;}
+function addSticker(p){var s=profileStk(p);s[p]=(s[p]||0)+1;}
+function stickersOf(p){p=p||CUR;if(PROFILES[p])return PROFILES[p].stickers[p]||0;return 0;}
+PROFILES=loadProfiles();
+
+/* ============ 纯逻辑：星级 / 解锁 / 排行 ============ */
+function starsOf(correct,total){if(!total)return 0;var r=correct/total;if(r>=1)return 3;if(r>=0.85)return 2;if(r>=0.7)return 1;return 0;}
+function recsOf(g,l){var rs=curRec();var f=[];for(var i=0;i<rs.length;i++){if(rs[i].g===g&&rs[i].l===l)f.push(rs[i]);}return f;}
+function anyPlayerQualified(g,l){var rs=recsOf(g,l);return rs.some(function(r){return r.stars>=1;})||rs.length>=3;}
+function gameOpen(g){if(S.freeMode)return true;if(g===1)return true;for(var i=0;i<GLEV[g-1];i++){if(anyPlayerQualified(g-1,i))return true;}return false;}
+function levelOpen(g,l){if(S.freeMode)return true;if(!gameOpen(g))return false;if(l===0)return true;return anyPlayerQualified(g,l-1);}
+function bestFrom(rs,g,l,p){var f=[];for(var i=0;i<rs.length;i++){var r=rs[i];if(r.g===g&&r.l===l&&r.p===p)f.push(r);}if(!f.length)return null;
+  return f.reduce(function(b,r){if(r.stars>b.stars||(r.stars===b.stars&&(r.correct/r.total)>(b.correct/b.total))||(r.stars===b.stars&&(r.correct/r.total)===(b.correct/b.total)&&r.seconds<b.seconds))return r;return b;},f[0]);}
+function bestFor(g,l,p){return PROFILES[p]?bestFrom(PROFILES[p].records,g,l,p):null;}
+function gameTotalStars(g){var sum=0;for(var i=0;i<GLEV[g];i++){var b=bestFor(g,i,CUR);if(b)sum+=b.stars;}return sum;}
+function rankPlayers(){var names=[];for(var k in PROFILES){if(k!==ADMIN_USER)names.push(k);}return names;}
+
+/* ============ 题目生成器（严格匹配难度） ============ */
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function genAdd(l){if(l>2)l=2;var a,b,t1,t2;
+  if(l===0){a=ri(2,9);b=ri(2,9);while(a+b<=10){a=ri(2,9);b=ri(2,9);}return {t:a+" + "+b,ans:a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+  if(l===1){t1=ri(1,4);a=ri(2,9);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+b,ans:t1*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+  t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+(t2*10+b),ans:t1*10+t2*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+function genSub1(l){if(l>2)l=2;var t,u,d,t1,u1,t2,u2;
+  if(l===0){t=1;u=ri(1,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
+  if(l===1){t=ri(2,4);u=ri(1,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
+  t1=ri(2,8);u1=ri(1,8);t2=ri(1,t1-1);u2=ri(u1+1,9);
+  return {t:(t1*10+u1)+" - "+(t2*10+u2),ans:t1*10+u1-t2*10-u2,sub:u2-u1};}
+function genSub2(l){if(l>2)l=2;var t1,u1,t2,u2,d;
+  if(l===0){t1=ri(2,6);u1=ri(0,8);d=ri(u1+1,9);return {t:(t1*10+u1)+" - "+d,ans:t1*10+u1-d};}
+  if(l===1){t1=ri(3,7);u1=ri(0,8);t2=ri(1,t1-1);u2=ri(u1+1,9);return {t:(t1*10+u1)+" - "+(t2*10+u2),ans:t1*10+u1-t2*10-u2};}
+  t1=ri(3,7);u1=ri(0,8);t2=ri(1,t1-1);u2=ri(u1+1,9);
+  var A=t1*10+u1,B=t2*10+u2;
+  var mid=A-B;
+  var c;
+  if(Math.random()<0.5 && mid>=10)c=ri(1,Math.floor(mid/10))*10;
+  else c=ri(1,mid%10);
+  return {t:A+" - "+B+" - "+c,ans:mid-c,mid:mid,c:c};}
+function genMix(l){var a,b,t,t1,t2,c,op;
+  if(l===0){a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"&&a<b){var z=a;a=b;b=z;}return {t:a+" "+op+" "+b,ans:op==="+"?a+b:a-b};}
+  if(l===1){t=ri(1,4);a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"){if(a<b){var z=a;a=b;b=z;}return {t:(t*10+a)+" "+op+" "+b,ans:t*10+a-b};}return {t:(t*10+a)+" + "+b,ans:t*10+a+b};}
+  if(l===2){t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"){if(t1*10+a<t2*10+b){var sw=t1;t1=t2;t2=sw;var w=a;a=b;b=w;}}return {t:(t1*10+a)+" "+op+" "+(t2*10+b),ans:op==="+"?t1*10+a+t2*10+b:t1*10+a-t2*10-b};}
+  a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";c=ri(1,9);var m=op==="+"?a+b:a-b;if(m<0){var z=a;a=b;b=z;m=a-b;}if(m<2){op="+";m=a+b;}var op2=Math.random()<0.5?"+":"-";var ans=op2==="+"?m+c:m-c;while(ans<0){c=ri(1,9);ans=m-c;}
+  return {t:a+" "+op+" "+b+" "+op2+" "+c,ans:ans};}
+function genShop(l){
+  if(l===3){
+    /* L4：单价个位数买几件（乘法），可能混买一件两位数单价商品，付 50 元以上找零 */
+    var q=ri(3,9),p=ri(2,9);
+    var idx=ri(0,GOODS.length-1);
+    var items=[{name:GOODS[idx][0],icon:GOODS[idx][1],price:p,qty:q}];
+    if(Math.random()<0.6){
+      var idx2=ri(0,GOODS.length-1);while(idx2===idx){idx2=ri(0,GOODS.length-1);}
+      var p2max=Math.min(48,98-p*q);
+      if(p2max>=11){items.push({name:GOODS[idx2][0],icon:GOODS[idx2][1],price:ri(11,p2max),qty:1});}
+    }
+    var total=0;for(var i=0;i<items.length;i++){total+=items[i].price*items[i].qty;}
+    var pay=(total+1<=50)?50:100;
+    return {t:"",items:items,total:total,mode:"change",pay:pay,change:pay-total,ans:pay-total};}
+  var priceFn,count=2;
+  if(l===0)priceFn=function(){return ri(1,9);};
+  else if(l===1)priceFn=function(){return ri(3,19);};
+  else priceFn=function(){return ri(8,45);};
+  var items2=[];var used=[];
+  for(var j=0;j<count;j++){var idx3=ri(0,GOODS.length-1);while(used.indexOf(idx3)>=0){idx3=ri(0,GOODS.length-1);}used.push(idx3);items2.push({name:GOODS[idx3][0],icon:GOODS[idx3][1],price:priceFn(),qty:1});}
+  var total2=items2[0].price+items2[1].price;
+  var mode=(l===2&&Math.random()<0.4)?"change":"sum";
+  var pay2=0,change2=0;
+  if(mode==="change"){var faces=[20,50,100];for(var k=0;k<faces.length;k++){if(faces[k]>=total2+1){pay2=faces[k];break;}}if(!pay2){pay2=100;total2=Math.min(total2,99);}change2=pay2-total2;}
+  return {t:"",items:items2,total:total2,mode:mode,pay:pay2,change:change2,ans:mode==="sum"?total2:change2};}
+function genQ(g,l){if(g===1)return genAdd(l);if(g===2)return genSub1(l);if(g===3)return genSub2(l);if(g===4)return genMix(l);return genShop(l);}
+function hintText(g,q){if(g===1)return "凑十法：先看 "+q.n1+" 差 "+(10-q.n1)+" 凑成 10，再从 "+q.n2+" 里拿走 "+(10-q.n1)+"，剩 "+(q.n2-(10-q.n1))+"，10 + "+(q.n2-(10-q.n1))+" = "+q.ans;
+  if(g===2)return "个位不够减：用破十法，把 "+(q.t.split(" - ")[0])+" 拆成 10 和余数，10 减 "+q.t.split(" - ")[1]+" 再加余数";
+  if(g===3)return "借十法：个位不够减，向十位借 1 个十，个位变成十几再减";
+  if(g===4)return "先算个位，再算十位，注意进位和退位";
+  return "算对总价/找零，顾客就会满意地点头";}
+
+/* ============ 视图导航 ============ */
+var TABS=[["hall","🏠 大厅"],["class","📚 四法课堂"],["achieve","🏆 成就墙"],["rank","📊 排行榜"],["sticker","⭐ 贴纸墙"],["settings","⚙️ 设置"]];
+var VIEWS=["hall","class","game","achieve","rank","sticker","settings"];
+function go(v){var i;for(i=0;i<VIEWS.length;i++){var el=document.getElementById("view-"+VIEWS[i]);if(el)el.className="view"+(VIEWS[i]===v?" on":"");}
+  var nav=document.getElementById("navBar");var html="";for(i=0;i<TABS.length;i++){html+='<button class="nav-tab'+(TABS[i][0]===v?" on":"")+'" onclick="go(\''+TABS[i][0]+'\')">'+TABS[i][1]+"</button>";}nav.innerHTML=html;
+  if(v==="hall")renderHall();if(v==="class")renderClass();if(v==="achieve")renderAchieve();if(v==="rank")renderRank();if(v==="sticker")renderSticker();if(v==="settings")renderSettings();
+  window.scrollTo(0,0);}
+
+/* ============ 大厅 ============ */
+function renderHall(){var el=document.getElementById("view-hall");
+  var html='';
+  html+='<div class="card"><p class="h2">选择游戏</p><p class="sub">从第 1 个游戏开始闯关，达标（★）或玩满 3 次即可解锁下一个游戏</p><div class="grid-hall">';
+  for(var i=0;i<GAMES.length;i++){var g=GAMES[i];var open=gameOpen(g.id);
+    html+='<div class="gcard'+(open?"":" locked")+'" onclick="'+(open?"enterGame("+g.id+")":"")+'"'+(open?"":' data-lock="1"')+' style="border-top:4px solid '+g.color+'">';
+    html+='<div class="ico">'+g.icon+"</div><div class=\"nm\">"+g.name+"</div><div class=\"ds\">"+g.desc+"</div>";
+    if(!open)html+='<div class="lock-tag">🔒 未解锁</div>';
+    html+='<div class="lvl-row">';
+    for(var L=0;L<GLEV[g.id];L++){var op=levelOpen(g.id,L);var any=bestFor(g.id,L,CUR);
+      var freeCls=(op?" free":"");var clickAttr=(op?' onclick="event.stopPropagation();enterGameLevel('+g.id+","+L+')"':"");
+      html+='<div class="lvl-dot'+(any?(any.stars===3?" full":" ok"):"")+freeCls+'"'+clickAttr+' title="'+lvlDesc(g.id,L)+(any?" · 最佳"+any.stars+"星":" · "+(op?"未玩":"未解锁"))+'">'+(any?any.stars:(op?"·":"🔒"))+"</div>";}
+    html+="</div>";
+    html+='<div class="best">'+(gameTotalStars(g.id)>0?"⭐ 累计 "+gameTotalStars(g.id)+" 星":"挑战开始")+"</div></div>";}
+  html+="</div></div>";
+  html+='<div class="card" style="margin-top:12px"><p class="h2">本周小贴士</p><div class="muted" style="font-size:14px;line-height:1.8">每天 10 分钟，到点就停 · 先玩会的方法，再比速度 · 错题只说“再想想”，不批评 · 家长每周故意算错一次，让孩子当老师</div></div>';
+  el.innerHTML=html;}
+
+/* ============ 四法课堂 ============ */
+var CLASSES=[
+ {n:"凑十法",on:"加法进位",tag:"8 + 5",verse:"看大数，拆小数，凑成十，加余数",steps:[
+   "看大数 8，还差 2 就凑成 10",
+   "把 5 拆成 2 和 3，8 + 2 = 10",
+   "10 + 3 = 13，所以 8 + 5 = 13"]},
+ {n:"破十法",on:"20 以内退位减",tag:"13 - 6",verse:"拆大数，分出十，先减十，再加余",steps:[
+   "把 13 拆成 10 和 3",
+   "10 - 6 = 4（先用整十去减）",
+   "4 + 3 = 7，所以 13 - 6 = 7"]},
+ {n:"平十法",on:"20 以内退位减",tag:"13 - 6",verse:"看减数，先减到十，再减余数",steps:[
+   "把减数 6 拆成 3 和 3",
+   "13 - 3 = 10（先减到整十）",
+   "10 - 3 = 7，所以 13 - 6 = 7"]},
+ {n:"借十法",on:"两位数退位减",tag:"32 - 17",verse:"不够减，借一十，先算个位再算十位",steps:[
+   "个位 2 - 7 不够，向十位借 1 个十",
+   "个位变 12：12 - 7 = 5",
+   "十位 3 被借走 1 剩 2：2 - 1 = 1，答案 15"]}
+];
+var classIdx=0;
+function renderClass(){var el=document.getElementById("view-class");var c=CLASSES[classIdx];
+  var html='<div class="card"><p class="h2">四法小课堂</p><p class="sub">先学会方法，再去游戏里练</p><div class="m-class-tabs">';
+  for(var i=0;i<CLASSES.length;i++){html+='<button class="m-tab'+(i===classIdx?" on":"")+'" onclick="classTab('+i+')">'+CLASSES[i].n+"</button>";}
+  html+="</div>";
+  html+='<div style="text-align:center;margin:8px 0"><div style="font-size:40px;font-weight:800;letter-spacing:4px">'+c.tag+"</div><div class=\"muted\">"+c.on+"</div></div>";
+  html+='<div class="hint-bar">📖 口诀：'+c.verse+"</div>";
+  html+='<ul class="step-list" id="clsSteps"></ul>';
+  html+='<div class="row center" style="margin-top:10px"><button class="btn ghost" onclick="classStep(-1)">◀ 上一步</button><button class="btn" onclick="classStep(1)">下一步 ▶</button></div></div>';
+  el.innerHTML=html;classStep(0);}
+var classStepIdx=-1;
+function classStep(dir){var c=CLASSES[classIdx];classStepIdx=Math.max(0,Math.min(c.steps.length-1,classStepIdx+dir));
+  var ul=document.getElementById("clsSteps");if(!ul)return;var html="";
+  for(var i=0;i<c.steps.length;i++){html+='<li class="'+(i===classStepIdx?"hl":"")+'"><span class="sn">'+(i+1)+"</span><span>"+c.steps[i]+(i===classStepIdx?" ✅":"")+"</span></li>";}
+  ul.innerHTML=html;}
+function classTab(i){classIdx=i;classStepIdx=-1;renderClass();}
+
+/* ============ 成就墙 ============ */
+function renderAchieve(){var el=document.getElementById("view-achieve");
+  var html='<div class="card"><p class="h2">成就墙 · '+CUR+'</p><p class="sub">点亮 = 该难度首次达标（≥1 星），记录首达日期与最佳星级</p>';
+  html+='<div class="ach-grid"><div></div>';
+  for(var L=0;L<4;L++)html+='<div class="hd" style="text-align:center">'+LEVELS[L]+"</div>";
+  for(var i=0;i<GAMES.length;i++){var g=GAMES[i];
+    html+='<div style="align-self:center;font-weight:600;font-size:13px">'+g.icon+" "+g.name+"</div>";
+    for(var L2=0;L2<4;L2++){
+      if(L2>=GLEV[g.id]){html+='<div class="ach-cell" style="opacity:.3;color:var(--mut)">—</div>';continue;}
+      var b=bestFor(g.id,L2,CUR);var op=levelOpen(g.id,L2);
+      if(b&&b.stars>=1){var d=new Date(b.ts);var ds=(d.getMonth()+1)+"月"+d.getDate()+"日";
+        html+='<div class="ach-cell on"><div class="st">'+("★".repeat(b.stars)+"☆".repeat(3-b.stars))+'</div><div class="dt">首达 '+ds+"</div></div>";}
+      else{html+='<div class="ach-cell">'+(op?"未达标":"🔒 未解锁")+"</div>";}}}
+  html+="</div></div>";
+  html+='<div class="card" style="margin-top:12px"><p class="h2">里程碑</p><div class="muted" style="font-size:14px;line-height:1.9" id="milestoneBox"></div></div>';
+  el.innerHTML=html;
+  var mb=document.getElementById("milestoneBox");
+  var total=0,first=null,last=null;
+  var crs=curRec();
+  for(var k=0;k<crs.length;k++){var r=crs[k];if(r.p===CUR){total++;if(!first||r.ts<first.ts)first=r;if(!last||r.ts>last.ts)last=r;}}
+  if(!total){mb.innerHTML="还没有完成过对局，去大厅玩一局吧！";}
+  else{var d1=new Date(first.ts),d2=new Date(last.ts);
+    mb.innerHTML="完成对局 <b>"+total+"</b> 次 · 首次 "+((d1.getMonth()+1)+"月"+d1.getDate()+"日")+" · 最近 "+((d2.getMonth()+1)+"月"+d2.getDate()+"日");}}
+
+/* ============ 排行榜 ============ */
+var rankG=1,rankL=0;
+function renderRank(){var el=document.getElementById("view-rank");
+  var html='<div class="card"><p class="h2">排行榜</p><p class="sub">每个游戏 × 每档难度独立榜单 · 同星级比正确率，再比用时</p><div class="rank-tabs">';
+  for(var i=0;i<GAMES.length;i++){html+='<button class="rtab'+(rankG===GAMES[i].id?" on":"")+'" onclick="rankPickG('+GAMES[i].id+')">'+GAMES[i].icon+GAMES[i].name+"</button>";}
+  html+="</div><div class=\"rank-tabs\">";
+  for(var L=0;L<GLEV[rankG];L++){html+='<button class="rtab'+(rankL===L?" on":"")+'" onclick="rankPickL('+L+')">'+LEVELS[L]+" "+lvlDesc(rankG,L)+"</button>";}
+  html+="</div>";
+  html+='<table class="rank"><thead><tr><th style="width:52px">名次</th><th>玩家</th><th style="text-align:center">星级</th><th style="text-align:right">成绩</th><th style="text-align:right">用时</th></tr></thead><tbody id="rankBody"></tbody></table></div>';
+  el.innerHTML=html;
+  var body=document.getElementById("rankBody");var open=levelOpen(rankG,rankL);
+  if(!open){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">该难度尚未解锁，先去完成低难度并达标（≥1 星）</td></tr>';return;}
+  var rows=[];var pls=rankPlayers();for(var j=0;j<pls.length;j++){var b=bestFor(rankG,rankL,pls[j]);if(b)rows.push({p:pls[j],b:b});}
+  rows.sort(function(x,y){if(y.b.stars!==x.b.stars)return y.b.stars-x.b.stars;var xr=x.b.correct/x.b.total,yr=y.b.correct/y.b.total;if(yr!==xr)return yr-xr;return x.b.seconds-y.b.seconds;});
+  if(!rows.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">还没有成绩，快去挑战吧！</td></tr>';return;}
+  var html2="";for(var k=0;k<rows.length;k++){var r=rows[k],n=k+1;
+    var badge=n===1?'<span class="rk1">1</span>':n===2?'<span class="rk2">2</span>':n===3?'<span class="rk2" style="background:#f1eee8">3</span>':n;
+    var secs=r.b.seconds<60?r.b.seconds+"秒":Math.floor(r.b.seconds/60)+"分"+(r.b.seconds%60);
+    html2+='<tr><td>'+badge+'</td><td style="font-weight:600">'+r.p+'</td><td style="text-align:center;color:#a87800">'+("★".repeat(r.b.stars)+"☆".repeat(3-r.b.stars))+'</td><td style="text-align:right">'+r.b.correct+"/"+r.b.total+"</td><td style=\"text-align:right;color:var(--mut)\">"+secs+"</td></tr>";}
+  body.innerHTML=html2;}
+function rankPickG(g){rankG=g;if(rankL>=GLEV[g])rankL=0;renderRank();}
+function rankPickL(l){rankL=l;renderRank();}
+
+/* ============ 贴纸墙 ============ */
+function renderSticker(){var el=document.getElementById("view-sticker");var n=stickersOf(CUR);
+  var html='<div class="card"><p class="h2">⭐ 贴纸墙 · '+CUR+'</p><p class="sub">每达标一局（≥1 星）得 1 颗星，攒满 10 颗庆祝一次</p>';
+  html+='<div style="display:flex;align-items:center;gap:14px;margin:6px 0 4px"><div style="font-size:44px;font-weight:800">'+n+"</div><div style=\"font-size:14px;color:var(--mut)\">颗星星<br>距离下个 10 颗还差 "+(10-n%10)+" 颗</div></div>";
+  html+='<div class="stk-wall">';for(var i=0;i<40;i++){html+=i<n?'<div class="stk">⭐</div>':'<div class="stk empty">·</div>';}
+  html+="</div><div class=\"row center\"><button class=\"btn ghost\" onclick=\"printSticker()\">🖨️ 打印贴纸墙</button></div></div>";
+  el.innerHTML=html;}
+function printSticker(){var box=document.getElementById("stkPrint");
+  box.style.display="block";box.innerHTML='<div style="font-family:sans-serif;padding:20px"><h2 style="margin:0 0 12px">⭐ 贴纸墙 · '+CUR+'（'+stickersOf(CUR)+' 颗）</h2><div style="display:grid;grid-template-columns:repeat(8,44px);gap:8px">';
+  var n=stickersOf(CUR);for(var i=0;i<40;i++){box.innerHTML+=i<n?'<div style="width:44px;height:44px;border-radius:12px;background:#fdf0d5;display:flex;align-items:center;justify-content:center;font-size:22px">⭐</div>':'<div style="width:44px;height:44px;border-radius:12px;background:#f1f4f9"></div>';}
+  box.innerHTML+="</div></div>";window.print();setTimeout(function(){box.style.display="none";box.innerHTML="";},500);}
+
+/* ============ 设置 ============ */
+function renderSettings(){var el=document.getElementById("view-settings");
+  var html='<div class="card"><p class="h2">设置</p>';
+  html+='<div class="set-row"><div><b>当前账号</b><div class="muted" style="font-size:13px">成绩与解锁记录保存在此账号下</div></div><div class="row" style="gap:6px"><span class="pchip on">👤 '+CUR+'</span><button class="btn ghost" style="padding:6px 14px;font-size:13px" onclick="logout()">退出登录</button></div></div>';
+  html+='<div class="set-row"><div><b>自由模式</b><div class="muted" style="font-size:13px">打开后所有游戏和难度全部解锁</div></div><div class="switch'+(S.freeMode?" on":"")+'" onclick="toggleFree()"></div></div>';
+  html+='<div class="set-row"><div><b>每局题量</b><div class="muted" style="font-size:13px">挑战时长约 3–5 分钟</div></div><div class="row" style="gap:6px" id="qtyRow"></div></div>';
+  html+='<div class="set-row"><div><b>数据管理</b><div class="muted" style="font-size:13px">当前账号的排行榜与成就存在本机浏览器</div></div><div class="row" style="gap:6px"><button class="btn ghost" style="padding:8px 14px;font-size:13px" onclick="exportData()">导出</button><button class="btn ghost" style="padding:8px 14px;font-size:13px;color:var(--no);border-color:#f2c4c0" onclick="clearData()">清空</button></div></div>';
+  html+="</div>";
+  if(CUR===ADMIN_USER){
+    html+='<div class="card" style="margin-top:12px"><p class="h2">👮 用户管理（管理员）</p><p class="sub">删除用户将清空其全部成绩、解锁记录与贴纸</p><div id="userAdminList"></div></div>';
+  }
+  html+='<div class="card" style="margin-top:12px"><p class="h2">给家长的话</p><div class="muted" style="font-size:14px;line-height:1.9">① 每天只玩 10 分钟，到点就停，意犹未尽是明天的钩子。② 解锁条件双保险：达标 1 次或玩 3 次，先到先解锁，慢一点的孩子也不会卡住。③ 排行榜只看自己上次的成绩，不跟别人比。④ 孩子算错时说“哦？讲讲你是怎么算的”，别直接给答案。</div></div>';
+  el.innerHTML=html;
+  var qr=document.getElementById("qtyRow");var h3="";[5,8,10].forEach(function(n){h3+='<button class="rtab'+(S.perRound===n?" on":"")+'" style="font-size:13px" onclick="setQty('+n+')">'+n+" 题</button>";});qr.innerHTML=h3;
+  if(CUR===ADMIN_USER)renderAdminList();}
+function renderAdminList(){var box=document.getElementById("userAdminList");if(!box)return;
+  var names=Object.keys(PROFILES).filter(function(n){return n!==ADMIN_USER;});
+  if(!names.length){box.innerHTML='<div class="muted" style="font-size:14px">暂无普通用户</div>';return;}
+  var h="";for(var i=0;i<names.length;i++){var prof=PROFILES[names[i]];var rc=prof.records.length;var st=0;for(var k in prof.stickers){st+=prof.stickers[k];}
+    h+='<div class="user-row"><span style="font-weight:600">'+names[i]+'</span><span class="muted" style="font-size:13px">'+rc+" 局 · "+st+' 星</span><button class="del" onclick="delUser(\''+names[i]+'\')">删除</button></div>';}
+  box.innerHTML=h;}
+function delUser(name){askConfirm("确定删除用户「"+name+"」的全部记录吗？此操作不可恢复！","delUserNow('"+name+"')");}
+function delUserNow(name){delete PROFILES[name];saveProfiles();renderSettings();}
+function setQty(n){S.perRound=n;save();renderSettings();}
+function toggleFree(){S.freeMode=!S.freeMode;save();renderSettings();}
+function exportData(){var blob=new Blob([JSON.stringify({user:CUR,records:curRec(),stickers:curStk()},null,1)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="math-park-"+CUR+".json";a.click();}
+function clearData(){askConfirm("确定清空「"+CUR+"」的所有成绩和贴纸吗？此操作不可恢复。","clearDataNow()");}
+function clearDataNow(){PROFILES[CUR]={records:[],stickers:{},created:Date.now()};saveProfiles();go("hall");}
+
+/* ============ 登录 ============ */
+function renderUserChip(){var el=document.getElementById("playerChips");if(!el)return;
+  el.innerHTML='<span class="pchip on" title="当前账号">👤 '+CUR+'</span><button class="icon-btn" style="width:auto;padding:0 12px;font-size:13px" onclick="logout()" title="退出登录">退出</button>';}
+function showLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg on";var u=document.getElementById("loginUser");if(u)u.focus();}
+function hideLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg";}
+function doLogin(){var u=document.getElementById("loginUser").value.trim();
+  var p=document.getElementById("loginPass").value;var err=document.getElementById("loginErr");
+  err.textContent="";
+  if(!u){err.textContent="请输入用户名";return;}
+  if(!/^[\u4e00-\u9fa5A-Za-z]{1,12}$/.test(u)){err.textContent="用户名仅支持中文和英文字母（1-12 个字符），不能含数字或符号";return;}
+  if(u===ADMIN_USER){if(p!==ADMIN_PASS){err.textContent="管理员密码错误";return;}}
+  if(!PROFILES[u]){PROFILES[u]={records:[],stickers:{},created:Date.now()};}
+  CUR=u;saveProfiles();try{localStorage.setItem(SESS_KEY,u);}catch(e){}
+  hideLogin();renderUserChip();go("hall");}
+function logout(){askConfirm("退出登录？当前账号成绩已自动保存，重新登录即可回来。","doLogout()");}
+function doLogout(){try{localStorage.removeItem(SESS_KEY);}catch(e){}
+  CUR=null;hideLogin();showLogin();}
+
+/* ============ 对局引擎 ============ */
+var R=null;
+function enterGame(g){if(!gameOpen(g))return;var L=0;for(var i=0;i<GLEV[g];i++){if(levelOpen(g,i))L=i;}startRound(g,L);}
+function enterGameLevel(g,l){if(!gameOpen(g)||!levelOpen(g,l))return;startRound(g,l);}
+function startRound(g,l){var n=S.perRound;var qs=[];for(var i=0;i<n;i++){qs.push(genQ(g,l));}
+  R={g:g,l:l,qs:qs,idx:0,ans:new Array(n),start:Date.now(),flash:null,chain:0,bestChain:0,answers:0,shown:0};
+  if(g===4){R.flashLeft=30;R.flashTimer=setInterval(function(){R.flashLeft--;var el=document.getElementById("timer4");if(el)el.textContent=Math.max(0,R.flashLeft);if(R.flashLeft<=0){clearInterval(R.flashTimer);endFlash();}},1000);}
+  go("game");renderGame();}
+function renderGame(){var el=document.getElementById("view-game");var g=R.g,l=R.l;
+  var html='<div class="flowbar">🏠 <b>'+GAMES[g-1].name+"</b> · "+LEVELS[l]+" "+lvlDesc(g,l)+" · 第 <b id=\"qNo\">1</b>/"+R.qs.length+" 题 · 对 <b id=\"okNo\">0</b> 题</div>";
+  html+='<div class="progress"><i id="pbar" style="width:0%"></i></div>';
+  html+='<div id="gameBody"></div>';
+  html+='<div class="row center" style="margin-top:10px"><button class="btn ghost" onclick="quitRound()">退出本局</button></div>';
+  el.innerHTML=html;renderQuestion();}
+function renderQuestion(){var q=R.qs[R.idx];var el=document.getElementById("gameBody");R.shown=Date.now();
+  var turn="";
+  if(R.g===1)el.innerHTML=game1HTML(q,turn);
+  else if(R.g===2)el.innerHTML=game2HTML(q,turn);
+  else if(R.g===3)el.innerHTML=game3HTML(q,turn);
+  else if(R.g===4)el.innerHTML=game4HTML(q,turn);
+  else el.innerHTML=game5HTML(q,turn);
+  if(R.g===1)bindGame1(q);else if(R.g===2)bindGame2(q);else if(R.g===3)bindGame3(q);else if(R.g===4)bindGame4(q);else bindGame5(q);}
+function okLine(extra){return '<div class="face-ok" style="font-size:16px;margin:8px 0">✅ 答对了！'+(extra||"")+"</div>";}
+function noLine(msg){return '<div class="face-no" style="font-size:16px;margin:8px 0">❌ '+msg+'</div>';}
+function advance(ok){R.ans[R.idx]={p:CUR,ok:ok};if(ok)R.answers++;
+  // 立即刷新 header 统计，避免 setTimeout 前出现旧数据
+  var on=document.getElementById("okNo");if(on)on.textContent=R.answers;
+  if(R.idx+1>=R.qs.length){finishRound();return;}
+  R.idx++;var el=document.getElementById("gameBody");
+  el.innerHTML='<div style="text-align:center;padding:30px;color:var(--mut)">下一题…</div>';
+  var qn=document.getElementById("qNo");if(qn)qn.textContent=R.idx+1;
+  setTimeout(function(){renderQuestion();var p=document.getElementById("pbar");if(p)p.style.width=((R.idx)/R.qs.length*100)+"%";var qn2=document.getElementById("qNo");if(qn2)qn2.textContent=R.idx+1;var on2=document.getElementById("okNo");if(on2)on2.textContent=R.answers;},260);}
+
+/* ---------- 游戏1 凑十小火车 ---------- */
+function game1Hint(q,l){
+  var c=q.carry,r=q.rest,a=q.n1,b=q.n2,ans=q.ans;
+  if(l===0)return"💡 用凑十法：先点 "+c+" 个橙点补满十格，再看 10 + "+r+" = "+ans;
+  if(l===1){var t1=Math.floor(a/10);return"💡 用凑十法："+a+" + "+c+" = "+(t1+1)*10+"，再看 "+(t1+1)*10+" + "+r+" = "+ans;}
+  if(l===2){var t1=Math.floor(a/10);return"💡 用凑十法："+a+" + "+c+" = "+(t1+1)*10+"，再看 "+(t1+1)*10+" + "+(Math.floor(b/10)*10+r)+" = "+ans;}
+  var parts=q.t.split(" ");var op=parts[3],c2=parseInt(parts[4],10);
+  return"💡 先点 "+c+" 个橙点，"+a+" + "+c+" = 10，再看 10 + "+r+" "+op+" "+c2+" = "+ans;}
+function game1HTML(q,turn){
+  var n1=q.n1,n2=q.n2,carry=q.carry,rest=q.rest;
+  var row1="",row2="";
+  for(var i=0;i<10;i++){row1+=i<n1?'<span class="dot b">'+(i+1)+"</span>":'<span class="dot ghost-dot" data-slot="'+(i-n1)+'">?</span>';}
+  for(var j=0;j<n2;j++){row2+='<span class="dot o" data-move="'+(j<carry?"carry":"rest")+'">'+(j+1)+"</span>";}
+  var html='<div class="qbox"><div class="qstep"> 题目</div><div class="qtext">'+q.t+" = ?</div>";
+  html+='<div class="hint-bar" id="hint1">'+game1Hint(q,R.l)+"</div>";
+  html+='<div class="tenrow" id="row1">'+row1+"</div>";
+  html+='<div class="tenrow" id="row2">'+row2+"</div>";
+  html+='<div class="ansline" id="qLine">'+q.t+' = <span id="ansShow">?</span></div>';
+  html+='<div class="opt-row" id="opts1" style="opacity:.4;pointer-events:none"></div>';
+  html+='<div class="row center"><button class="btn" id="btnReset1" style="display:none" onclick="resetDots1()">重新点</button></div></div>';
+  return html;}
+function makeOpts1(ans){
+  var set={};set[ans]=1;var tries=0;
+  while(Object.keys(set).length<3&&tries<50){tries++;var d=ri(1,Math.max(2,Math.min(5,ans+1)));var v=ans+d;if(Math.random()<0.5)v=ans-d;if(v>=0&&v!==ans)set[v]=1;}
+  var arr=Object.keys(set).map(Number);while(arr.length<3){var last=arr[arr.length-1]||ans;var next=last+1;while(set[next])next++;arr.push(next);}
+  for(var i=arr.length-1;i>0;i--){var j=ri(0,i);var z=arr[i];arr[i]=arr[j];arr[j]=z;}
+  return arr.slice(0,3);}
+function bindGame1(q){var moved=0,need=q.carry;
+  var dots2=document.querySelectorAll("#row2 .dot.o");var slots=document.querySelectorAll("#row1 .ghost-dot");
+  var filled={};
+  for(var i=0;i<dots2.length;i++){dots2[i].style.cursor="pointer";dots2[i].addEventListener("click",function(ev){var d=ev.target;if(d.getAttribute("data-moved"))return;
+    var slot=null;for(var s=0;s<slots.length;s++){if(!filled[s]){slot=s;break;}}
+    if(slot===null)return;filled[slot]=1;d.setAttribute("data-moved","1");d.classList.remove("o");d.classList.add("g");
+    var sp=slots[slot];sp.classList.remove("ghost-dot");sp.classList.add("y");sp.textContent=d.textContent;moved++;
+    if(moved>=need)showOpts1(q);});}
+  R1Filled=filled;R1Slots=slots;}
+function showOpts1(q){
+  var opts=makeOpts1(q.ans);
+  var box=document.getElementById("opts1");if(!box)return;
+  box.style.opacity="1";box.style.pointerEvents="auto";
+  box.innerHTML=opts.map(function(v){return '<button class="opt" data-v="'+v+'">'+v+'</button>';}).join("");
+  box.querySelectorAll(".opt").forEach(function(btn){btn.addEventListener("click",function(){var v=parseInt(btn.getAttribute("data-v"),10);
+    if(v===q.ans){answerOk("凑十成功！");}else{answerNo("正确答案是 "+q.ans);}});});}
+function resetDots1(){if(!R1Slots)return;renderQuestion();}
+var R1Filled=null,R1Slots=null;
+function answerOk(msg){var el=document.getElementById("gameBody");el.innerHTML=okLine(msg)+'<div style="text-align:center;padding:10px">即将进入下一题…</div>';advance(true);}
+function answerNo(msg,regen){var el=document.getElementById("gameBody");el.innerHTML=noLine(msg)+'<div style="text-align:center;padding:10px">再来一次…</div>';advance(false);}
+
+/* ---------- 游戏2 减法双通道 ---------- */
+function game2HTML(q,turn){var A=q.t.split(" - ")[0],B=q.t.split(" - ")[1];
+  var html='<div class="qbox"><div class="qstep">'+" 选一条路拆解 "+q.t+"</div><div class=\"qtext\">"+A+" − "+B+" = ?</div>";
+  html+='<div class="row center" style="margin:12px 0"><button class="btn" style="background:var(--c2)" onclick="pickRoute(\'break\')">🛤️ 破十路<br><small style="font-weight:400">先拆出 10（整十）</small></button>';
+  html+='<button class="btn orange" onclick="pickRoute(\'flat\')">🛤️ 平十路<br><small style="font-weight:400">先减到整十</small></button></div></div>';
+  return html;}
+var routeQ=null;
+function pickRoute(route){var q=R.qs[R.idx];routeQ=route;var A=parseInt(q.t.split(" - ")[0]),B=parseInt(q.t.split(" - ")[1]);
+  var el=document.getElementById("gameBody");var u=A%10,ten=A-u;
+  var big=B>=10;
+  var html='<div class="qbox"><div class="qstep">'+(route==="break"?(big?"破十路：把 "+A+" 拆成整十和十几，先用十几减个位":"破十路：把 "+A+" 拆成 10 和余数"):"平十路：把减数 "+B+" 拆开，先减到整十")+"</div><div class=\"qtext\">"+q.t+" = ?</div>";
+  var bindIds,bindOpt;
+  if(route==="break"){
+    var carry,tensHint;
+    if(big){
+      var teens=10+u;var part1=A-teens;var u2=B%10;var bT=B-u2;
+      carry=part1-bT;
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div style="font-size:14px;color:var(--mut);margin:4px">其中一个是整十，另一个是十几（可交换）</div>';
+      html+='<div class="fillin" style="margin:8px">'+teens+" − "+u2+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
+      tensHint='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(part1/10)+" − "+(bT/10)+" = "+(carry/10)+"，也就是 "+carry+"，点按钮会自动代入</div>";}
+    else{
+      carry=A-10;
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div style="font-size:14px;color:var(--mut);margin:4px">其中一个是 10（可交换）</div>';
+      html+='<div class="fillin" style="margin:8px">10 − '+B+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
+      tensHint='';}
+    html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="breakTransfer" onclick="transferBreak('+carry+')">👉 填完点击，把结果代入下一行</button></div>';
+    html+=tensHint;
+    html+='<div class="fillin" style="margin:8px"><input id="f3a" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> + <input id="fR" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> = <input id="f4" type="tel" maxlength="2"></div>';
+    html+='<div style="font-size:14px;color:var(--mut);margin:4px">把上一步结果和余数相加</div>';
+    html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBreak('+A+','+B+')">下一题</button></div>';
+    bindIds=["f1","f2","f3","f4"];bindOpt={after:"f3",afterAction:function(){transferBreak(carry);}};}
+  else{
+    var need=u;var r2=B-need;var mid=ten;
+    html+='<div class="fillin" style="margin:8px">'+B+" = <input id=\"g1\" type=\"tel\" maxlength=\"2\"> + <input id=\"g2\" type=\"tel\" maxlength=\"2\"></div>";
+    html+='<div style="font-size:14px;color:var(--mut);margin:4px">先填几能让 '+A+" 减成 "+mid+"（填第一个框）</div>";
+    html+='<div class="fillin" style="margin:8px">'+A+" − <input id=\"g3\" type=\"tel\" maxlength=\"2\" placeholder=\"?\"> = <span>"+mid+"</span></div>";
+    html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="flatTransfer" onclick="transferFlat('+need+','+r2+')">👉 填完点击，把数字代入下一行</button></div>';
+    html+='<div class="fillin" style="margin:8px">'+mid+' − <input id="g3a" type="tel" maxlength="2" placeholder="?" disabled style="width:46px;background:#f1f4f9;color:var(--mut)"> = <input id="g4" type="tel" maxlength="2"></div>';
+    html+='<div style="font-size:14px;color:var(--mut);margin:4px">第一行填完后再填：'+A+' 减几等于 '+mid+'？'+mid+' 减剩下的数等于几？</div>';
+    html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkFlat('+A+','+B+')">下一题</button></div>';
+    bindIds=["g1","g2","g3","g4"];bindOpt={after:"g2",afterAction:function(){transferFlat(need,r2);}};}
+  el.innerHTML=html;
+  bindPad(bindIds,bindOpt);}
+function bindPad(ids,opts){opts=opts||{};var cur=0;function focusNext(){cur++;if(cur<ids.length){var n=document.getElementById(ids[cur]);if(n)n.focus();}}
+  function submitIfLast(){if(cur>=ids.length-1){var btn=document.querySelector("#gameBody .btn.green");if(btn)btn.click();}}
+  var pad=document.querySelector("#gameBody .pad");
+  if(!pad){var insert=document.querySelector("#gameBody .qbox");insert.insertAdjacentHTML("beforeend",'<div class="pad" id="padBox"></div>');pad=document.getElementById("padBox");}
+  var keys=["1","2","3","4","5","6","7","8","9","0","⌫","确定"];
+  pad.innerHTML=keys.map(function(k){return '<button type="button" data-k="'+k+'">'+k+"</button>";}).join("");
+  pad.addEventListener("click",function(ev){var k=ev.target.getAttribute("data-k");if(!k)return;
+    var inp=document.getElementById(ids[cur]);if(!inp)return;
+    if(k==="⌫"){inp.value=inp.value.slice(0,-1);}
+    else if(k==="确定"){
+      if(opts.after&&opts.after===ids[cur]&&typeof opts.afterAction==="function"){opts.afterAction();focusNext();}
+      else if(cur<ids.length-1){focusNext();}else{submitIfLast();}}
+    else{inp.value=(inp.value+k).slice(0,2);}
+    syncFillers(ids);});
+  syncFillers(ids);
+  var first=document.getElementById(ids[0]);if(first)first.focus();}
+function syncFillers(ids){
+  // 破十法 f3→f3a 由 transferBreak 按钮/确定键触发，不自动同步
+}
+function val(id){var n=document.getElementById(id);return n?parseInt(n.value||"-1",10):-1;}
+function transferBreak(r1){
+  var f3=document.getElementById("f3"),f3a=document.getElementById("f3a"),fR=document.getElementById("fR");
+  if(!f3||!f3a||!fR)return false;
+  var v=f3.value.trim();
+  if(v===""){elBad(["f3"]);return false;}
+  f3a.value=v;f3a.classList.add("ok");
+  fR.value=r1;fR.classList.add("ok");
+  setTimeout(function(){f3a.classList.remove("ok");fR.classList.remove("ok");},600);
+  var f4=document.getElementById("f4");if(f4)f4.focus();
+  return true;}
+function checkBreak(A,B){var f1=val("f1"),f2=val("f2"),f3=val("f3"),f3a=val("f3a"),fR=val("fR"),f4=val("f4");
+  var u=A%10;
+  if(B<10){
+    var r1=A-10;
+    if(!((f1===10&&f2===r1)||(f2===10&&f1===r1))){elBad(["f1","f2"]);return;}
+    if(f3!==10-B){elBad(["f3"]);return;}
+    if(f3a!==f3){elBad(["f3a","f3"]);return;}
+    if(fR!==r1){elBad(["fR"]);return;}
+    if(f4!==f3+r1){answerNo("正确答案是 "+(f3+r1));return;}
+    answerOk("破十路走通！答案 "+(f3+r1));}
+  else{
+    var teens=10+u,part1=A-teens,u2=B%10,bT=B-u2,carry=part1-bT;
+    if(!((f1===part1&&f2===teens)||(f2===part1&&f1===teens))){elBad(["f1","f2"]);return;}
+    if(f3!==teens-u2){elBad(["f3"]);return;}
+    if(f3a!==f3){elBad(["f3a","f3"]);return;}
+    if(fR!==carry){elBad(["fR"]);return;}
+    if(f4!==f3+carry){answerNo("正确答案是 "+(f3+carry));return;}
+    answerOk("破十路走通！答案 "+(f3+carry));}}
+function transferFlat(need,r2){
+  var g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),g3a=document.getElementById("g3a");
+  if(!g1||!g2||!g3||!g3a)return false;
+  var v1=g1.value.trim(),v2=g2.value.trim();
+  if(v1===""||v2===""){elBad(["g1","g2"]);return false;}
+  if(parseInt(v1,10)!==need||parseInt(v2,10)!==r2){elBad(["g1","g2"]);return false;}
+  g3.value=v1;g3.classList.add("ok");
+  g3a.value=v2;g3a.classList.add("ok");
+  setTimeout(function(){g3.classList.remove("ok");g3a.classList.remove("ok");},600);
+  var g4=document.getElementById("g4");if(g4)g4.focus();
+  return true;}
+function checkFlat(A,B){var g1=val("g1"),g2=val("g2"),g3=val("g3"),g3a=val("g3a"),g4=val("g4");
+  var need=A%10;var r2=B-need;var mid=A-need;
+  if(!(g1===need&&g2===r2)){elBad(["g1","g2"]);return;}
+  if(g3!==need){elBad(["g3"]);return;}
+  if(g3a!==r2){elBad(["g3a"]);return;}
+  if(g4!==mid-r2){answerNo("正确答案是 "+(mid-r2));return;}
+  answerOk("平十路走通！答案 "+(mid-r2));}
+function elBad(ids){for(var i=0;i<ids.length;i++){var n=document.getElementById(ids[i]);if(n){n.classList.remove("ok");n.classList.add("bad");(function(el){setTimeout(function(){el.classList.remove("bad");},600);})(n);}}}
+
+/* ---------- 游戏3 借十银行 ---------- */
+var G3Q=null; /* 连减两步题的状态：{stage:1|2, c:第二个减数} */
+function game3HTML(q,turn){var parts=q.t.split(" - ");var A=parseInt(parts[0]),B=parseInt(parts[1]);var Bstr=parts[1];
+  var twoStep=parts.length===3;
+  G3Q=twoStep?{stage:1,c:parseInt(parts[2],10)}:null;
+  var t1=Math.floor(A/10),u1=A%10;var t2=Math.floor(B/10),u2=B%10;
+  var bstr=(""+B).padStart(2,"0");
+  var html='<div class="qbox"><div class="qstep">'+(twoStep?" 第 1 步：先算 "+A+" − "+B+"（个位不够减，向十位借钱）":" 个位不够减，向十位借钱")+"</div><div class=\"qtext\">"+(twoStep?A+" − "+B+" − "+G3Q.c+" = ?":q.t+" = ?")+"</div>";
+  html+='<div class="vert"><div class="numrow" style="font-size:34px;letter-spacing:6px"><span class="ten" id="t1c">'+t1+'</span><span id="u1c">'+u1+"</span></div>";
+  html+='<div class="numrow" style="font-size:34px;letter-spacing:6px;color:var(--mut)">− <span class="ten">'+t2+'</span><span>'+u2+"</span></div></div>";
+  html+='<div class="row center" style="margin:12px 0"><button class="btn orange" id="borrowBtn" onclick="doBorrow('+A+','+B+')">🏦 向十位借 1 个十</button></div>';
+  html+='<div id="borrowArea"></div></div>';
+  return html;}
+function doBorrow(A,B){var t1=Math.floor(A/10),u1=A%10;var t2=Math.floor(B/10),u2=B%10;
+  var el=document.getElementById("borrowArea");
+  el.innerHTML='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(t1)+" 借出 1 个十 → 剩 <b>"+(t1-1)+"</b>，个位 "+(u1)+" 变 <b>1"+(u1)+"</b></div>";
+  el.innerHTML+='<div class="fillin" style="margin:8px">个位 1'+u1+" − "+u2+" = <input id=\"h1\" type=\"tel\" maxlength=\"2\"></div>";
+  el.innerHTML+='<div class="fillin" style="margin:8px">十位 '+(t1-1)+' − '+t2+' = <input id="h2" type="tel" maxlength="2"></div>';
+  el.innerHTML+='<div class="fillin" style="margin:8px">'+(G3Q&&G3Q.stage===1?"第一步答案":"答案")+' = <input id="h3" type="tel" maxlength="2"></div>';
+  el.innerHTML+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBorrow('+(u1)+','+u2+','+(t1-1)+','+t2+')">'+(G3Q&&G3Q.stage===1?"下一步":"下一题")+'</button></div>';
+  bindPad(["h1","h2","h3"]);
+  var t1c=document.getElementById("t1c");if(t1c){t1c.textContent=t1-1;t1c.classList.remove("ten");t1c.style.color="var(--no)";}
+  var u1c=document.getElementById("u1c");if(u1c){u1c.textContent="1"+u1;u1c.style.color="var(--no)";}
+  var btn=document.getElementById("borrowBtn");if(btn){btn.disabled=true;btn.style.opacity=.4;}}
+function checkBorrow(u1,u2,t1n,t2){var h1=val("h1"),h2=val("h2"),h3=val("h3");
+  if(h1!==(10+u1-u2)){elBad(["h1"]);return;}
+  if(h2!==t1n-t2){elBad(["h2"]);return;}
+  var ans=(t1n-t2)*10+(10+u1-u2);
+  if(G3Q&&G3Q.stage===1){if(h3!==ans){elBad(["h3"]);return;}G3Q.stage=2;borrowStage2(ans);return;}
+  if(h3!==ans){answerNo("正确答案是 "+ans);return;}
+  answerOk("借十成功！答案 "+ans);}
+function borrowStage2(mid){var c=G3Q.c;var el=document.getElementById("gameBody");
+  var mu=mid%10,mt=Math.floor(mid/10),ct=Math.floor(c/10),cu=c%10;
+  var html='<div class="qbox"><div class="qstep">第 2 步：再算 '+mid+" − "+c+"</div>";
+  html+='<div class="qtext">'+mid+" − "+c+" = ?</div>";
+  html+='<div class="vert"><div class="numrow" style="font-size:34px;letter-spacing:6px">'+mid+"</div>";
+  html+='<div class="numrow" style="font-size:34px;letter-spacing:6px;color:var(--mut)">− '+(""+c).padStart(2,"0")+"</div></div>";
+  html+='<div class="fillin" style="margin:8px">个位 '+mu+" − "+cu+' = <input id="s1" type="tel" maxlength="2"></div>';
+  if(ct>0)html+='<div class="fillin" style="margin:8px">十位 '+mt+" − "+ct+' = <input id="s1t" type="tel" maxlength="2"></div>';
+  html+='<div class="fillin" style="margin:8px">第二步答案 = <input id="s2" type="tel" maxlength="2"></div>';
+  html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBorrow2('+mid+','+c+')">下一题</button></div></div>';
+  el.innerHTML=html;
+  bindPad(ct>0?["s1","s1t","s2"]:["s1","s2"]);}
+function checkBorrow2(mid,c){var s1=val("s1"),s2=val("s2");
+  var mu=mid%10,ct=Math.floor(c/10),cu=c%10;
+  if(s1!==mu-cu){elBad(["s1"]);return;}
+  if(ct>0){var s1t=val("s1t");if(s1t!==Math.floor(mid/10)-ct){elBad(["s1t"]);return;}}
+  if(s2!==mid-c){answerNo("正确答案是 "+(mid-c));return;}
+  answerOk("连减两步成功！答案 "+(mid-c));}
+
+/* ---------- 游戏4 口算闪电战 ---------- */
+var R4=null;
+function game4HTML(q,turn){var opts=makeOpts(q.ans);
+  var html='<div class="qbox"><div style="display:flex;justify-content:space-between;align-items:center"><div class="timer" id="timer4">30</div><div>连击 <b id="chain4">0</b></div></div>';
+  html+='<div class="qstep">'+" 30 秒，看谁算得多</div><div class=\"qtext\">"+q.t+" = ?</div>";
+  html+='<div class="opt-row" id="opt4">';
+  for(var i=0;i<opts.length;i++){html+='<button class="opt" data-v="'+opts[i]+'">'+opts[i]+"</button>";}
+  html+="</div><div id=\"fb4\"></div></div>";
+  return html;}
+function makeOpts(ans){var set={};set[ans]=1;var tries=0;
+  while(Object.keys(set).length<3&&tries<50){tries++;var d=ri(1,Math.max(2,Math.min(3,ans+1)));var v=ans+d;if(Math.random()<0.5)v=ans-d;if(v>=0)set[v]=1;}
+  var arr=Object.keys(set).map(Number);while(arr.length<3){arr.push(arr[arr.length-1]+1);}
+  for(var i=arr.length-1;i>0;i--){var j=ri(0,i);var z=arr[i];arr[i]=arr[j];arr[j]=z;}
+  return arr.slice(0,3);}
+function bindGame4(q){R4=R4?{chain:R4.chain,bestChain:R4.bestChain,over:false}:{chain:0,bestChain:0,over:false};
+  var ch0=document.getElementById("chain4");if(ch0)ch0.textContent=R4.chain;
+  document.getElementById("opt4").addEventListener("click",function(ev){if(R4.over)return;var b=ev.target.closest("button");if(!b)return;var v=parseInt(b.getAttribute("data-v"),10);
+    if(v===q.ans){R4.chain++;if(R4.chain>R4.bestChain)R4.bestChain=R4.chain;R4.over=true;
+      var el=document.getElementById("fb4");el.innerHTML=okLine("连击 "+R4.chain);advance(true);}
+    else{b.style.background="var(--no)";b.style.borderColor="var(--no)";R4.chain=0;var ch=document.getElementById("chain4");if(ch)ch.textContent=0;
+      var fb=document.getElementById("fb4");fb.innerHTML='<div class="hint-bar" style="margin-top:8px">'+hintText(R.g,q)+"</div>";setTimeout(function(){fb.innerHTML="";},2200);}});}
+function endFlash(){R4.over=true;if(R.flashTimer)clearInterval(R.flashTimer);
+  finishRoundExtra(R.answers,30);}
+
+/* ---------- 游戏5 超市小掌柜 ---------- */
+function game5HTML(q,turn){var shelf="";var shown={};
+  var html='<div class="qbox"><div class="qstep">'+" 顾客来买东西</div>";
+  html+='<div class="shop-shelf" id="shelf5">';
+  for(var i=0;i<q.items.length;i++){var it=q.items[i];var icons=(it.qty&&it.qty>1)?it.icon.repeat(it.qty):it.icon;var qtyText=(it.qty&&it.qty>1)?" "+it.qty+"个":"";shelf+='<div class="shop-item"><div class="pico">'+icons+'</div><div class="pnm">'+it.name+qtyText+'</div><div class="ppr">每个 ¥'+it.price+'</div></div>';}
+  html+=shelf+"</div>";
+  html+='<div class="receipt"><div class="rline"><span>🛒 顾客买了</span></div>';
+  for(var j=0;j<q.items.length;j++){var it2=q.items[j];var qtyText2=(it2.qty&&it2.qty>1)?" "+it2.qty+"个":"";html+='<div class="rline"><span>'+it2.icon+" "+it2.name+qtyText2+'</span><span>¥'+it2.price+'/个</span></div>';}
+  html+='<div class="rsep"></div>';
+  if(q.mode==="change"){html+='<div class="rline"><span>顾客付了</span><span style="font-weight:700">¥'+q.pay+"</span></div>";}
+  html+="</div>";
+  html+='<div class="ansline">'+(q.mode==="sum"?"总价是 ¥<span id=\"inpA\"></span>":"要找零 ¥<span id=\"inpA\"></span>")+"</div>";
+  html+='<div class="pad" id="shopPad"></div></div>';
+  return html;}
+function bindGame5(q){var val5="";
+  var pad=document.getElementById("shopPad");
+  pad.innerHTML=["1","2","3","4","5","6","7","8","9","0","⌫","确定"].map(function(k){return '<button type="button" data-k="'+k+'">'+k+"</button>";}).join("");
+  pad.addEventListener("click",function(ev){var k=ev.target.getAttribute("data-k");if(!k)return;
+    var disp=document.getElementById("inpA");
+    if(k==="⌫"){val5=val5.slice(0,-1);}
+    else if(k==="确定"){if(val5==="")return;var v=parseInt(val5,10);
+      if(v===q.ans){answerOk(q.mode==="sum"?"算得又快又准！":"找零正确！");}
+      else{var el=document.getElementById("gameBody");el.innerHTML=noLine(q.mode==="sum"?"总价是 "+q.ans+" 元":"应该找 "+q.ans+" 元")+"<div style=\"text-align:center;padding:10px\">再来一次…</div>";advance(false);}return;}
+    else{val5=(val5+k).slice(0,3);}
+    if(disp)disp.textContent=val5||"·";});}
+
+/* ============ 结算 ============ */
+function finishRound(){if(R.flashTimer)clearInterval(R.flashTimer);var secs=Math.max(1,Math.round((Date.now()-R.start)/1000));
+  var groups={};for(var i=0;i<R.qs.length;i++){var a=R.ans[i];if(!a)continue;if(!groups[a.p])groups[a.p]={ok:0,total:0};groups[a.p].total++;if(a.ok)groups[a.p].ok++;}
+  var list=[];for(var p in groups){list.push({p:p,ok:groups[p].ok,total:groups[p].total});}
+  if(!list.length)list=[{p:CUR,ok:R.answers,total:R.qs.length}];
+  for(var k=0;k<list.length;k++){var st=starsOf(list[k].ok,list[k].total);
+    profileRec(list[k].p).push({g:R.g,l:R.l,p:list[k].p,correct:list[k].ok,total:list[k].total,seconds:secs,stars:st,ts:Date.now()});
+    if(st>=1)addSticker(list[k].p);}
+  save();saveProfiles();
+  var before=[];for(var g2=2;g2<=5;g2++){if(!gameOpen(g2))before.push(g2);}
+  var unlocks=[];for(var m=0;m<before.length;m++){if(gameOpen(before[m]))unlocks.push(before[m]);}
+  showResult(list,secs,unlocks);}
+function finishRoundExtra(correct,secs){if(R.flashTimer)clearInterval(R.flashTimer);var list=[{p:CUR,ok:correct,total:Math.max(correct,10)}];
+  var st=starsOf(correct,Math.max(correct,10));
+  profileRec(list[0].p).push({g:R.g,l:R.l,p:list[0].p,correct:correct,total:Math.max(correct,10),seconds:secs,stars:st,ts:Date.now()});
+  if(st>=1)addSticker(list[0].p);save();saveProfiles();
+  var before=[];for(var g2=2;g2<=5;g2++){if(!gameOpen(g2))before.push(g2);}
+  var unlocks=[];for(var m=0;m<before.length;m++){if(gameOpen(before[m]))unlocks.push(before[m]);}
+  showResult(list,secs,unlocks);}
+function showResult(list,secs,unlocks){var g=GAMES[R.g-1];var first=list[0];
+  var st=starsOf(first.ok,first.total);
+  var html='<div class="congrats">'+(st>=3?"太厉害了！":st>=2?"很不错！":st>=1?"达标啦！":"继续加油！")+"</div>";
+  html+='<div class="stars-big">'+("★".repeat(st)+"☆".repeat(3-st))+"</div>";
+  html+='<div class="stat-line">'+g.icon+" "+g.name+" · "+LEVELS[R.l]+" · "+first.p+"</div>";
+  html+='<div class="stat-line">答对 '+first.ok+" / "+first.total+" 题 · 用时 "+(secs<60?secs+" 秒":Math.floor(secs/60)+" 分"+(secs%60))+"</div>";
+  if(st>=1)html+='<div class="stat-line">⭐ 获得 1 颗贴纸星（累计 '+stickersOf(first.p)+" 颗）</div>";
+  if(unlocks.length){html+='<div class="unlock-tip">🎉 新游戏解锁：'+unlocks.map(function(u){return GAMES[u-1].icon+GAMES[u-1].name;}).join("、")+"！去大厅试试吧</div>";}
+  html+='<div class="row center" style="margin-top:16px"><button class="btn ghost grow" onclick="closeModal();go(\'hall\')">回大厅</button><button class="btn orange grow" onclick="again()">再来一局</button></div>';
+  openModal(html);}
+function again(){closeModal();var g=R.g,l=R.l;startRound(g,l);}
+function openModal(html){var bg=document.getElementById("modalBg");document.getElementById("modalBox").innerHTML=html;bg.className="modal-bg on";}
+function closeModal(){document.getElementById("modalBg").className="modal-bg";}
+function askConfirm(msg,act){
+  var mb=document.getElementById("modalBox");
+  mb.innerHTML='<div style="text-align:center"><p style="font-size:16px;font-weight:600;margin:4px 0 18px;line-height:1.6">'+msg+'</p><div class="row center" style="gap:10px"><button class="btn ghost" style="flex:1" onclick="closeModal()">取消</button><button class="btn" style="flex:1;background:var(--no);border-color:var(--no)" onclick="'+act+';closeModal()">确定</button></div></div>';
+  document.getElementById("modalBg").className="modal-bg on";}
+function quitRound(){askConfirm("退出本局？本局成绩不记录。","quitRoundNow()");}
+function quitRoundNow(){if(R&&R.flashTimer)clearInterval(R.flashTimer);R=null;go("hall");}
+
+/* ============ 初始化 ============ */
+function initAuth(){var sess=null;try{sess=localStorage.getItem(SESS_KEY);}catch(e){}
+  if(sess&&PROFILES[sess]){CUR=sess;renderUserChip();go("hall");}
+  else{showLogin();}}
+initAuth();
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>难度复核 · 数学四法闯关乐园</title>
+<style>
+:root{
+  --blue:#2f6fd0;--green:#0f8a6d;--orange:#d85a30;--purple:#7f77dd;--gold:#ba7517;
+  --ok:#0f8a6d;--no:#d85a30;--mut:#7a86a1;--bg:#f2f5fa;--card:#ffffff;--line:#e3e9f2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:#23324a;padding-bottom:60px}
+header{background:linear-gradient(135deg,#2f6fd0,#5aa0e8);color:#fff;padding:18px 20px;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header h1{font-size:20px}
+header p{font-size:13px;opacity:.9;margin-top:4px}
+main{max-width:960px;margin:0 auto;padding:16px}
+.sumcard{background:var(--card);border-radius:14px;padding:16px 18px;margin-bottom:16px;box-shadow:0 2px 8px rgba(30,60,110,.06)}
+.sumcard h2{font-size:16px;margin-bottom:10px}
+.sumcard li{font-size:13.5px;line-height:1.9;color:#3a4a63}
+.warn{color:var(--no);font-weight:600}
+.okk{color:var(--ok);font-weight:600}
+.gsec{margin:26px 0 10px;display:flex;align-items:center;gap:10px}
+.gsec .gico{font-size:26px}
+.gsec h2{font-size:18px}
+.gsec .gdesc{font-size:12.5px;color:var(--mut)}
+.card{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(30,60,110,.06);border-top:4px solid var(--blue)}
+.card.g2{border-top-color:var(--green)}
+.card.g3{border-top-color:var(--orange)}
+.card.g4{border-top-color:var(--gold)}
+.card.g5{border-top-color:var(--purple)}
+.cardhd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lv{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:15px}
+.lv small{font-weight:400;color:var(--mut);font-size:12.5px}
+.badge{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:600}
+.badge.ok{background:#e3f5ef;color:var(--ok)}
+.badge.warn{background:#fdeae3;color:var(--no)}
+.rule{font-size:12.5px;color:var(--mut);margin:2px 0 10px}
+.rr{margin-left:auto;flex:0 0 auto}
+.rr button{border:1px solid var(--line);background:#f6f9fd;border-radius:8px;padding:5px 12px;font-size:12.5px;color:#3a4a63;cursor:pointer}
+.rr button:hover{background:#eaf1fb}
+.qbox{background:#f7faff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.qtext{font-size:26px;font-weight:800;text-align:center;letter-spacing:2px;margin:4px 0 8px}
+.hint-bar{background:#fff7e6;border:1px solid #f0dfb2;color:#8a6d1a;border-radius:8px;padding:7px 10px;font-size:13px;margin:8px 0}
+.tenrow{display:flex;gap:6px;justify-content:center;margin:6px 0;flex-wrap:wrap}
+.dot{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+.dot.b{background:var(--blue)}
+.dot.o{background:var(--orange)}
+.dot.y{background:#e8b931;color:#5b4300}
+.opt-row{display:flex;gap:10px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.opt{min-width:64px;padding:10px 14px;font-size:20px;font-weight:700;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:default;position:relative}
+.opt.right{border-color:var(--ok);background:#e3f5ef;color:var(--ok)}
+.opt.right:after{content:"✓ 正确答案";position:absolute;top:-9px;right:-6px;font-size:10px;background:var(--ok);color:#fff;border-radius:8px;padding:1px 6px}
+.fillin{display:flex;align-items:center;justify-content:center;gap:8px;font-size:20px;font-weight:700;margin:8px 0;flex-wrap:wrap}
+.fb{display:inline-flex;min-width:44px;height:38px;align-items:center;justify-content:center;border:2px solid var(--ok);background:#e3f5ef;color:var(--ok);border-radius:8px;font-size:19px}
+.fq{display:inline-flex;min-width:44px;height:38px;align-items:center;justify-content:center;border:2px dashed #b9c5d8;background:#fff;color:#8a97ad;border-radius:8px;font-size:19px}
+.tbtn{display:inline-block;background:#e8f0fb;color:var(--blue);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;margin:6px auto}
+.route2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.route2{grid-template-columns:1fr}}
+.routebox{border:1px dashed var(--line);border-radius:10px;padding:8px}
+.routebox h4{font-size:13px;margin-bottom:6px;text-align:center}
+.vert{text-align:center;margin:6px 0}
+.numrow{font-weight:800}
+.mut{font-size:12px;color:var(--mut)}
+.notecard{background:#fdeae3;border:1px solid #f3c4b3;border-radius:10px;padding:8px 12px;font-size:12.5px;color:#a33f22;line-height:1.7;margin-top:8px}
+.shop-shelf{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.shop-item{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;text-align:center}
+.pico{font-size:26px}
+.pnm{font-size:12.5px;color:#3a4a63;margin:2px 0}
+.ppr{font-size:14px;font-weight:700;color:var(--orange)}
+.receipt{background:#fffdf3;border:1px dashed #d8c891;border-radius:8px;padding:8px 12px;max-width:340px;margin:8px auto;font-size:13.5px}
+.rline{display:flex;justify-content:space-between;margin:2px 0}
+.rsep{border-top:1px dashed #d8c891;margin:6px 0}
+.ansline{text-align:center;font-size:18px;font-weight:700;margin:8px 0}
+.timer{font-size:22px;font-weight:800;color:var(--no)}
+.flexhd{display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔍 难度复核 · 数学四法闯关乐园</h1>
+  <p>5 个游戏 × 4 档难度 = 20 种出题规则。示例题由与线上一致的出题逻辑实时生成，点「换一题」可反复抽样。</p>
+</header>
+<main>
+  <div class="sumcard">
+    <h2>📋 复核结论速览（我的建议）</h2>
+    <ul>
+      <li><span class="warn">游戏1 凑十小火车 L4</span>：出「4 + 7 − 2」三步混合题，凑十法只能管前两个数，十格图和提示与最终答案脱节 → 不适合，建议改题型。</li>
+      <li><span class="warn">游戏2 减法双通道 L4</span>：出「23 − 7 + 4」混合题，破十/平十拆解只拆前半段，<b>后半段「+4」在判分时被完全忽略</b> → 属于 bug 级问题。</li>
+      <li><span class="warn">游戏3 借十银行 L4</span>：出「35 − 18 + 4」混合题，借十竖式只算前半段，后半段同样被忽略 → 同上。</li>
+      <li><span class="warn">游戏2 L3 标签不符</span>：全局难度文案写「两个十位数」，但游戏2 L3 实际仍是「十几~四十几 减 一位数」，从未出两位数减两位数。</li>
+      <li><span class="warn">游戏5 L3 与 L4 几乎无差异</span>：单价范围 8~45 与 5~48 基本重叠，找零比例相同，建议重新区分。</li>
+      <li><span class="okk">游戏4 口算闪电战 L4</span>：混合多步对口算提速游戏本身是合理的（它不做拆解教学），是否保留由您定夺。</li>
+      <li>游戏1 L1–L3、游戏2 L1–L2、游戏3 L1–L3、游戏4 L1–L3、游戏5 L1–L2 的题型与玩法匹配，见下方示例确认。</li>
+    </ul>
+  </div>
+  <div id="app"></div>
+</main>
+
+<script>
+"use strict";
+/* ===== 出题函数：与 index.html 完全一致（复制） ===== */
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function genAdd(l){var a,b,c,op,t1,t2;
+  if(l===0){a=ri(2,9);b=ri(2,9);while(a+b<=10){a=ri(2,9);b=ri(2,9);}return {t:a+" + "+b,ans:a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+  if(l===1){t1=ri(1,4);a=ri(2,9);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+b,ans:t1*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+  if(l===2){t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+(t2*10+b),ans:t1*10+t2*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+  a=ri(2,9);b=ri(2,9);while(a+b<=10){b=ri(2,9);}op=Math.random()<0.5?"+":"-";c=ri(1,9);
+  var mid=a+b,ans=op==="+"?mid+c:mid-c;while(ans<0){c=ri(1,9);ans=mid-c;}
+  return {t:a+" + "+b+" "+op+" "+c,ans:ans,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+function genSub1(l){var t,u,d,c,op,ans;
+  if(l===0){t=1;u=ri(1,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
+  if(l===1){t=ri(2,4);u=ri(0,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
+  if(l===2){if(Math.random()<0.5){t=1;u=ri(1,8);d=ri(u+1,9);}else{t=ri(2,4);u=ri(0,8);d=ri(u+1,9);}return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
+  t=ri(2,4);u=ri(0,8);d=ri(u+1,9);op=Math.random()<0.5?"+":"-";c=ri(1,9);ans=op==="+"?t*10+u-d+c:t*10+u-d-c;while(ans<0){c=ri(1,9);ans=t*10+u-d-c;}
+  return {t:(t*10+u)+" - "+d+" "+op+" "+c,ans:ans,sub:d-u};}
+function genSub2(l){var t1,u1,t2,u2,d,op,c,ans;
+  if(l===0){t1=ri(2,6);u1=ri(0,8);d=ri(u1+1,9);return {t:(t1*10+u1)+" - "+d,ans:t1*10+u1-d};}
+  if(l===1){t1=ri(3,7);u1=ri(0,8);t2=ri(1,t1-1);u2=ri(u1+1,9);return {t:(t1*10+u1)+" - "+(t2*10+u2),ans:t1*10+u1-t2*10-u2};}
+  if(l===2){if(Math.random()<0.5){t1=ri(2,6);u1=ri(0,8);d=ri(u1+1,9);return {t:(t1*10+u1)+" - "+d,ans:t1*10+u1-d};}t1=ri(3,7);u1=ri(0,8);t2=ri(1,t1-1);u2=ri(u1+1,9);return {t:(t1*10+u1)+" - "+(t2*10+u2),ans:t1*10+u1-t2*10-u2};}
+  t1=ri(3,7);u1=ri(0,8);t2=ri(1,t1-1);u2=ri(u1+1,9);op=Math.random()<0.5?"+":"-";c=ri(1,9);ans=op==="+"?t1*10+u1-t2*10-u2+c:t1*10+u1-t2*10-u2-c;while(ans<0){c=ri(1,9);ans=t1*10+u1-t2*10-u2-c;}
+  return {t:(t1*10+u1)+" - "+(t2*10+u2)+" "+op+" "+c,ans:ans};}
+function genMix(l){var a,b,t,t1,t2,c,op;
+  if(l===0){a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"&&a<b){var z=a;a=b;b=z;}return {t:a+" "+op+" "+b,ans:op==="+"?a+b:a-b};}
+  if(l===1){t=ri(1,4);a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"){if(a<b){var z=a;a=b;b=z;}return {t:(t*10+a)+" "+op+" "+b,ans:t*10+a-b};}return {t:(t*10+a)+" + "+b,ans:t*10+a+b};}
+  if(l===2){t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"){if(t1*10+a<t2*10+b){var sw=t1;t1=t2;t2=sw;var w=a;a=b;b=w;}}return {t:(t1*10+a)+" "+op+" "+(t2*10+b),ans:op==="+"?t1*10+a+t2*10+b:t1*10+a-t2*10-b};}
+  a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";c=ri(1,9);var m=op==="+"?a+b:a-b;if(m<0){var z=a;a=b;b=z;m=a-b;}if(m<2){op="+";m=a+b;}var op2=Math.random()<0.5?"+":"-";var ans=op2==="+"?m+c:m-c;while(ans<0){c=ri(1,9);ans=m-c;}
+  return {t:a+" "+op+" "+b+" "+op2+" "+c,ans:ans};}
+var GOODS=[["棒棒糖","🍭"],["果汁","🧃"],["曲奇饼","🍪"],["苹果","🍎"],["小蛋糕","🧁"],["面包","🍞"],["牛奶","🥛"],["爆米花","🍿"],["冰淇淋","🍦"],["香蕉","🍌"],["鸡蛋","🥚"],["橙子","🍊"]];
+function genShop(l){var priceFn,count=2;
+  if(l===0)priceFn=function(){return ri(1,9);};
+  else if(l===1)priceFn=function(){return ri(3,19);};
+  else if(l===2)priceFn=function(){return ri(8,45);};
+  else priceFn=function(){return ri(5,48);};
+  var items=[];var used=[];
+  for(var i=0;i<count;i++){var idx=ri(0,GOODS.length-1);while(used.indexOf(idx)>=0){idx=ri(0,GOODS.length-1);}used.push(idx);items.push({name:GOODS[idx][0],icon:GOODS[idx][1],price:priceFn()});}
+  var total=items[0].price+items[1].price;
+  var mode=(l>=2&&Math.random()<0.4)?"change":"sum";
+  var pay=0,change=0;
+  if(mode==="change"){var faces=[20,50,100];for(var k=0;k<faces.length;k++){if(faces[k]>=total+1){pay=faces[k];break;}}if(!pay){pay=100;total=Math.min(total,99);}change=pay-total;}
+  return {t:"",items:items,total:total,mode:mode,pay:pay,change:change,ans:mode==="sum"?total:change};}
+function genQ(g,l){if(g===1)return genAdd(l);if(g===2)return genSub1(l);if(g===3)return genSub2(l);if(g===4)return genMix(l);return genShop(l);}
+
+/* ===== 辅助 ===== */
+var LV=["L1","L2","L3","L4"];
+function makeOpts(ans){var set={};set[ans]=1;var tries=0;
+  while(Object.keys(set).length<3&&tries<50){tries++;var d=ri(1,Math.max(2,Math.min(5,ans+1)));var v=ans+d;if(Math.random()<0.5)v=ans-d;if(v>=0&&v!==ans)set[v]=1;}
+  var arr=Object.keys(set).map(Number);while(arr.length<3){var last=arr[arr.length-1]||ans;var next=last+1;while(set[next])next++;arr.push(next);}
+  for(var i=arr.length-1;i>0;i--){var j=ri(0,i);var z=arr[i];arr[i]=arr[j];arr[j]=z;}
+  return arr.slice(0,3);}
+function optsHTML(ans){var arr=makeOpts(ans);
+  return '<div class="opt-row">'+arr.map(function(v){return '<div class="opt'+(v===ans?" right":"")+'">'+v+"</div>";}).join("")+"</div>";}
+function fb(v){return '<span class="fb">'+v+"</span>";}
+function fq(){return '<span class="fq">?</span>';}
+function isMixed(t){return t.trim().split(/\s+/).length>=4;}
+
+/* ===== 各游戏示例卡 ===== */
+function cardG1(l){
+  var q=genAdd(l);var n1=q.n1,n2=q.n2,carry=q.carry,rest=q.rest;
+  var row1="";for(var i=0;i<n1;i++)row1+='<span class="dot b">'+(i+1)+"</span>";
+  for(var j=0;j<carry;j++)row1+='<span class="dot y">'+(n1+j+1)+"</span>";
+  var row2="";for(var k=0;k<rest;k++)row2+='<span class="dot o">'+(k+1)+"</span>";
+  var hint="凑十提示：看大数 "+n1+"，差 "+(10-n1)+" 凑成 10；把 "+n2+" 拆成 "+carry+" 和 "+rest+"，10 + "+rest+" = "+(n1+n2);
+  var html='<div class="qbox"><div class="qtext">'+q.t+" = ?</div>";
+  html+='<div class="hint-bar">📖 '+hint+"</div>";
+  html+='<div class="mut" style="text-align:center">十格图（孩子把橙色圆点移进空位凑十后的样子）</div>';
+  html+='<div class="tenrow">'+row1+"</div><div class=\"tenrow\">"+row2+"</div>";
+  html+='<div class="ansline">答案 = '+fb(q.ans)+"</div>";
+  html+=optsHTML(q.ans)+"</div>";
+  if(l===3)html+='<div class="notecard">⚠️ 问题：十格图与凑十提示只针对前两个数（'+n1+" + "+n2+" = "+(n1+n2)+"），但题目最终答案是三步混合的结果（"+q.ans+"）。孩子按凑十算出中间结果后，第三步无人引导，选项也直接跳到最终答案 → 凑十玩法不适合混合运算。</div>";
+  return html;}
+function cardG2(l){
+  var q=genSub1(l);
+  var A=parseInt(q.t.split(" - ")[0],10),B=parseInt(q.t.split(" - ")[1],10);
+  var r1=A-10,f3=10-B,bAns=f3+r1;
+  var need=A-10,r2=B-need,fAns=10-r2;
+  var html='<div class="qbox"><div class="qtext">'+q.t+" = ?</div>";
+  html+='<div class="route2"><div class="routebox"><h4>🛤️ 破十路</h4>';
+  html+='<div class="fillin">'+A+" = "+fb(10)+" + "+fb(r1)+"</div>";
+  html+='<div class="fillin">10 − '+B+" = "+fb(f3)+"</div>";
+  html+='<div class="fillin">'+fb(f3)+" + "+fb(r1)+" = "+fb(bAns)+"</div></div>";
+  html+='<div class="routebox"><h4>🛤️ 平十路</h4>';
+  html+='<div class="fillin">'+B+" = "+fb(need)+" + "+fb(r2)+"</div>";
+  html+='<div class="fillin">'+A+" − "+fb(need)+" = "+fb(10)+"</div>";
+  html+='<div class="fillin">10 − '+fb(r2)+" = "+fb(fAns)+"</div></div></div>";
+  html+='<div class="ansline">两条路答案 = '+fb(bAns)+"</div></div>";
+  if(l===2)html+='<div class="notecard">⚠️ 标签不符：难度文案写「两个十位数」，但本档实际仍是「十几~四十几 减 一位数」，从未出现两位数减两位数（那是游戏3的内容）。</div>';
+  if(l===3)html+='<div class="notecard">⚠️ 问题（bug 级）：题目是三步混合，但破十/平十拆解<b>只针对前半段 '+A+" − "+B+"</b>，后面的第三步在游戏里完全没有输入框，判分也只按前半段算（拆完即判对）→ 后半步被忽略。</div>";
+  return html;}
+function cardG3(l){
+  var q=genSub2(l);
+  var parts=q.t.split(" - ");var A=parseInt(parts[0],10),B=parseInt(parts[1],10);
+  var t1=Math.floor(A/10),u1=A%10,t2=Math.floor(B/10),u2=B%10;
+  var h1=10+u1-u2,h2=(t1-1)-t2,ans=h2*10+h1;
+  var html='<div class="qbox"><div class="qtext">'+q.t+" = ?</div>";
+  html+='<div class="vert"><div class="numrow" style="font-size:34px;letter-spacing:8px">'+t1+u1+'</div><div class="numrow" style="font-size:34px;letter-spacing:8px;color:var(--mut)">− '+t2+u2+"</div></div>";
+  html+='<div style="text-align:center"><span class="tbtn">🏦 向十位借 1 个十（点击后）</span></div>';
+  html+='<div class="mut" style="text-align:center">十位 '+t1+" 借出 1 → 剩 "+(t1-1)+"，个位 "+u1+" 变 1"+u1+"</div>";
+  html+='<div class="fillin">个位 1'+u1+" − "+u2+" = "+fb(h1)+"</div>";
+  html+='<div class="fillin">十位 '+(t1-1)+" − "+t2+" = "+fb(h2)+"</div>";
+  html+='<div class="fillin">答案 = '+fb(ans)+"</div></div>";
+  if(l===3)html+='<div class="notecard">⚠️ 问题（bug 级）：题目是三步混合，但竖式和借十流程<b>只算前半段 '+A+" − "+B+"</b>，第三步没有任何输入位置，拆完即判对 → 后半步被忽略。</div>";
+  return html;}
+function cardG4(l){
+  var q=genMix(l);
+  var html='<div class="qbox"><div class="flexhd"><div class="timer">30</div><div>连击 <b>0</b></div></div>';
+  html+='<div class="qtext">'+q.t+" = ?</div>";
+  html+=optsHTML(q.ans);
+  html+='<div class="mut" style="text-align:center">30 秒计时 · 选项制 · 答错连击清零并给提示</div></div>';
+  if(l===3)html+='<div class="notecard">ℹ️ 说明：三步混合对口算提速玩法本身成立（无拆解教学环节）。是否保留此难度、或降低数字范围，由您决定。</div>';
+  return html;}
+function cardG5(l){
+  var q=genShop(l);
+  var html='<div class="qbox"><div class="shop-shelf">';
+  for(var i=0;i<q.items.length;i++){var it=q.items[i];html+='<div class="shop-item"><div class="pico">'+it.icon+'</div><div class="pnm">'+it.name+'</div><div class="ppr">¥'+it.price+"</div></div>";}
+  html+="</div><div class=\"receipt\">";
+  html+='<div class="rline"><span>🛒 顾客买了</span><span></span></div>';
+  for(var j=0;j<q.items.length;j++){html+='<div class="rline"><span>'+q.items[j].icon+" "+q.items[j].name+'</span><span>¥'+q.items[j].price+"</span></div>";}
+  html+='<div class="rsep"></div>';
+  if(q.mode==="change")html+='<div class="rline"><span>顾客付了</span><span style="font-weight:700">¥'+q.pay+"</span></div>";
+  html+="</div>";
+  html+='<div class="ansline">'+(q.mode==="sum"?"总价是 ":"要找零 ")+fb(q.ans)+"</div>";
+  html+='<div class="mut" style="text-align:center">数字键盘输入 · 两种题型：求总价 / 付整找零</div></div>';
+  if(l===3)html+='<div class="notecard">⚠️ 差异过小：L3 单价 8~45、L4 单价 5~48，范围基本重叠，找零比例均为 40% → 两档几乎一样，建议重新区分（如 L4 三件商品、更大金额或连买两次）。</div>';
+  return html;}
+
+/* ===== 卡片框架 ===== */
+var GAMES=[
+ {g:1,name:"凑十小火车",icon:"🚂",desc:"加法 · 凑十法",rules:["两个个位数，和＞10（如 8+5）","两位数 + 个位数，个位进位（如 23+8）","两位数 + 两位数，个位进位（如 23+38）","三步混合 a+b±c（如 4+7−2）"]},
+ {g:2,name:"减法双通道",icon:"🛤️",desc:"退位减 · 破十平十",rules:["十几减一位数（如 13−6）","二十几~四十几减一位数（如 32−7）","十几~四十几减一位数，随机混合","两位数−一位数±个位数（如 23−7+4）"]},
+ {g:3,name:"借十银行",icon:"🏦",desc:"两位数退位减",rules:["二十几~六十几减一位数（如 42−8）","两位数−两位数退位（如 52−17）","L1/L2 题型随机混合","两位数−两位数±个位数（如 35−18+4）"]},
+ {g:4,name:"口算闪电战",icon:"⚡",desc:"四法提速 30 秒",rules:["个位数 ± 个位数","两位数 ± 个位数","两位数 ± 两位数","三步混合 a±b±c（如 4+7−2）"]},
+ {g:5,name:"超市小掌柜",icon:"🛒",desc:"综合应用",rules:["单价 1~9，求总价","单价 3~19，求总价","单价 8~45，40% 概率找零题","单价 5~48，40% 概率找零题"]}
+];
+var WARNLV={1:3,2:2,3:3,4:99,5:3};/* 99=仅说明 */
+function cardInner(g,l){
+  if(g===1)return cardG1(l);if(g===2)return cardG2(l);if(g===3)return cardG3(l);if(g===4)return cardG4(l);return cardG5(l);}
+function cardHTML(G,l){
+  var warn=(G.g===1&&l===3)||(G.g===2&&(l===2||l===3))||(G.g===3&&l===3)||(G.g===5&&l===3);
+  var info=G.g===4&&l===3;
+  var badge=warn?'<span class="badge warn">⚠️ 待定夺</span>':(info?'<span class="badge warn">ℹ️ 请定夺</span>':'<span class="badge ok">✅ 匹配</span>');
+  return '<div class="card g'+G.g+'" id="card-'+G.g+"-"+l+'"><div class="cardhd"><div class="lv">'+LV[l]+" <small>"+G.rules[l]+"</small></div>"+badge+
+  '<div class="rr"><button type="button" onclick="reroll('+G.g+","+l+')">🎲 换一题</button></div></div>'+cardInner(G.g,l)+"</div>";}
+function renderApp(){var html="";
+  for(var i=0;i<GAMES.length;i++){var G=GAMES[i];
+    html+='<div class="gsec"><span class="gico">'+G.icon+'</span><div><h2>'+G.name+'</h2><div class="gdesc">'+G.desc+"</div></div></div>";
+    for(var l=0;l<4;l++)html+=cardHTML(G,l);}
+  document.getElementById("app").innerHTML=html;}
+function reroll(g,l){var G=null;for(var i=0;i<GAMES.length;i++)if(GAMES[i].g===g)G=GAMES[i];
+  document.getElementById("card-"+g+"-"+l).outerHTML=cardHTML(G,l);}
+renderApp();
+</script>
+</body>
+</html>
