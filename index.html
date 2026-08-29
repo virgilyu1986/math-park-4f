@@ -64,6 +64,12 @@ section.view.on{display:block;animation:fade .25s ease}
 .dot{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:15px}
 .dot.b{background:var(--c1)} .dot.o{background:var(--c3)} .dot.g{background:var(--ok)} .dot.y{background:var(--gold)}
 .dot.ghost-dot{background:#edf0f6;color:#b6bfd0;border:2px dashed #cdd6e5}
+.dot.carriage{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#dbeafe,#bfdbfe);border:2px solid #2563eb;border-radius:8px;color:#1e40af;padding:0 6px;min-width:38px;height:42px;box-sizing:border-box;position:relative;flex-shrink:0;gap:1px}
+.dot.carriage .ic{font-size:18px;line-height:1}
+.dot.carriage .badge{position:absolute;top:-5px;right:-6px;font-size:9px;background:#1e40af;color:#fff;padding:1px 3px;border-radius:6px;font-weight:700;line-height:1}
+.dot.fruit{font-size:22px;line-height:1}
+.dot.moved{background:#d4d8e1;color:#9aa3b5;opacity:.6;cursor:default}
+.train-engine,.truck-engine{font-size:28px;width:42px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;margin:0 2px}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:280px;margin:10px auto}
 .pad button{height:52px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;font-size:22px;font-weight:700;cursor:pointer}
 .pad button:active{background:var(--soft)}
@@ -147,6 +153,13 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
 .login-inp:focus{border-color:var(--c1)}
 .login-err{color:var(--no);font-size:13px;min-height:18px;margin-bottom:6px}
 .login-tip{font-size:12px;color:var(--mut);margin-top:12px;line-height:1.7}
+.login-wrap{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;max-width:900px;width:100%;padding:20px}
+.thanks-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px 24px;max-width:320px;width:100%;box-shadow:0 12px 40px rgba(40,60,100,.12);text-align:left}
+.thanks-title{font-size:16px;font-weight:700;margin-bottom:12px;color:var(--ink)}
+.thanks-list{font-size:14px;color:var(--mut);line-height:1.8}
+.thanks-item{padding:8px 0;border-bottom:1px dashed var(--line)}
+.thanks-item:last-child{border-bottom:0}
+.thanks-item b{color:var(--c1)}
 .user-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
 .user-row:last-child{border-bottom:0}
 .user-row .del{background:#fdeceb;color:var(--no);border:1px solid #f7d3d1;border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer}
@@ -181,15 +194,23 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
 <div id="stkPrint" style="display:none"></div>
 
 <div class="login-bg" id="loginOverlay">
-  <div class="login-card">
-    <div style="font-size:44px">🧮</div>
-    <div class="login-title">数学四法闯关乐园</div>
-    <div class="login-sub">先登录再开始 · 成绩与解锁按账号分开保存</div>
-    <input class="login-inp" id="loginUser" type="text" placeholder="用户名（中文/英文字母）" maxlength="12" autocomplete="off">
-    <input class="login-inp" id="loginPass" type="password" placeholder="密码（仅管理员需要）" autocomplete="off">
-    <div class="login-err" id="loginErr"></div>
-    <button class="btn big" onclick="doLogin()">进入乐园 🎉</button>
-    <div class="login-tip">新用户名将自动创建账号，无需密码<br>管理员账号：admin</div>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div style="font-size:44px">🧮</div>
+      <div class="login-title">数学四法闯关乐园</div>
+      <div class="login-sub">先登录再开始 · 成绩与解锁按账号分开保存</div>
+      <input class="login-inp" id="loginUser" type="text" placeholder="用户名（中文/英文字母）" maxlength="12" autocomplete="off">
+      <input class="login-inp" id="loginPass" type="password" placeholder="密码（仅管理员需要）" autocomplete="off">
+      <div class="login-err" id="loginErr"></div>
+      <button class="btn big" onclick="doLogin()">进入乐园 🎉</button>
+      <div class="login-tip">新用户名将自动创建账号，无需密码<br>管理员账号：admin</div>
+    </div>
+    <div class="thanks-card">
+      <div class="thanks-title">🌟 特别鸣谢</div>
+      <div class="thanks-list">
+        <div class="thanks-item">感谢优秀数学教师<b>高老师</b>对该项目的改进建议</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -221,6 +242,7 @@ var GOODS=[
  ["棒棒糖","🍭"],["果汁","🧃"],["曲奇饼","🍪"],["苹果","🍎"],["小蛋糕","🧁"],["面包","🍞"],
  ["牛奶","🥛"],["爆米花","🍿"],["冰淇淋","🍦"],["香蕉","🍌"],["鸡蛋","🥚"],["橙子","🍊"]
 ];
+var FRUITS=["🍎","🍌","🍊","🍓","🍇","🍑","🍒","🥝","🍍","🥭","🍐","🍉"];
 var GNAME={1:"凑十法",2:"破十/平十法",3:"借十法",4:"四法综合",5:"四法应用"};
 var HINTS={
  "1":"凑十：看大数拆小数，凑成十再加余数",
@@ -266,10 +288,13 @@ function rankPlayers(){var names=[];for(var k in PROFILES){if(k!==ADMIN_USER)nam
 
 /* ============ 题目生成器（严格匹配难度） ============ */
 function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
-function genAdd(l){if(l>2)l=2;var a,b,t1,t2;
-  if(l===0){a=ri(2,9);b=ri(2,9);while(a+b<=10){a=ri(2,9);b=ri(2,9);}return {t:a+" + "+b,ans:a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
-  if(l===1){t1=ri(1,4);a=ri(2,9);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+b,ans:t1*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
-  t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);while(a+b<=10){b=ri(2,9);}return {t:(t1*10+a)+" + "+(t2*10+b),ans:t1*10+t2*10+a+b,carry:10-a,rest:b-(10-a),n1:a,n2:b};}
+function genAdd(l){if(l>2)l=2;var a,b,t1,t2,base,add2,carry,rest,ans,t;
+  if(l===0){t1=0;t2=0;a=ri(2,9);b=ri(2,9);while(a+b<=10){a=ri(2,9);b=ri(2,9);}base=a;add2=b;t=a+" + "+b;}
+  else if(l===1){t2=0;t1=ri(1,4);a=ri(2,9);b=ri(2,9);while(a+b<=10){b=ri(2,9);}base=t1*10+a;add2=b;t=(t1*10+a)+" + "+b;}
+  else{t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);while(a+b<=10){b=ri(2,9);}base=t1*10+a;add2=t2*10+b;t=(t1*10+a)+" + "+(t2*10+b);}
+  carry=10-a;rest=add2-carry;ans=base+add2;
+  var fruit=FRUITS[ri(0,FRUITS.length-1)];var fruits=[];for(var k=0;k<10+add2;k++)fruits.push(fruit);
+  return {t:t,ans:ans,carry:carry,rest:rest,n1:a,n2:b,t1:t1,t2:t2,fruits:fruits,fruit:fruit};}
 function genSub1(l){if(l>2)l=2;var t,u,d,t1,u1,t2,u2;
   if(l===0){t=1;u=ri(1,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
   if(l===1){t=ri(2,4);u=ri(1,8);d=ri(u+1,9);return {t:(t*10+u)+" - "+d,ans:t*10+u-d,sub:d-u};}
@@ -533,12 +558,18 @@ function game1Hint(q,l){
   var parts=q.t.split(" ");var op=parts[3],c2=parseInt(parts[4],10);
   return"💡 先点 "+c+" 个橙点，"+a+" + "+c+" = 10，再看 10 + "+r+" "+op+" "+c2+" = "+ans;}
 function game1HTML(q,turn){
-  var n1=q.n1,n2=q.n2,carry=q.carry,rest=q.rest;
-  var row1="",row2="";
-  for(var i=0;i<10;i++){row1+=i<n1?'<span class="dot b">'+(i+1)+"</span>":'<span class="dot ghost-dot" data-slot="'+(i-n1)+'">?</span>';}
-  for(var j=0;j<n2;j++){row2+='<span class="dot o" data-move="'+(j<carry?"carry":"rest")+'">'+(j+1)+"</span>";}
-  var html='<div class="qbox"><div class="qstep"> 题目</div><div class="qtext">'+q.t+" = ?</div>";
-  html+='<div class="hint-bar" id="hint1">'+game1Hint(q,R.l)+"</div>";
+  var n1=q.n1,n2=q.n2,carry=q.carry,fruits=q.fruits||[],t1=q.t1||0,t2=q.t2||0,fruit=q.fruit||"🍎";
+  var carriage='<span class="dot carriage" title="这一节=10个水果"><span class="ic">🚃</span><span class="badge">10</span></span>';
+  var row1='<span class="train-engine" title="火车">🚂</span>';
+  for(var c1=0;c1<t1;c1++)row1+=carriage;
+  for(var i=0;i<10;i++){
+    if(i<n1){row1+='<span class="dot b fruit">'+fruit+'</span>';}
+    else{row1+='<span class="dot ghost-dot" data-slot="'+(i-n1)+'">·</span>';}
+  }
+  var row2='<span class="truck-engine" title="货车">🚚</span>';
+  for(var c2=0;c2<t2;c2++)row2+=carriage;
+  for(var j=0;j<n2;j++){row2+='<span class="dot o fruit" data-fruit="'+fruit+'" data-move="'+(j<carry?"carry":"rest")+'">'+fruit+'</span>';}
+  var html='<div class="qbox"><div class="qstep">题目</div><div class="qtext">'+q.t+" = ?</div>";
   html+='<div class="tenrow" id="row1">'+row1+"</div>";
   html+='<div class="tenrow" id="row2">'+row2+"</div>";
   html+='<div class="ansline" id="qLine">'+q.t+' = <span id="ansShow">?</span></div>';
@@ -556,8 +587,10 @@ function bindGame1(q){var moved=0,need=q.carry;
   var filled={};
   for(var i=0;i<dots2.length;i++){dots2[i].style.cursor="pointer";dots2[i].addEventListener("click",function(ev){var d=ev.target;if(d.getAttribute("data-moved"))return;
     var slot=null;for(var s=0;s<slots.length;s++){if(!filled[s]){slot=s;break;}}
-    if(slot===null)return;filled[slot]=1;d.setAttribute("data-moved","1");d.classList.remove("o");d.classList.add("g");
-    var sp=slots[slot];sp.classList.remove("ghost-dot");sp.classList.add("y");sp.textContent=d.textContent;moved++;
+    if(slot===null)return;filled[slot]=1;d.setAttribute("data-moved","1");
+    d.classList.remove("o");d.classList.add("moved");d.style.cursor="default";
+    var sp=slots[slot];sp.classList.remove("ghost-dot");sp.classList.add("b");sp.classList.add("fruit");
+    sp.textContent=d.textContent;moved++;
     if(moved>=need)showOpts1(q);});}
   R1Filled=filled;R1Slots=slots;}
 function showOpts1(q){
