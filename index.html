@@ -145,7 +145,7 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
 .face-ok{color:var(--ok);font-weight:700}
 .face-no{color:var(--no);font-weight:700}
 .login-bg{position:fixed;inset:0;background:linear-gradient(160deg,#eef3fb,#fdf6e3);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}
-.login-bg.on{display:flex}
+.login-bg.on{display:flex;flex-direction:column}
 .login-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:32px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(40,60,100,.12)}
 .login-title{font-size:20px;font-weight:700;margin:8px 0 2px}
 .login-sub{font-size:13px;color:var(--mut);margin-bottom:16px}
@@ -154,11 +154,13 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
 .login-err{color:var(--no);font-size:13px;min-height:18px;margin-bottom:6px}
 .login-tip{font-size:12px;color:var(--mut);margin-top:12px;line-height:1.7}
 .login-wrap{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;max-width:900px;width:100%;padding:20px}
-.thanks-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px 24px;max-width:320px;width:100%;box-shadow:0 12px 40px rgba(40,60,100,.12);text-align:left}
-.thanks-title{font-size:16px;font-weight:700;margin-bottom:12px;color:var(--ink)}
-.thanks-list{font-size:14px;color:var(--mut);line-height:1.8}
-.thanks-item{padding:8px 0;border-bottom:1px dashed var(--line)}
-.thanks-item:last-child{border-bottom:0}
+.thanks-bar{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:10px 20px;max-width:680px;width:calc(100% - 32px);box-shadow:0 6px 24px rgba(40,60,100,.10);text-align:center;margin-top:6px}
+.thanks-bar .thanks-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.thanks-viewport{position:relative;height:30px;overflow:hidden}
+.thanks-roll{position:relative;height:30px}
+.thanks-item{position:absolute;left:0;right:0;top:30px;height:30px;line-height:30px;font-size:14px;color:var(--mut);opacity:0;transition:top .5s ease,opacity .5s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thanks-item.on{top:0;opacity:1}
+.thanks-item.out{top:-30px;opacity:0}
 .thanks-item b{color:var(--c1)}
 .user-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
 .user-row:last-child{border-bottom:0}
@@ -205,12 +207,10 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
       <button class="btn big" onclick="doLogin()">进入乐园 🎉</button>
       <div class="login-tip">新用户名将自动创建账号，无需密码<br>管理员账号：admin</div>
     </div>
-    <div class="thanks-card">
-      <div class="thanks-title">🌟 特别鸣谢</div>
-      <div class="thanks-list">
-        <div class="thanks-item">感谢优秀数学教师<b>高老师</b>对该项目的改进建议</div>
-      </div>
-    </div>
+  </div>
+  <div class="thanks-bar" id="thanksBar">
+    <div class="thanks-title">🌟 特别鸣谢</div>
+    <div class="thanks-viewport"><div class="thanks-roll" id="thanksRoll"></div></div>
   </div>
 </div>
 
@@ -349,11 +349,11 @@ function hintText(g,q){if(g===1)return "凑十法：先看 "+q.n1+" 差 "+(10-q.
   return "算对总价/找零，顾客就会满意地点头";}
 
 /* ============ 视图导航 ============ */
-var TABS=[["hall","🏠 大厅"],["class","📚 四法课堂"],["achieve","🏆 成就墙"],["rank","📊 排行榜"],["sticker","⭐ 贴纸墙"],["settings","⚙️ 设置"]];
+var TABS=[["class","📚 四法课堂"],["hall","🏠 大厅"],["achieve","🏆 成就墙"],["rank","📊 排行榜"],["sticker","⭐ 贴纸墙"],["settings","⚙️ 设置"]];
 var VIEWS=["hall","class","game","achieve","rank","sticker","settings"];
 function go(v){var i;for(i=0;i<VIEWS.length;i++){var el=document.getElementById("view-"+VIEWS[i]);if(el)el.className="view"+(VIEWS[i]===v?" on":"");}
   var nav=document.getElementById("navBar");var html="";for(i=0;i<TABS.length;i++){html+='<button class="nav-tab'+(TABS[i][0]===v?" on":"")+'" onclick="go(\''+TABS[i][0]+'\')">'+TABS[i][1]+"</button>";}nav.innerHTML=html;
-  if(v==="hall")renderHall();if(v==="class")renderClass();if(v==="achieve")renderAchieve();if(v==="rank")renderRank();if(v==="sticker")renderSticker();if(v==="settings")renderSettings();
+  if(v==="hall"){renderHall();maybeClassTip();}if(v==="class")renderClass();if(v==="achieve")renderAchieve();if(v==="rank")renderRank();if(v==="sticker")renderSticker();if(v==="settings")renderSettings();
   window.scrollTo(0,0);}
 
 /* ============ 大厅 ============ */
@@ -395,6 +395,7 @@ var CLASSES=[
 ];
 var classIdx=0;
 function renderClass(){var el=document.getElementById("view-class");var c=CLASSES[classIdx];
+  if(CUR&&PROFILES[CUR]&&!PROFILES[CUR].classSeen){PROFILES[CUR].classSeen=Date.now();saveProfiles();}
   var html='<div class="card"><p class="h2">四法小课堂</p><p class="sub">先学会方法，再去游戏里练</p><div class="m-class-tabs">';
   for(var i=0;i<CLASSES.length;i++){html+='<button class="m-tab'+(i===classIdx?" on":"")+'" onclick="classTab('+i+')">'+CLASSES[i].n+"</button>";}
   html+="</div>";
@@ -501,17 +502,32 @@ function clearDataNow(){PROFILES[CUR]={records:[],stickers:{},created:Date.now()
 /* ============ 登录 ============ */
 function renderUserChip(){var el=document.getElementById("playerChips");if(!el)return;
   el.innerHTML='<span class="pchip on" title="当前账号">👤 '+CUR+'</span><button class="icon-btn" style="width:auto;padding:0 12px;font-size:13px" onclick="logout()" title="退出登录">退出</button>';}
-function showLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg on";var u=document.getElementById("loginUser");if(u)u.focus();}
-function hideLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg";}
+function showLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg on";var u=document.getElementById("loginUser");if(u)u.focus();startThanksRoll();}
+/* ============ 特别鸣谢（滚动播出，多条可扩展） ============ */
+var THANKS=["感谢优秀数学教师<b>高老师</b>对该项目的改进建议"];
+var THANKS_TIMER=null,THANKS_IDX=0;
+function renderThanks(){var el=document.getElementById("thanksRoll");if(!el)return;
+  el.innerHTML=THANKS.map(function(t,i){return '<div class="thanks-item'+(i===0?" on":"")+'">'+t+"</div>";}).join("");
+  THANKS_IDX=0;}
+function startThanksRoll(){renderThanks();
+  if(THANKS_TIMER){clearInterval(THANKS_TIMER);THANKS_TIMER=null;}
+  if(THANKS.length<2)return;
+  THANKS_TIMER=setInterval(function(){var el=document.getElementById("thanksRoll");if(!el){if(THANKS_TIMER){clearInterval(THANKS_TIMER);THANKS_TIMER=null;}return;}
+    var items=el.querySelectorAll(".thanks-item");if(!items||items.length<2)return;
+    if(items[THANKS_IDX])items[THANKS_IDX].className="thanks-item out";
+    THANKS_IDX=(THANKS_IDX+1)%items.length;
+    if(items[THANKS_IDX])items[THANKS_IDX].className="thanks-item on";
+  },4000);}
+function hideLogin(){var o=document.getElementById("loginOverlay");if(o)o.className="login-bg";if(THANKS_TIMER){clearInterval(THANKS_TIMER);THANKS_TIMER=null;}}
 function doLogin(){var u=document.getElementById("loginUser").value.trim();
   var p=document.getElementById("loginPass").value;var err=document.getElementById("loginErr");
   err.textContent="";
   if(!u){err.textContent="请输入用户名";return;}
   if(!/^[\u4e00-\u9fa5A-Za-z]{1,12}$/.test(u)){err.textContent="用户名仅支持中文和英文字母（1-12 个字符），不能含数字或符号";return;}
   if(u===ADMIN_USER){if(p!==ADMIN_PASS){err.textContent="管理员密码错误";return;}}
-  if(!PROFILES[u]){PROFILES[u]={records:[],stickers:{},created:Date.now()};}
+  if(!PROFILES[u]){PROFILES[u]={records:[],stickers:{},created:Date.now()};var isNew=true;}
   CUR=u;saveProfiles();try{localStorage.setItem(SESS_KEY,u);}catch(e){}
-  hideLogin();renderUserChip();go("hall");}
+  hideLogin();renderUserChip();go(isNew?"class":"hall");}
 function logout(){askConfirm("退出登录？当前账号成绩已自动保存，重新登录即可回来。","doLogout()");}
 function doLogout(){try{localStorage.removeItem(SESS_KEY);}catch(e){}
   CUR=null;hideLogin();showLogin();}
@@ -849,6 +865,14 @@ function showResult(list,secs,unlocks){var g=GAMES[R.g-1];var first=list[0];
   openModal(html);}
 function again(){closeModal();var g=R.g,l=R.l;startRound(g,l);}
 function openModal(html){var bg=document.getElementById("modalBg");document.getElementById("modalBox").innerHTML=html;bg.className="modal-bg on";}
+function maybeClassTip(){
+  if(!CUR||!PROFILES[CUR])return;
+  var P=PROFILES[CUR];
+  if(P.classSeen||P.classTip)return;
+  P.classTip=1;saveProfiles();
+  var mb=document.getElementById("modalBox");
+  mb.innerHTML='<div style="text-align:center"><div style="font-size:42px;margin:8px 0">📚</div><p style="font-size:16px;font-weight:600;margin:4px 0 6px;line-height:1.7">这个账号还没有看过「四法课堂」哦！</p><p style="font-size:14px;color:var(--mut);margin:0 0 18px;line-height:1.7">建议先学习方法，再去大厅游戏里练习，会玩得更顺利～</p><div class="row center" style="gap:10px"><button class="btn ghost" style="flex:1" onclick="closeModal()">继续逛大厅</button><button class="btn" style="flex:1" onclick="closeModal();go(\'class\')">去四法课堂</button></div></div>';
+  document.getElementById("modalBg").className="modal-bg on";}
 function closeModal(){document.getElementById("modalBg").className="modal-bg";}
 function askConfirm(msg,act){
   var mb=document.getElementById("modalBox");
