@@ -304,8 +304,8 @@ function tcbDelete(p){if(!tcbReady()||!p)return;
     headers:{"Authorization":"Bearer "+TCB_CFG.accessKey}
   }).catch(function(){});}
 function tcbBoot(){if(!tcbReady())return;
-  if(CUR){tcbFetch(CUR,function(cloud){if(!cloud)return;var m=mergeCloud(CUR,cloud);
-    if(JSON.stringify(m)!==JSON.stringify(PROFILES[CUR])){PROFILES[CUR]=m;saveProfiles();renderHall();}});}
+  if(CUR){tcbFetch(CUR,function(cloud){if(!cloud)return;
+    PROFILES[CUR]=mergeCloud(CUR,cloud);saveProfiles();renderHall();});}
 }
 function mergeCloud(p,cloud){
   var local=PROFILES[p]||{records:[],stickers:{},created:Date.now()};
@@ -578,11 +578,10 @@ function doLogin(){var u=document.getElementById("loginUser").value.trim();
   if(!/^[\u4e00-\u9fa5A-Za-z]{1,12}$/.test(u)){err.textContent="用户名仅支持中文和英文字母（1-12 个字符），不能含数字或符号";return;}
   if(u===ADMIN_USER){if(p!==ADMIN_PASS){err.textContent="管理员密码错误";return;}}
   if(!PROFILES[u]){PROFILES[u]={records:[],stickers:{},created:Date.now()};var isNew=true;}
-  CUR=u;saveProfiles();try{localStorage.setItem(SESS_KEY,u);}catch(e){}
+  CUR=u;try{localStorage.setItem(PROFILES_KEY,JSON.stringify(PROFILES));localStorage.setItem(SESS_KEY,u);}catch(e){}
   hideLogin();renderUserChip();go(isNew?"class":"hall");
   tcbFetch(u,function(cloud){if(!cloud){tcbPush(u);return;}
-    var m=mergeCloud(u,cloud);
-    if(JSON.stringify(m)!==JSON.stringify(PROFILES[u])){PROFILES[u]=m;saveProfiles();renderHall();}});}
+    PROFILES[u]=mergeCloud(u,cloud);saveProfiles();renderHall();});}
 function logout(){askConfirm("退出登录？当前账号成绩已自动保存，重新登录即可回来。","doLogout()");}
 function doLogout(){try{localStorage.removeItem(SESS_KEY);}catch(e){}
   CUR=null;hideLogin();showLogin();}
