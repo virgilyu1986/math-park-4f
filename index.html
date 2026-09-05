@@ -692,14 +692,14 @@ function pickRoute(route){var q=R.qs[R.idx];routeQ=route;var A=parseInt(q.t.spli
     if(big){
       var teens=10+u;var part1=A-teens;var u2=B%10;var bT=B-u2;
       carry=part1-bT;
-      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
-      html+='<div style="font-size:14px;color:var(--mut);margin:4px">其中一个是整十，另一个是十几（可交换）</div>';
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\""+part1+"\" disabled style=\"width:46px;background:#f1f4f9;color:var(--c2)\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div style="font-size:14px;color:var(--mut);margin:4px">整十已给：填出那个十几</div>';
       html+='<div class="fillin" style="margin:8px">'+teens+" − "+u2+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
       tensHint='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(part1/10)+" − "+(bT/10)+" = "+(carry/10)+"，也就是 "+carry+"，点按钮会自动代入</div>";}
     else{
       carry=A-10;
-      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
-      html+='<div style="font-size:14px;color:var(--mut);margin:4px">其中一个是 10（可交换）</div>';
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\"10\" disabled style=\"width:46px;background:#f1f4f9;color:var(--c2)\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div style="font-size:14px;color:var(--mut);margin:4px">10 已给：填出余数</div>';
       html+='<div class="fillin" style="margin:8px">10 − '+B+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
       tensHint='';}
     html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="breakTransfer" onclick="transferBreak('+carry+')">👉 填完点击，把结果代入下一行</button></div>';
@@ -707,11 +707,11 @@ function pickRoute(route){var q=R.qs[R.idx];routeQ=route;var A=parseInt(q.t.spli
     html+='<div class="fillin" style="margin:8px"><input id="f3a" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> + <input id="fR" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> = <input id="f4" type="tel" maxlength="2"></div>';
     html+='<div style="font-size:14px;color:var(--mut);margin:4px">把上一步结果和余数相加</div>';
     html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBreak('+A+','+B+')">下一题</button></div>';
-    bindIds=["f1","f2","f3","f4"];bindOpt={after:"f3",afterAction:function(){transferBreak(carry);}};}
+    bindIds=["f2","f3","f4"];bindOpt={after:"f3",afterAction:function(){transferBreak(carry);}};}
   else{
     var need=u;var r2=B-need;var mid=ten;
     html+='<div class="fillin" style="margin:8px">'+B+" = <input id=\"g1\" type=\"tel\" maxlength=\"2\"> + <input id=\"g2\" type=\"tel\" maxlength=\"2\"></div>";
-    html+='<div style="font-size:14px;color:var(--mut);margin:4px">先填几能让 '+A+" 减成 "+mid+"（填第一个框）</div>";
+    html+='<div style="font-size:14px;color:var(--mut);margin:4px">把 '+B+" 拆成两个数，其中一个让 "+A+" 先减到 "+mid+"（顺序不限）</div>";
     html+='<div class="fillin" style="margin:8px">'+A+" − <input id=\"g3\" type=\"tel\" maxlength=\"2\" placeholder=\"?\"> = <span>"+mid+"</span></div>";
     html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="flatTransfer" onclick="transferFlat('+need+','+r2+')">👉 填完点击，把数字代入下一行</button></div>';
     html+='<div class="fillin" style="margin:8px">'+mid+' − <input id="g3a" type="tel" maxlength="2" placeholder="?" disabled style="width:46px;background:#f1f4f9;color:var(--mut)"> = <input id="g4" type="tel" maxlength="2"></div>';
@@ -750,11 +750,11 @@ function transferBreak(r1){
   setTimeout(function(){f3a.classList.remove("ok");fR.classList.remove("ok");},600);
   var f4=document.getElementById("f4");if(f4)f4.focus();
   return true;}
-function checkBreak(A,B){var f1=val("f1"),f2=val("f2"),f3=val("f3"),f3a=val("f3a"),fR=val("fR"),f4=val("f4");
+function checkBreak(A,B){var f2=val("f2"),f3=val("f3"),f3a=val("f3a"),fR=val("fR"),f4=val("f4");
   var u=A%10;
   if(B<10){
     var r1=A-10;
-    if(!((f1===10&&f2===r1)||(f2===10&&f1===r1))){elBad(["f1","f2"]);return;}
+    if(f2!==r1){elBad(["f2"]);return;}
     if(f3!==10-B){elBad(["f3"]);return;}
     if(f3a!==f3){elBad(["f3a","f3"]);return;}
     if(fR!==r1){elBad(["fR"]);return;}
@@ -762,7 +762,7 @@ function checkBreak(A,B){var f1=val("f1"),f2=val("f2"),f3=val("f3"),f3a=val("f3a
     answerOk("破十路走通！答案 "+(f3+r1));}
   else{
     var teens=10+u,part1=A-teens,u2=B%10,bT=B-u2,carry=part1-bT;
-    if(!((f1===part1&&f2===teens)||(f2===part1&&f1===teens))){elBad(["f1","f2"]);return;}
+    if(f2!==teens){elBad(["f2"]);return;}
     if(f3!==teens-u2){elBad(["f3"]);return;}
     if(f3a!==f3){elBad(["f3a","f3"]);return;}
     if(fR!==carry){elBad(["fR"]);return;}
@@ -773,15 +773,16 @@ function transferFlat(need,r2){
   if(!g1||!g2||!g3||!g3a)return false;
   var v1=g1.value.trim(),v2=g2.value.trim();
   if(v1===""||v2===""){elBad(["g1","g2"]);return false;}
-  if(parseInt(v1,10)!==need||parseInt(v2,10)!==r2){elBad(["g1","g2"]);return false;}
-  g3.value=v1;g3.classList.add("ok");
-  g3a.value=v2;g3a.classList.add("ok");
+  var n1=parseInt(v1,10),n2=parseInt(v2,10);
+  if(!((n1===need&&n2===r2)||(n1===r2&&n2===need))){elBad(["g1","g2"]);return false;}
+  g3.value=need;g3.classList.add("ok");
+  g3a.value=r2;g3a.classList.add("ok");
   setTimeout(function(){g3.classList.remove("ok");g3a.classList.remove("ok");},600);
   var g4=document.getElementById("g4");if(g4)g4.focus();
   return true;}
 function checkFlat(A,B){var g1=val("g1"),g2=val("g2"),g3=val("g3"),g3a=val("g3a"),g4=val("g4");
   var need=A%10;var r2=B-need;var mid=A-need;
-  if(!(g1===need&&g2===r2)){elBad(["g1","g2"]);return;}
+  if(!((g1===need&&g2===r2)||(g1===r2&&g2===need))){elBad(["g1","g2"]);return;}
   if(g3!==need){elBad(["g3"]);return;}
   if(g3a!==r2){elBad(["g3a"]);return;}
   if(g4!==mid-r2){answerNo("正确答案是 "+(mid-r2));return;}
