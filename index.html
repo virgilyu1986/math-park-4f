@@ -91,6 +91,12 @@ section.view.on{display:block;animation:fade .25s ease}
 .numrow{display:flex;gap:10px;justify-content:center;align-items:center}
 .fillin{display:inline-flex;align-items:center;gap:6px;font-size:26px;font-weight:700}
 .fillin input{width:70px;height:52px;border:2px solid var(--c1);border-radius:12px;text-align:center;font-size:26px;font-weight:700;color:var(--ink)}
+.fillin input.c-blue{border-color:#2f6fd0;color:#2f6fd0;background:#eaf1fd}
+.fillin input.c-green{border-color:#0f8a6d;color:#0f8a6d;background:#e8f6ef}
+.fillin input.c-orange{border-color:#d85a30;color:#d85a30;background:#fcf0e8}
+.fillin input.c-amber{border-color:#ba7517;color:#ba7517;background:#fbf3e2}
+.fillin input.c-purple{border-color:#7f77dd;color:#7f77dd;background:#f0eefb}
+.nc-blue{color:#2f6fd0}.nc-green{color:#0f8a6d}.nc-orange{color:#d85a30}.nc-amber{color:#ba7517}.nc-purple{color:#7f77dd}
 .fillin input.ok{background:#e8f6ef;border-color:var(--ok);color:var(--ok)}
 .fillin input.bad{background:#fdeceb;border-color:var(--no);color:var(--no)}
 .hint-bar{background:#fdf6e3;border:1px solid #f2dd9b;border-radius:12px;padding:10px 14px;font-size:14px;color:#7a5b12;margin:8px 0}
@@ -685,41 +691,42 @@ var routeQ=null;
 function pickRoute(route){var q=R.qs[R.idx];routeQ=route;var A=parseInt(q.t.split(" - ")[0]),B=parseInt(q.t.split(" - ")[1]);
   var el=document.getElementById("gameBody");var u=A%10,ten=A-u;
   var big=B>=10;
-  var html='<div class="qbox"><div class="qstep">'+(route==="break"?(big?"破十路：把 "+A+" 拆成整十和十几，先用十几减个位":"破十路：把 "+A+" 拆成 10 和余数"):"平十路：把减数 "+B+" 拆开，先减到整十")+"</div><div class=\"qtext\">"+q.t+" = ?</div>";
+  var html='<div class="qbox"><div class="qstep">'+(route==="break"?(big?"破十路：把 "+A+" 拆成整十和十几，先用十几减个位":"破十路：把 "+A+" 拆成 10 和余数"):"平十路：把减数 "+B+" 拆开，先减到整十")+"</div><div class=\"qtext\">"+q.t+" = ?</div><div style=\"font-size:13px;color:var(--mut);margin:2px 0\">🔗 相同颜色的数字是同一个数，会一起走到下一行</div>";
   var bindIds,bindOpt;
   if(route==="break"){
     var carry,tensHint;
     if(big){
       var teens=10+u;var part1=A-teens;var u2=B%10;var bT=B-u2;
       carry=part1-bT;
-      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\""+part1+"\" disabled style=\"width:46px;background:#f1f4f9;color:var(--c2)\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\""+part1+"\" disabled class=\"c-purple\" style=\"width:46px;background:#f1f4f9\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       html+='<div style="font-size:14px;color:var(--mut);margin:4px">整十已给：填出那个十几</div>';
-      html+='<div class="fillin" style="margin:8px">'+teens+" − "+u2+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div class="fillin" style="margin:8px"><span class="nc-'+ncColor(teens)+'">'+teens+'</span> − '+u2+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       tensHint='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(part1/10)+" − "+(bT/10)+" = "+(carry/10)+"，也就是 "+carry+"，点按钮会自动代入</div>";}
     else{
       carry=A-10;
-      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\"10\" disabled style=\"width:46px;background:#f1f4f9;color:var(--c2)\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\"10\" disabled class=\"c-purple\" style=\"width:46px;background:#f1f4f9\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       html+='<div style="font-size:14px;color:var(--mut);margin:4px">10 已给：填出余数</div>';
-      html+='<div class="fillin" style="margin:8px">10 − '+B+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\"></div>";
+      html+='<div class="fillin" style="margin:8px"><span class="nc-purple">10</span> − '+B+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       tensHint='';}
     html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="breakTransfer" onclick="transferBreak('+carry+')">👉 填完点击，把结果代入下一行</button></div>';
     html+=tensHint;
-    html+='<div class="fillin" style="margin:8px"><input id="f3a" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> + <input id="fR" type="tel" maxlength="2" disabled style="width:46px;background:#f1f4f9;color:var(--mut)" placeholder="?"> = <input id="f4" type="tel" maxlength="2"></div>';
+    html+='<div class="fillin" style="margin:8px"><input id="f3a" type="tel" maxlength="2" disabled data-nc="1" style="width:46px;background:#f1f4f9" placeholder="?"> + <input id="fR" type="tel" maxlength="2" disabled data-nc="1" style="width:46px;background:#f1f4f9" placeholder="?"> = <input id="f4" type="tel" maxlength="2"></div>';
     html+='<div style="font-size:14px;color:var(--mut);margin:4px">把上一步结果和余数相加</div>';
     html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBreak('+A+','+B+')">下一题</button></div>';
     bindIds=["f2","f3","f4"];bindOpt={after:"f3",afterAction:function(){transferBreak(carry);}};}
   else{
     var need=u;var r2=B-need;var mid=ten;
-    html+='<div class="fillin" style="margin:8px">'+B+" = <input id=\"g1\" type=\"tel\" maxlength=\"2\"> + <input id=\"g2\" type=\"tel\" maxlength=\"2\"></div>";
-    html+='<div style="font-size:14px;color:var(--mut);margin:4px">把 '+B+" 拆成两个数，其中一个让 "+A+" 先减到 "+mid+"（顺序不限）</div>";
-    html+='<div class="fillin" style="margin:8px">'+A+" − <input id=\"g3\" type=\"tel\" maxlength=\"2\" placeholder=\"?\"> = <span>"+mid+"</span></div>";
+    html+='<div class="fillin" style="margin:8px">'+B+" = <input id=\"g1\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"> + <input id=\"g2\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
+    html+='<div style="font-size:14px;color:var(--mut);margin:4px">把 '+B+" 拆成两个数，其中一个让 "+A+" 先减到 <span class=\"nc-purple\">"+mid+"</span>（顺序不限）</div>";
+    html+='<div class="fillin" style="margin:8px">'+A+" − <input id=\"g3\" type=\"tel\" maxlength=\"2\" placeholder=\"?\" data-nc=\"1\"> = <span class=\"nc-purple\">"+mid+"</span></div>";
     html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="flatTransfer" onclick="transferFlat('+need+','+r2+')">👉 填完点击，把数字代入下一行</button></div>';
-    html+='<div class="fillin" style="margin:8px">'+mid+' − <input id="g3a" type="tel" maxlength="2" placeholder="?" disabled style="width:46px;background:#f1f4f9;color:var(--mut)"> = <input id="g4" type="tel" maxlength="2"></div>';
+    html+='<div class="fillin" style="margin:8px"><span class="nc-purple">'+mid+'</span> − <input id="g3a" type="tel" maxlength="2" placeholder="?" disabled data-nc="1" style="width:46px;background:#f1f4f9"> = <input id="g4" type="tel" maxlength="2"></div>';
     html+='<div style="font-size:14px;color:var(--mut);margin:4px">第一行填完后再填：'+A+' 减几等于 '+mid+'？'+mid+' 减剩下的数等于几？</div>';
     html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkFlat('+A+','+B+')">下一题</button></div>';
     bindIds=["g1","g2","g3","g4"];bindOpt={after:"g2",afterAction:function(){transferFlat(need,r2);}};}
   el.innerHTML=html;
-  bindPad(bindIds,bindOpt);}
+  bindPad(bindIds,bindOpt);
+  recolorGame2();}
 function bindPad(ids,opts){opts=opts||{};var cur=0;function focusNext(){cur++;if(cur<ids.length){var n=document.getElementById(ids[cur]);if(n)n.focus();}}
   function submitIfLast(){if(cur>=ids.length-1){var btn=document.querySelector("#gameBody .btn.green");if(btn)btn.click();}}
   var pad=document.querySelector("#gameBody .pad");
@@ -737,8 +744,11 @@ function bindPad(ids,opts){opts=opts||{};var cur=0;function focusNext(){cur++;if
   syncFillers(ids);
   var first=document.getElementById(ids[0]);if(first)first.focus();}
 function syncFillers(ids){
-  // 破十法 f3→f3a 由 transferBreak 按钮/确定键触发，不自动同步
+  recolorGame2();
 }
+var NC_PAL=["blue","green","orange","amber"];
+function ncColor(v){v=parseInt(v,10);if(isNaN(v)||v<=0)return "none";if(v%10===0)return "purple";return NC_PAL[v%NC_PAL.length];}
+function recolorGame2(){var ins=document.querySelectorAll("#gameBody [data-nc]");for(var i=0;i<ins.length;i++){var n=ins[i];var v=parseInt(n.value,10);var c=isNaN(v)||v<=0?null:ncColor(v);"c-blue c-green c-orange c-amber c-purple".split(" ").forEach(function(x){n.classList.remove(x);});if(c)n.classList.add("c-"+c);}}
 function val(id){var n=document.getElementById(id);return n?parseInt(n.value||"-1",10):-1;}
 function transferBreak(r1){
   var f3=document.getElementById("f3"),f3a=document.getElementById("f3a"),fR=document.getElementById("fR");
@@ -748,6 +758,7 @@ function transferBreak(r1){
   f3a.value=v;f3a.classList.add("ok");
   fR.value=r1;fR.classList.add("ok");
   setTimeout(function(){f3a.classList.remove("ok");fR.classList.remove("ok");},600);
+  recolorGame2();
   var f4=document.getElementById("f4");if(f4)f4.focus();
   return true;}
 function checkBreak(A,B){var f2=val("f2"),f3=val("f3"),f3a=val("f3a"),fR=val("fR"),f4=val("f4");
@@ -778,6 +789,7 @@ function transferFlat(need,r2){
   g3.value=need;g3.classList.add("ok");
   g3a.value=r2;g3a.classList.add("ok");
   setTimeout(function(){g3.classList.remove("ok");g3a.classList.remove("ok");},600);
+  recolorGame2();
   var g4=document.getElementById("g4");if(g4)g4.focus();
   return true;}
 function checkFlat(A,B){var g1=val("g1"),g2=val("g2"),g3=val("g3"),g3a=val("g3a"),g4=val("g4");
