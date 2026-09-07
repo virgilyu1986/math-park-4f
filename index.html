@@ -694,24 +694,26 @@ function pickRoute(route){var q=R.qs[R.idx];routeQ=route;var A=parseInt(q.t.spli
   var html='<div class="qbox"><div class="qstep">'+(route==="break"?(big?"破十路：把 "+A+" 拆成整十和十几，先用十几减个位":"破十路：把 "+A+" 拆成 10 和余数"):"平十路：把减数 "+B+" 拆开，先减到整十")+"</div><div class=\"qtext\">"+q.t+" = ?</div><div style=\"font-size:13px;color:var(--mut);margin:2px 0\">🔗 相同颜色的数字是同一个数，会一起走到下一行</div>";
   var bindIds,bindOpt;
   if(route==="break"){
-    var carry,tensHint;
+    var carry,tensHint,unitsHint;
     if(big){
       var teens=10+u;var part1=A-teens;var u2=B%10;var bT=B-u2;
       carry=part1-bT;
       html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\""+part1+"\" disabled class=\"c-purple\" style=\"width:46px;background:#f1f4f9\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       html+='<div style="font-size:14px;color:var(--mut);margin:4px">整十已给：填出那个十几</div>';
       html+='<div class="fillin" style="margin:8px"><span class="nc-'+ncColor(teens)+'">'+teens+'</span> − '+u2+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
-      tensHint='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(part1/10)+" − "+(bT/10)+" = "+(carry/10)+"，也就是 "+carry+"，点按钮会自动代入</div>";}
+      tensHint='<div style="font-size:14px;color:var(--mut);margin:4px">十位 '+(part1/10)+" − "+(bT/10)+" = "+(carry/10)+"，也就是 "+carry+"，点按钮会自动代入</div>";
+      unitsHint='<div style="font-size:14px;color:var(--mut);margin:4px">相加时按位拆开看：<b style="color:var(--c2)">'+(teens-u2)+'（个位结果）</b> + <b style="color:var(--c2)">'+carry+'（整十）</b> → 个位 = '+(teens-u2)+'、十位 = '+(carry/10)+'（'+carry+' 末尾的 0 写到个位上）→ 答案 = ?</div>';}
     else{
       carry=A-10;
       html+='<div class="fillin" style="margin:8px">'+A+" = <input id=\"f1\" type=\"tel\" maxlength=\"2\" value=\"10\" disabled class=\"c-purple\" style=\"width:46px;background:#f1f4f9\"> + <input id=\"f2\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
       html+='<div style="font-size:14px;color:var(--mut);margin:4px">10 已给：填出余数</div>';
       html+='<div class="fillin" style="margin:8px"><span class="nc-purple">10</span> − '+B+" = <input id=\"f3\" type=\"tel\" maxlength=\"2\" data-nc=\"1\"></div>";
-      tensHint='';}
+      tensHint='';
+      unitsHint='<div style="font-size:14px;color:var(--mut);margin:4px">相加：<b style="color:var(--c2)">'+(10-B)+'（个位结果）</b> + <b style="color:var(--c2)">'+carry+'（余数）</b> = ?（两个都是个位数，按普通加法算）</div>';}
     html+='<div class="row center" style="margin:6px 0"><button type="button" class="btn" id="breakTransfer" onclick="transferBreak('+carry+')">👉 填完点击，把结果代入下一行</button></div>';
     html+=tensHint;
     html+='<div class="fillin" style="margin:8px"><input id="f3a" type="tel" maxlength="2" disabled data-nc="1" style="width:46px;background:#f1f4f9" placeholder="?"> + <input id="fR" type="tel" maxlength="2" disabled data-nc="1" style="width:46px;background:#f1f4f9" placeholder="?"> = <input id="f4" type="tel" maxlength="2"></div>';
-    html+='<div style="font-size:14px;color:var(--mut);margin:4px">把上一步结果和余数相加</div>';
+    html+=tensHint+unitsHint;
     html+='<div class="row center" style="margin-top:10px"><button type="button" class="btn green" onclick="checkBreak('+A+','+B+')">下一题</button></div>';
     bindIds=["f2","f3","f4"];bindOpt={after:"f3",afterAction:function(){transferBreak(carry);}};}
   else{
