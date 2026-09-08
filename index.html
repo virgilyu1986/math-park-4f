@@ -309,6 +309,14 @@ function tcbDelete(p){if(!tcbReady()||!p)return;
     method:"DELETE",
     headers:{"Authorization":"Bearer "+TCB_CFG.accessKey}
   }).catch(function(){});}
+function tcbFetchAllPlayers(cb){if(!tcbReady()){cb(null,"云同步未配置");return;}
+  fetch(tcbUrl()+"?select=username,records",{headers:{"Authorization":"Bearer "+TCB_CFG.accessKey}})
+    .then(function(r){return r.json();}).then(function(arr){
+    if(!arr||!arr.length){cb([],null);return;}
+    var out=[];for(var i=0;i<arr.length;i++){var row=arr[i];
+      out.push({username:row.username,records:tcbNorm(row.records,false)||[]});}
+    cb(out,null);
+  }).catch(function(e){cb(null,(e&&e.message)||"网络异常");});}
 function tcbBoot(){if(!tcbReady())return;
   if(CUR){tcbFetch(CUR,function(cloud){if(!cloud)return;
     PROFILES[CUR]=mergeCloud(CUR,cloud);saveProfiles();renderHall();});}
@@ -493,26 +501,51 @@ function renderAchieve(){var el=document.getElementById("view-achieve");
   else{var d1=new Date(first.ts),d2=new Date(last.ts);
     mb.innerHTML="完成对局 <b>"+total+"</b> 次 · 首次 "+((d1.getMonth()+1)+"月"+d1.getDate()+"日")+" · 最近 "+((d2.getMonth()+1)+"月"+d2.getDate()+"日");}}
 
-/* ============ 排行榜 ============ */
+/* ============ 排行榜（全网） ============ */
 var rankG=1,rankL=0;
 function renderRank(){var el=document.getElementById("view-rank");
-  var html='<div class="card"><p class="h2">排行榜</p><p class="sub">每个游戏 × 每档难度独立榜单 · 同星级比正确率，再比用时</p><div class="rank-tabs">';
+  var html='<div class="card"><p class="h2">🏆 全网排行榜</p><p class="sub">每个游戏 × 每档难度独立榜单 · 全网同玩玩家一起排 · 同星级比正确率，再比用时（★×等级=积分）</p><div class="rank-tabs">';
   for(var i=0;i<GAMES.length;i++){html+='<button class="rtab'+(rankG===GAMES[i].id?" on":"")+'" onclick="rankPickG('+GAMES[i].id+')">'+GAMES[i].icon+GAMES[i].name+"</button>";}
   html+="</div><div class=\"rank-tabs\">";
   for(var L=0;L<GLEV[rankG];L++){html+='<button class="rtab'+(rankL===L?" on":"")+'" onclick="rankPickL('+L+')">'+LEVELS[L]+" "+lvlDesc(rankG,L)+"</button>";}
   html+="</div>";
-  html+='<table class="rank"><thead><tr><th style="width:52px">名次</th><th>玩家</th><th style="text-align:center">星级</th><th style="text-align:right">成绩</th><th style="text-align:right">用时</th></tr></thead><tbody id="rankBody"></tbody></table></div>';
+  html+='<table class="rank"><thead><tr><th style="width:52px">名次</th><th>玩家</th><th style="text-align:center">星级</th><th style="text-align:right">成绩</th><th style="text-align:right">用时</th></tr></thead><tbody id="rankBody"><tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">⏳ 正在从云端拉取全网数据…</td></tr></tbody></table>';
+  html+='<div style="text-align:center;padding:8px 0 4px"><span class="muted" id="rankFooter" style="font-size:12px"></span></div>';
+  html+="</div>";
   el.innerHTML=html;
-  var body=document.getElementById("rankBody");var open=levelOpen(rankG,rankL);
-  if(!open){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">该难度尚未解锁，先去完成低难度并达标（≥1 星）</td></tr>';return;}
-  var rows=[];var pls=rankPlayers();for(var j=0;j<pls.length;j++){var b=bestFor(rankG,rankL,pls[j]);if(b)rows.push({p:pls[j],b:b});}
+  var body=document.getElementById("rankBody");
+  if(!levelOpen(rankG,rankL)){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">该难度尚未解锁，先去完成低难度并达标（≥1 星）</td></tr>';return;}
+  var done=function(players,err){
+    renderRankBody(body,players,err);
+    var ft=document.getElementById("rankFooter");
+    if(ft)ft.textContent=(players&&players.length)?("数据来源：云端 math_users 表 · 共 "+players.length+" 个账号"):(err?("⚠️ "+err+" · 已临时回退到本机数据"):"");
+  };
+  if(tcbReady()){tcbFetchAllPlayers(function(players,err){
+    if(err){done(rankPlayersLocal(),err);return;}
+    done(players,null);
+  });}else{done(rankPlayersLocal(),"未配置云端 Publishable Key");}
+}
+function renderRankBody(body,players,err){
+  var rows=[];if(!players||!players.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">'+(err?("云端暂无数据（"+err+"）"):"云端暂无数据")+'</td></tr>';return;}
+  for(var j=0;j<players.length;j++){var pl=players[j];
+    var b=bestFromCloud(pl.records,rankG,rankL,pl.username);
+    if(b)rows.push({p:pl.username,b:b});}
+  if(!rows.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">该难度还没有任何玩家成绩，快去挑战抢首榜！</td></tr>';return;}
   rows.sort(function(x,y){if(y.b.stars!==x.b.stars)return y.b.stars-x.b.stars;var xr=x.b.correct/x.b.total,yr=y.b.correct/y.b.total;if(yr!==xr)return yr-xr;return x.b.seconds-y.b.seconds;});
-  if(!rows.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:18px">还没有成绩，快去挑战吧！</td></tr>';return;}
-  var html2="";for(var k=0;k<rows.length;k++){var r=rows[k],n=k+1;
+  var myRank=0,myBest=null;for(var k=0;k<rows.length;k++){if(rows[k].p===CUR){myRank=k+1;myBest=rows[k].b;break;}}
+  var html2="";
+  for(var k=0;k<rows.length;k++){var r=rows[k],n=k+1;
     var badge=n===1?'<span class="rk1">1</span>':n===2?'<span class="rk2">2</span>':n===3?'<span class="rk2" style="background:#f1eee8">3</span>':n;
     var secs=r.b.seconds<60?r.b.seconds+"秒":Math.floor(r.b.seconds/60)+"分"+(r.b.seconds%60);
-    html2+='<tr><td>'+badge+'</td><td style="font-weight:600">'+r.p+'</td><td style="text-align:center;color:#a87800">'+("★".repeat(r.b.stars)+"☆".repeat(3-r.b.stars))+'</td><td style="text-align:right">'+r.b.correct+"/"+r.b.total+"</td><td style=\"text-align:right;color:var(--mut)\">"+secs+"</td></tr>";}
-  body.innerHTML=html2;}
+    var isMe=(r.p===CUR);
+    var shownName=(r.p===ADMIN_USER)?'🛡️ 管理员':r.p;
+    html2+='<tr'+(isMe?' style="background:#fff7d6"':"")+'><td>'+badge+(isMe?' <span style="color:var(--c2);font-size:11px">我</span>':"")+'</td><td style="font-weight:'+(isMe?"800":"600")+'">'+shownName+'</td><td style="text-align:center;color:#a87800">'+("★".repeat(r.b.stars)+"☆".repeat(3-r.b.stars))+'</td><td style="text-align:right">'+r.b.correct+"/"+r.b.total+'</td><td style="text-align:right;color:var(--mut)">'+secs+"</td></tr>";}
+  if(myRank===0){html2+='<tr><td colspan="5" style="background:#fafafa;color:var(--mut);font-size:13px;padding:10px;text-align:center">你在该难度还没有成绩，<a style="color:var(--c2);cursor:pointer" onclick="go(\'hall\')">去挑战一局</a> 即可上榜</td></tr>';}
+  body.innerHTML=html2;
+}
+function rankPlayersLocal(){var names=[];for(var k in PROFILES){if(k!==ADMIN_USER)names.push({username:k,records:PROFILES[k].records||[]});}return names;}
+function bestFromCloud(rs,g,l,p){if(!rs||!rs.length)return null;var f=[];for(var i=0;i<rs.length;i++){var r=rs[i];if(r.g===g&&r.l===l&&r.p===p)f.push(r);}if(!f.length)return null;
+  return f.reduce(function(b,r){if(r.stars>b.stars||(r.stars===b.stars&&(r.correct/r.total)>(b.correct/b.total))||(r.stars===b.stars&&(r.correct/r.total)===(b.correct/b.total)&&r.seconds<b.seconds))return r;return b;},f[0]);}
 function rankPickG(g){rankG=g;if(rankL>=GLEV[g])rankL=0;renderRank();}
 function rankPickL(l){rankL=l;renderRank();}
 
