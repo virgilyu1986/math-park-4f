@@ -107,7 +107,7 @@ section.view.on{display:block;animation:fade .25s ease}
 .step-list li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);font-size:15px}
 .step-list li .sn{flex:0 0 26px;height:26px;border-radius:8px;background:var(--soft);color:var(--c1);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
 .step-list li.hl{background:#fbf4e2;border-radius:10px;padding:10px 8px;border-bottom-color:transparent}
-.ach-grid{display:grid;grid-template-columns:120px repeat(4,1fr);gap:6px;font-size:13px}
+.ach-grid{display:grid;grid-template-columns:110px repeat(6,1fr);gap:6px;font-size:13px}
 .ach-grid .hd{font-weight:600;color:var(--mut);font-size:12px;align-self:center}
 .ach-cell{border-radius:10px;padding:7px 3px;text-align:center;min-height:52px;display:flex;flex-direction:column;justify-content:center;background:#f1f4f9;color:#b6bfd0}
 .ach-cell.on{background:var(--soft);color:var(--ink)}
@@ -146,6 +146,78 @@ table.rank td{padding:9px 6px;border-bottom:1px dashed var(--line)}
 .receipt{background:#fffdf6;border:1px solid #f2e6c8;border-radius:14px;padding:12px 16px;margin:10px 0;font-size:15px}
 .receipt .rline{display:flex;justify-content:space-between;padding:3px 0}
 .receipt .rsep{border-top:1px dashed #e5d9b8;margin:6px 0}
+/* 游戏5 综合关：格子货架 / 图形选项 / 钟面 / 纸币 / 规律 / 选购 */
+.count-grid{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:330px;margin:8px auto;font-size:26px;line-height:1.3}
+.count-grid span{width:32px;text-align:center}
+.opt-row4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:440px;margin:14px auto}
+.opt-icon{height:84px;border:2px solid var(--line);background:var(--card);border-radius:14px;font-size:36px;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center}
+.opt-icon:active{transform:scale(.95)}
+.opt-icon.good{background:#e8f6ef;border-color:var(--ok)}
+.opt-icon.bad{background:#fdeceb;border-color:var(--no)}
+.pile-box{border:1.5px solid var(--line);border-radius:14px;padding:10px;background:#fffdf6;min-width:130px}
+.pile-box .pile{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;font-size:22px;line-height:1.2;min-height:52px;align-items:center}
+.pile-box .plabel{font-size:13px;color:var(--mut);margin-top:4px}
+.shelf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:320px;margin:10px auto}
+.shelf-cell{border:1.5px dashed var(--line);border-radius:10px;height:54px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#fffdf6;cursor:pointer}
+.shelf-cell:active{background:var(--soft)}
+.shelf-cell.picked{background:#e8f6ef;border-color:var(--ok);border-style:solid}
+.shelf-cell.bad{background:#fdeceb;border-color:var(--no);border-style:solid;color:var(--no)}
+.clock-face{width:132px;height:132px;margin:6px auto;display:block}
+/* 店长记账账本 */
+.ledger{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+.led-row{display:flex;gap:12px;align-items:center;background:#fbf9f2;border:1.5px solid var(--line);border-radius:14px;padding:10px}
+.led-clock{width:96px;flex:none}
+.led-clock .clock-face{width:100%;height:auto;margin:0}
+.led-info{flex:1;text-align:left;min-width:0}
+.day-note{background:#eef4ff;border:1px solid #c9dcff;color:#2b4a86;border-radius:10px;padding:7px 10px;font-size:13px;margin:2px 0 8px;text-align:left}
+.stock-tbl{border:1px solid #dfe5ef;border-radius:12px;overflow:hidden;margin:6px 0 2px;font-size:15px}
+.stock-tbl .str{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.1fr;text-align:center;padding:7px 4px;border-bottom:1px solid #eef1f7}
+.stock-tbl .str:last-child{border-bottom:0}
+.stock-tbl .st-head{background:#f4f7fc;font-size:13px;color:var(--mut);font-weight:700}
+.stock-tbl .in{color:var(--ok);font-weight:700}
+.stock-tbl .out{color:#d9534f;font-weight:700}
+.stock-tbl .money{color:#a87800;font-weight:700}
+.led-desc{font-size:15px;font-weight:600;margin-bottom:8px}
+.led-fields{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px;font-weight:700;color:var(--ink)}
+.led-fwrap{display:inline-flex;align-items:center;gap:2px}
+.led-f{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:34px;padding:0 6px;border:2px dashed #c3cbda;border-radius:9px;background:#fff;font-size:18px;font-weight:700;color:var(--ink)}
+.led-f.on{border-style:solid;border-color:var(--c1);box-shadow:0 0 0 2px color-mix(in srgb,var(--c1) 25%,transparent)}
+.led-f.ok{border:2px solid var(--ok);background:#e8f6ef;color:var(--ok)}
+.led-f.bad{border-color:var(--no);background:#fdeeee}
+.bill{display:inline-block;border:1.5px solid #b9c6d8;border-radius:8px;padding:9px 13px;margin:4px;background:#eef4fb;font-weight:700;font-size:19px;color:#2f6fd0}
+/* 仿真人民币：1元硬币 + 5/10/20/50/100 纸币（按真实主色调） */
+.rm-money{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.rm-note{position:relative;display:inline-flex;align-items:center;justify-content:center;width:98px;height:46px;border-radius:6px;margin:4px;box-shadow:0 1px 3px rgba(0,0,0,.18);font-weight:800;color:#fff;border:1px solid rgba(0,0,0,.15);overflow:hidden}
+.rm-note .rm-den{font-size:26px;text-shadow:0 1px 1px rgba(0,0,0,.25);margin-left:18px}
+.rm-note .rm-txt{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:8px;letter-spacing:3px;opacity:.8;font-weight:600}
+.rm-note .rm-wm{position:absolute;left:7px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:13px;background:rgba(255,255,255,.14);opacity:.85}
+.rm-note.n5{background:linear-gradient(135deg,#9a6ab8,#6d4391)}
+.rm-note.n10{background:linear-gradient(135deg,#4a7ab0,#274f80)}
+.rm-note.n20{background:linear-gradient(135deg,#b07c40,#7e5222)}
+.rm-note.n50{background:linear-gradient(135deg,#4a9a6c,#1f6b42)}
+.rm-note.n100{background:linear-gradient(135deg,#cc5050,#96313c)}
+.rm-coin{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;margin:4px;background:radial-gradient(circle at 32% 30%,#f6f8fa,#ccd2d9 55%,#adb4bd);border:2px solid #98a0a9;box-shadow:0 1px 3px rgba(0,0,0,.2);font-weight:800;color:#5c6670;font-size:16px;line-height:1.05}
+.rm-coin small{font-size:7px;color:#7c858e;font-weight:600;letter-spacing:1px}
+/* 找零点选：钱面盘 + 钱箱 */
+.rm-palette{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.rm-pick{cursor:pointer;border:none;background:none;padding:0;transition:transform .1s}
+.rm-pick:active{transform:scale(.9)}
+.rm-pick:hover{filter:brightness(1.05)}
+.rm-tray{min-height:62px;border:2px dashed #d8dee8;border-radius:12px;padding:6px;display:flex;flex-wrap:wrap;gap:2px;align-items:center;justify-content:center;margin:6px 0;background:#fbfcfe}
+.rm-tray .empty{color:var(--mut);font-size:14px}
+.seq-row{display:flex;justify-content:center;gap:7px;align-items:center;margin:10px 0;flex-wrap:wrap}
+.seq-cell{width:48px;height:48px;border:1.5px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:27px;background:#fffdf6}
+.seq-q{font-size:26px;font-weight:700;color:var(--mut)}
+.buy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:9px;margin:10px 0}
+.buy-item{border:1.5px solid var(--line);border-radius:14px;padding:8px;text-align:center;background:#fffdf6;cursor:pointer}
+.buy-item .bico{font-size:26px}
+.buy-item .bnm{font-size:12px;font-weight:600;margin:2px 0}
+.buy-item .bpr{font-size:13px;color:var(--c3);font-weight:700}
+.buy-item.sel{background:#e8f6ef;border-color:var(--ok);border-style:solid;box-shadow:0 0 0 2px #cfeee0 inset}
+.buy-item .bqty{font-size:11px;color:var(--ok);font-weight:700}
+.buy-item .blim{font-size:10px;color:var(--mut);background:#f1f4f9;border-radius:6px;padding:1px 6px;margin-top:2px}
+.budget-bar{background:#fffdf6;border:1px solid #f2e6c8;border-radius:14px;padding:10px 14px;margin:10px 0;font-size:15px}
+.budget-bar .rline{display:flex;justify-content:space-between;padding:2px 0}
 .flowbar{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);margin-bottom:8px;flex-wrap:wrap}
 .flowbar b{color:var(--ink)}
 .face-ok{color:var(--ok);font-weight:700}
@@ -232,17 +304,17 @@ var GAMES=[
  {id:2,name:"减法双通道",icon:"🛤️",desc:"退位减 · 破十平十",color:"#0f8a6d"},
  {id:3,name:"借十银行",icon:"🏦",desc:"两位数退位减",color:"#d85a30"},
  {id:4,name:"口算闪电战",icon:"⚡",desc:"四法提速 30秒",color:"#ba7517"},
- {id:5,name:"超市小掌柜",icon:"🛒",desc:"综合应用",color:"#7f77dd"}
+ {id:5,name:"超市小掌柜",icon:"🛒",desc:"角色扮演 · 理货/收银/店长/顾客",color:"#7f77dd"}
 ];
-var LEVELS=["L1","L2","L3","L4"];
-/* 每个游戏的难度档数：游戏1/2/3 只有 3 档 */
-var GLEV={1:3,2:3,3:3,4:4,5:4};
+var LEVELS=["L1","L2","L3","L4","L5","L6","L7","L8"];
+/* 每个游戏的难度档数：游戏5 按角色分组，每角色 2 级（理货员0-1 / 收银员2-3 / 店长4-5 / 顾客6-7） */
+var GLEV={1:3,2:3,3:3,4:4,5:8};
 var GLEV_DESC={
  1:["两个个位数","十位+个位","两个十位数"],
  2:["十几减一位数","二十几~四十几减一位数","两位数减两位数"],
  3:["两位数减一位数","两位数减两位数","连减两步"],
  4:["两个个位数","十位+个位","两个十位数","混合 · 多步"],
- 5:["个位单价求和","两位数单价求和","求和与找零","买几件算找零"]};
+ 5:["理货员① 数数·图形·分类·简单规律","理货员② 位置·比多少·进阶规律","收银员① 单件找零","收银员② 多件结账","店长① 记账 · 整点半点","店长② 三天记账 + 库存和赚钱总账","顾客① 预算自由买","顾客② 限定任务采购"]};
 function lvlDesc(g,l){return (GLEV_DESC[g]&&GLEV_DESC[g][l])||"";}
 var GOODS=[
  ["棒棒糖","🍭"],["果汁","🧃"],["曲奇饼","🍪"],["苹果","🍎"],["小蛋糕","🧁"],["面包","🍞"],
@@ -342,10 +414,13 @@ PROFILES=loadProfiles();
 
 /* ============ 纯逻辑：星级 / 解锁 / 排行 ============ */
 function starsOf(correct,total){if(!total)return 0;var r=correct/total;if(r>=1)return 3;if(r>=0.85)return 2;if(r>=0.7)return 1;return 0;}
+/* 游戏5 L6 是开放题：不按正确率，按「规划达标的轮数」直接给星（3轮→3星，2轮→2星，1轮→1星） */
+function g5Stars(ok,total){if(R&&R.g===5&&R.l>=6){return Math.min(3,Math.max(0,ok));}return starsOf(ok,total);}
+function isL6Round(){return !!(R&&R.g===5&&R.l>=6);}
 function recsOf(g,l){var rs=curRec();var f=[];for(var i=0;i<rs.length;i++){if(rs[i].g===g&&rs[i].l===l)f.push(rs[i]);}return f;}
 function anyPlayerQualified(g,l){var rs=recsOf(g,l);return rs.some(function(r){return r.stars>=1;})||rs.length>=3;}
-function gameOpen(g){if(S.freeMode)return true;if(g===1)return true;for(var i=0;i<GLEV[g-1];i++){if(anyPlayerQualified(g-1,i))return true;}return false;}
-function levelOpen(g,l){if(S.freeMode)return true;if(!gameOpen(g))return false;if(l===0)return true;return anyPlayerQualified(g,l-1);}
+function gameOpen(g){if(S.freeMode)return true;if(g===1)return true;if(g===5)return true;/* 超市小掌柜是综合应用关，开局即可玩 */for(var i=0;i<GLEV[g-1];i++){if(anyPlayerQualified(g-1,i))return true;}return false;}
+function levelOpen(g,l){if(S.freeMode)return true;if(!gameOpen(g))return false;if(l===0)return true;if(g===5)return (l%2===0)?true:anyPlayerQualified(5,l-1);/* 角色内逐级解锁：每个角色的第1级直接开放 */return anyPlayerQualified(g,l-1);}
 function bestFrom(rs,g,l,p){var f=[];for(var i=0;i<rs.length;i++){var r=rs[i];if(r.g===g&&r.l===l&&r.p===p)f.push(r);}if(!f.length)return null;
   return f.reduce(function(b,r){if(r.stars>b.stars||(r.stars===b.stars&&(r.correct/r.total)>(b.correct/b.total))||(r.stars===b.stars&&(r.correct/r.total)===(b.correct/b.total)&&r.seconds<b.seconds))return r;return b;},f[0]);}
 function bestFor(g,l,p){return PROFILES[p]?bestFrom(PROFILES[p].records,g,l,p):null;}
@@ -382,37 +457,167 @@ function genMix(l){var a,b,t,t1,t2,c,op;
   if(l===2){t1=ri(1,4);a=ri(2,9);t2=ri(1,4);b=ri(2,9);op=Math.random()<0.5?"+":"-";if(op==="-"){if(t1*10+a<t2*10+b){var sw=t1;t1=t2;t2=sw;var w=a;a=b;b=w;}}return {t:(t1*10+a)+" "+op+" "+(t2*10+b),ans:op==="+"?t1*10+a+t2*10+b:t1*10+a-t2*10-b};}
   a=ri(2,9);b=ri(2,9);op=Math.random()<0.5?"+":"-";c=ri(1,9);var m=op==="+"?a+b:a-b;if(m<0){var z=a;a=b;b=z;m=a-b;}if(m<2){op="+";m=a+b;}var op2=Math.random()<0.5?"+":"-";var ans=op2==="+"?m+c:m-c;while(ans<0){c=ri(1,9);ans=m-c;}
   return {t:a+" "+op+" "+b+" "+op2+" "+c,ans:ans};}
-function genShop(l){
-  if(l===3){
-    /* L4：单价个位数买几件（乘法），可能混买一件两位数单价商品，付 50 元以上找零 */
-    var q=ri(3,9),p=ri(2,9);
-    var idx=ri(0,GOODS.length-1);
-    var items=[{name:GOODS[idx][0],icon:GOODS[idx][1],price:p,qty:q}];
-    if(Math.random()<0.6){
-      var idx2=ri(0,GOODS.length-1);while(idx2===idx){idx2=ri(0,GOODS.length-1);}
-      var p2max=Math.min(48,98-p*q);
-      if(p2max>=11){items.push({name:GOODS[idx2][0],icon:GOODS[idx2][1],price:ri(11,p2max),qty:1});}
-    }
-    var total=0;for(var i=0;i<items.length;i++){total+=items[i].price*items[i].qty;}
-    var pay=(total+1<=50)?50:100;
-    return {t:"",items:items,total:total,mode:"change",pay:pay,change:pay-total,ans:pay-total};}
-  var priceFn,count=2;
-  if(l===0)priceFn=function(){return ri(1,9);};
-  else if(l===1)priceFn=function(){return ri(3,19);};
-  else priceFn=function(){return ri(8,45);};
-  var items2=[];var used=[];
-  for(var j=0;j<count;j++){var idx3=ri(0,GOODS.length-1);while(used.indexOf(idx3)>=0){idx3=ri(0,GOODS.length-1);}used.push(idx3);items2.push({name:GOODS[idx3][0],icon:GOODS[idx3][1],price:priceFn(),qty:1});}
-  var total2=items2[0].price+items2[1].price;
-  var mode=(l===2&&Math.random()<0.4)?"change":"sum";
-  var pay2=0,change2=0;
-  if(mode==="change"){var faces=[20,50,100];for(var k=0;k<faces.length;k++){if(faces[k]>=total2+1){pay2=faces[k];break;}}if(!pay2){pay2=100;total2=Math.min(total2,99);}change2=pay2-total2;}
-  return {t:"",items:items2,total:total2,mode:mode,pay:pay2,change:change2,ans:mode==="sum"?total2:change2};}
-function genQ(g,l){if(g===1)return genAdd(l);if(g===2)return genSub1(l);if(g===3)return genSub2(l);if(g===4)return genMix(l);return genShop(l);}
+/* ============ 游戏5 超市小掌柜 · L1-L6 综合应用关 ============ */
+var SHAPE_LIB={tri:{name:"三角形",items:["🍕","🔺","⛺"]},sq:{name:"正方形",items:["📦","🧊","🎁"]},cir:{name:"圆形",items:["🍎","⚽","🍩"]}};
+var SHAPE_KEYS=["tri","sq","cir"];
+var FRUITS5=["🍎","🍌","🍊","🍇","🍓","🍉","🍐","🥝"];
+var DAILY5=["🥛","🍞","🧴","🪥","🧻","🍪"];
+var L6_BUDGET=[30,50,80];
+function shuffle5(a){for(var i=a.length-1;i>0;i--){var j=ri(0,i),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pickSome5(arr,n){var c=arr.slice(),r=[];for(var i=0;i<n&&c.length;i++){r.push(c.splice(ri(0,c.length-1),1)[0]);}return r;}
+function otherIcon5(pool,ex){var x=pool[ri(0,pool.length-1)],g=0;while(x===ex&&g++<12){x=pool[ri(0,pool.length-1)];}return x;}
+function uniqGoods5(n){var used=[],out=[];for(var i=0;i<n;i++){var idx=ri(0,GOODS.length-1),g=0;while(used.indexOf(idx)>=0&&g++<25){idx=ri(0,GOODS.length-1);}used.push(idx);out.push({name:GOODS[idx][0],icon:GOODS[idx][1]});}return out;}
+/* 理货员按规律摆促销堆头：lv=0 两元素循环（空在最后一步）；lv=1 三元素/加长循环（空在中间某处） */
+function genPat5(lv){var cycs=lv?[[0,1,2],[0,1,1,0],[0,1,2,2]]:[[0,1],[0,0,1,1],[0,0,1]];
+  var cyc=cycs[ri(0,cycs.length-1)],nIc=0;
+  for(var z=0;z<cyc.length;z++){if(cyc[z]+1>nIc)nIc=cyc[z]+1;}
+  var ic=pickSome5(FRUITS5,nIc);
+  var N=lv?7:6,hid=lv?ri(2,N-3):N-1,seq=[],ansIc="";
+  for(var i=0;i<N;i++){var c=ic[cyc[i%cyc.length]];
+    if(i===hid){ansIc=c;}else{seq.push(c);}}
+  var opts=[{icon:ansIc,ok:true}],g2=0;
+  while(opts.length<3&&g2++<40){var cd=FRUITS5[ri(0,FRUITS5.length-1)],dup=false;
+    for(var z2=0;z2<opts.length;z2++){if(opts[z2].icon===cd)dup=true;}
+    if(!dup)opts.push({icon:cd,ok:false});}
+  opts=shuffle5(opts);var ans=0;for(var z3=0;z3<opts.length;z3++){if(opts[z3].ok)ans=z3;}
+  return {kind:"pattern",seq:seq,hidden:hid,opts:opts,ans:ans,
+    ask:lv?"按规律摆促销堆头，缺的那一格摆什么？":"按规律摆促销堆头，接着该摆什么？"};}
+/* L1 理货员（入门）：数商品 1-10、认形状、分类找不同、简单规律 */
+function genShopL1(){var t=ri(0,3);
+  if(t===0){var n=ri(3,10),ic=FRUITS5[ri(0,FRUITS5.length-1)];
+    return {kind:"count",icon:ic,n:n,ans:n,ask:"货架上一共有几个 "+ic+" ？"};}
+  if(t===1){var k=SHAPE_KEYS[ri(0,2)],rest=SHAPE_KEYS.filter(function(x){return x!==k;});
+    var opts=[{icon:SHAPE_LIB[k].items[ri(0,2)],ok:true}];
+    for(var i=0;i<2;i++){opts.push({icon:SHAPE_LIB[rest[i]].items[ri(0,2)],ok:false});}
+    opts=shuffle5(opts);var ans=0;for(var j=0;j<opts.length;j++){if(opts[j].ok)ans=j;}
+    return {kind:"shape",shapeName:SHAPE_LIB[k].name,opts:opts,ans:ans,ask:"哪一个的形状是「"+SHAPE_LIB[k].name+"」？"};}
+  var isF=Math.random()<0.5,mainP=isF?FRUITS5:DAILY5,oddP=isF?DAILY5:FRUITS5;
+  var ms=pickSome5(mainP,3),opts2=[];
+  for(var m=0;m<ms.length;m++){opts2.push({icon:ms[m],ok:false});}
+  opts2.splice(ri(0,3),0,{icon:oddP[ri(0,oddP.length-1)],ok:true});
+  var ans2=0;for(var j2=0;j2<opts2.length;j2++){if(opts2[j2].ok)ans2=j2;}
+  if(t===3)return genPat5(0);
+  return {kind:"odd",opts:opts2,ans:ans2,ask:"哪一个和其他的「不是同一类」？"};}
+/* L2 理货员（进阶）：数商品 11-20、比多少、按位置摆货架、进阶规律 */
+function genShopL2(){var t=ri(0,3);
+  if(t===0){var n=ri(11,20),ic=FRUITS5[ri(0,FRUITS5.length-1)];
+    return {kind:"count",icon:ic,n:n,ans:n,ask:"货架上一共有几个 "+ic+" ？"};}
+  if(t===1){var hi=ri(5,12),lo=ri(2,hi-1),ia=FRUITS5[ri(0,FRUITS5.length-1)],ib=otherIcon5(FRUITS5,ia),flip=Math.random()<0.5;
+    return {kind:"compare",a:flip?lo:hi,b:flip?hi:lo,ia:flip?ib:ia,ib:flip?ia:ib,ans:hi-lo,ask:"哪一堆多？多出几个？"};}
+  if(t===3)return genPat5(1);
+  var g=GOODS[ri(0,GOODS.length-1)],rows=3,cols=4,r=ri(1,rows),c=ri(1,cols);
+  return {kind:"place",rows:rows,cols:cols,row:r,col:c,icon:g[1],name:g[0],ans:(r-1)*cols+(c-1),ask:"把 "+g[1]+" "+g[0]+" 摆到第 "+r+" 层第 "+c+" 格"};}
+/* L3 收银员（初级）：只买 1 件 · 20 以内找零；认识人民币面额 */
+function genShopL3(){var t=ri(0,1);
+  if(t===0){var it=GOODS[ri(0,GOODS.length-1)],p=ri(2,19);
+    var pay=p<10?(Math.random()<0.5?10:20):20;/* 保证 pay>p，找零恒为正且 ≤18 */
+    return {kind:"num",mode:"change",items:[{name:it[0],icon:it[1],price:p,qty:1}],total:p,pay:pay,change:pay-p,ans:pay-p,dens:[1,5,10],ask:"顾客买 1 件，点出该找的零钱"};}
+  var pool=[1,5,10,20],k=ri(2,3),bills=[],s=0;
+  for(var i=0;i<k;i++){var b=pool[ri(0,pool.length-1)];bills.push(b);s+=b;}
+  if(Math.random()<0.2&&bills.length<3){var pos=ri(0,bills.length-1);s+=50-bills[pos];bills[pos]=50;}/* 低概率出现 50 元，认识大面额 */
+  return {kind:"money",bills:bills,ans:s,ask:"这些钱一共是多少元？"};}
+/* L4 收银员（中级）：买 2-3 件，总价不超过 100，求和或找零 */
+function genShopL4(){var cnt=Math.random()<0.5?2:3,gs=uniqGoods5(cnt),items=[],cap=Math.max(6,Math.floor(96/cnt));
+  for(var i=0;i<cnt;i++){items.push({name:gs[i].name,icon:gs[i].icon,price:ri(5,cap),qty:1});}
+  var total=0;for(var j=0;j<items.length;j++){total+=items[j].price;}
+  var mode=Math.random()<0.5?"sum":"change",pay=0,change=0;
+  if(mode==="change"){pay=total<50?50:100;change=pay-total;}/* 保证找零为正 */
+  return {kind:"num",mode:mode,items:items,total:total,pay:pay,change:change,ans:mode==="sum"?total:change,dens:mode==="change"?[1,5,10,20,50]:null,ask:mode==="sum"?"一共要付多少元？":"顾客付了 ¥"+pay+"，点出该找的零钱"};}
+/* L5 店长：认钟表、按规律摆促销堆头、统计货架 */
+function genShopL5(){var t=ri(0,2);
+  if(t===0){var h=ri(1,12),half=Math.random()<0.5;
+    return {kind:"clock",h:h,half:half,ans:h,ask:half?"现在是 ☐ 点半（只填数字）":"现在是 ☐ 点（只填数字）"};}
+  if(t===1){var ks=["ABAB","AABB","ABC"],k=ks[ri(0,2)],ic=pickSome5(FRUITS5,k==="ABC"?3:2),seq=[],next="";
+    if(k==="ABAB"){seq=[ic[0],ic[1],ic[0],ic[1],ic[0]];next=ic[1];}
+    else if(k==="AABB"){seq=[ic[0],ic[0],ic[1],ic[1],ic[0]];next=ic[0];}
+    else{seq=[ic[0],ic[1],ic[2],ic[0],ic[1]];next=ic[2];}
+    var opts=[{icon:next,ok:true}],g2=0;
+    while(opts.length<3&&g2++<40){var cd=FRUITS5[ri(0,FRUITS5.length-1)],dup=false;
+      for(var z=0;z<opts.length;z++){if(opts[z].icon===cd){dup=true;}}
+      if(!dup){opts.push({icon:cd,ok:false});}}
+    opts=shuffle5(opts);var ans=0;for(var z2=0;z2<opts.length;z2++){if(opts[z2].ok){ans=z2;}}
+    return {kind:"pattern",seq:seq,opts:opts,ans:ans,ask:"按规律摆促销堆头，下一个摆什么？"};}
+  var tg=FRUITS5[ri(0,FRUITS5.length-1)],tn=ri(2,6),grid=[];
+  for(var i2=0;i2<tn;i2++){grid.push(tg);}
+  var extra=ri(3,6);for(var j3=0;j3<extra;j3++){grid.push(otherIcon5(FRUITS5,tg));}
+  grid=shuffle5(grid);
+  return {kind:"stat",grid:grid,target:tg,ans:tn,ask:"货架上 "+tg+" 一共有几个？"};}
+/* 顾客①：开放题「你有 X 元，可以怎么买？」（每样限购 2-3 件，防止整5整10刷题） */
+function genShopL6(round){var b=L6_BUDGET[round]||50,gs=uniqGoods5(8),goods=[];
+  for(var i=0;i<gs.length;i++){goods.push({name:gs[i].name,icon:gs[i].icon,price:ri(5,30),cap:ri(2,3)});}
+  return {kind:"budget",budget:b,goods:goods,ans:0,ask:"你有 ¥"+b+"，可以怎么买？"};}
+/* 店长①：整点/半点 + 记账（2 笔：1 笔进货 + 1 笔卖货收钱）；12小时计时法，进货图标重复摆放、做题人自己数 */
+var UNITS5=["箱","瓶","盒","袋"];
+function genShopM1(){var gs1=uniqGoods5(3),inGoods=[],ni=2+ri(0,1);
+  for(var i=0;i<ni;i++){inGoods.push({icon:gs1[i].icon,name:gs1[i].name,unit:UNITS5[ri(0,3)],qty:ri(2,6)});}
+  var g2=uniqGoods5(1)[0];
+  var h1=ri(8,11),m1=Math.random()<0.5?0:30,h2=ri(1,6),m2=Math.random()<0.5?0:30;
+  var qty2=ri(2,5),price=ri(2,5);
+  return {kind:"ledger",rows:[
+    {type:"in",h:h1,m:m1,goods:inGoods},
+    {type:"out",h:h2,m:m2,icon:g2.icon,name:g2.name,unit:UNITS5[ri(0,3)],qty:qty2,price:price,amount:qty2*price}],
+    ask:"看钟表，把两笔账记进账本"};}
+/* 店长②：整5分/整10分 + 记账（3 笔，时间互不相同，难度加大）；小时也按12小时计时法 */
+function genShopM2(){var mins=[5,10,15,20,25,35,40,45,50,55],used=[],rows=[];
+  for(var i=0;i<3;i++){var h=ri(1,12),m=mins[ri(0,mins.length-1)];
+    while(used.indexOf(h*60+m)>=0){h=ri(1,12);m=mins[ri(0,mins.length-1)];}
+    used.push(h*60+m);
+    if(i===1||(i===2&&Math.random()<0.5)){var g=uniqGoods5(1)[0],qty=ri(2,5),price=ri(2,9);
+      rows.push({type:"out",h:h,m:m,icon:g.icon,name:g.name,unit:UNITS5[ri(0,3)],qty:qty,price:price,amount:qty*price});}
+    else{var gs=uniqGoods5(3),inGoods=[],ni=2+ri(0,1);
+      for(var j=0;j<ni;j++){inGoods.push({icon:gs[j].icon,name:gs[j].name,unit:UNITS5[ri(0,3)],qty:ri(2,6)});}
+      rows.push({type:"in",h:h,m:m,goods:inGoods});}}
+  return {kind:"ledger",rows:rows,ask:"看钟表（整5分/整10分），把三笔账记进账本"};}
+/* 账本一行要填的字段：进货=点/分 + 每种货品的数量（自己数图标）；卖货=点/分/收钱金额 */
+/* 店长②：连续三天的账本（每天数据来自 genShopM2），并保证三天总结余为正 */
+function genStockDays(){var days=[];
+  for(var d=0;d<3;d++){var q=genShopM2(),inN=0,outN=0,earn=0;
+    for(var i=0;i<q.rows.length;i++){var r=q.rows[i];
+      if(r.type==="in"){for(var k=0;k<r.goods.length;k++){inN+=r.goods[k].qty;}}
+      else{outN+=r.qty;earn+=r.amount;}}
+    days.push({rows:q.rows,inN:inN,outN:outN,earn:earn});}
+  var totIn=0,totOut=0;for(var t=0;t<3;t++){totIn+=days[t].inN;totOut+=days[t].outN;}
+  var need=totOut+3-totIn,g=0;
+  while(need>0&&g++<30){var dd=ri(0,2),gs=days[dd].rows[0].goods,gi=ri(0,gs.length-1);
+    gs[gi].qty++;days[dd].inN++;need--;}
+  return days;}
+/* 店长②的收尾总账题：算三天后的总库存（进货-卖出）与赚钱总数（收钱合计） */
+function genStockQ(days){var list=[],totIn=0,totOut=0,totEarn=0;
+  for(var i=0;i<days.length;i++){totIn+=days[i].inN;totOut+=days[i].outN;totEarn+=days[i].earn;
+    list.push({day:i+1,inN:days[i].inN,outN:days[i].outN,earn:days[i].earn});}
+  return {kind:"stock",days:list,totIn:totIn,totOut:totOut,totEarn:totEarn,
+    fields:[{pre:"店里还剩 ",suf:" 件货",ans:totIn-totOut},{pre:"这三天一共赚了 ¥",suf:"",ans:totEarn}],
+    ask:"三天过去了，算一算总账"};}
+function ledFields(r){var f=[{k:"h",pre:"",suf:" 点",ans:r.h},{k:"m",pre:"",suf:" 分",ans:r.m}];
+  if(r.type==="out")f.push({k:"amt",pre:"收钱 ¥",suf:"",ans:r.amount});
+  else{for(var i=0;i<r.goods.length;i++)f.push({k:"qty"+i,pre:r.goods[i].name+" ",suf:" "+r.goods[i].unit,ans:r.goods[i].qty});}
+  return f;}
+/* 顾客②：预算 + 限定任务（至少/最多买几件、买能平均分成几份的数量） */
+function genShopL7(round){var b=L6_BUDGET[round]||50,gs=uniqGoods5(8),goods=[];
+  for(var i2=0;i2<gs.length;i2++){goods.push({name:gs[i2].name,icon:gs[i2].icon,price:ri(5,30),cap:ri(2,3)});}
+  var MS=[{type:"minN",n:4,txt:"至少买 4 件商品"},
+    {type:"maxN",n:3,txt:"最多买 3 件商品"},
+    {type:"share",n:3,txt:"要有一种商品的数量能平均分给 3 个小伙伴"}];
+  var mi=round%3;
+  return {kind:"budget",budget:b,goods:goods,ans:0,mission:MS[mi],ask:"你有 ¥"+b+" · 任务："+MS[mi].txt};}
+function genShop(l,round){if(l===0)return genShopL1();if(l===1)return genShopL2();if(l===2)return genShopL3();if(l===3)return genShopL4();if(l===4)return genShopM1();if(l===5)return genShopM2();if(l===7)return genShopL7(round||0);return genShopL6(round||0);}
+function genQ(g,l){if(g===1)return genAdd(l);if(g===2)return genSub1(l);if(g===3)return genSub2(l);if(g===4)return genMix(l);return genShop(l,0);}
 function hintText(g,q){if(g===1)return "凑十法：先看 "+q.n1+" 差 "+(10-q.n1)+" 凑成 10，再从 "+q.n2+" 里拿走 "+(10-q.n1)+"，剩 "+(q.n2-(10-q.n1))+"，10 + "+(q.n2-(10-q.n1))+" = "+q.ans;
   if(g===2)return "个位不够减：用破十法，把 "+(q.t.split(" - ")[0])+" 拆成 10 和余数，10 减 "+q.t.split(" - ")[1]+" 再加余数";
   if(g===3)return "借十法：个位不够减，向十位借 1 个十，个位变成十几再减";
   if(g===4)return "先算个位，再算十位，注意进位和退位";
-  return "算对总价/找零，顾客就会满意地点头";}
+  var K=q.kind;
+  if(K==="count")return "一个一个数，数过的做个记号，别漏也别重复";
+  if(K==="stat")return "只数 "+q.target+"，其他的不算在内";
+  if(K==="compare")return "先数出每堆各有几个，再用多的减去少的";
+  if(K==="place")return "从上往下数第几层，再从左往右数第几格";
+  if(K==="money")return "把每张钱的面值一个个加起来";
+  if(K==="clock")return "分针指 12 是整点、指 6 是半点；时针指到几就是几点";
+  if(K==="ledger")return "先认时间：时针指几就是几点（12小时计时法）；分针指 12 是整点、指 6 是半点，指别的数字就 5 个 5 个地数（指 2 是 10 分、指 3 是 15 分…）。进货那行要一个一个数图标，数出每种到了多少；卖的那笔还要算出收多少钱";
+  if(K==="pattern")return "看看前面是怎么重复的，找出循环的一小段";
+  if(K==="stock")return "先把三天的进货加起来、卖出的加起来，进货减卖出＝剩下的库存；再把三天的收钱加起来＝一共赚的钱";
+  if(K==="budget")return q.mission?("先完成今天的任务："+q.mission.txt+"，再注意别超支"):"先挑想买的，看钱够不够；不够就去掉一样，或换便宜点的";
+  return q.mode==="sum"?"把每件商品的价格加起来":"用付的钱减去总价，从下面点出对应的钱币：先点大面额纸币，再用 1 元硬币凑零头";}
 
 /* ============ 视图导航 ============ */
 var TABS=[["class","📚 四法课堂"],["hall","🏠 大厅"],["achieve","🏆 成就墙"],["rank","📊 排行榜"],["sticker","⭐ 贴纸墙"],["settings","⚙️ 设置"]];
@@ -426,7 +631,7 @@ function go(v){var i;for(i=0;i<VIEWS.length;i++){var el=document.getElementById(
 function renderHall(){var el=document.getElementById("view-hall");
   var html='';
   html+='<div class="card"><p class="h2">选择游戏</p><p class="sub">从第 1 个游戏开始闯关，达标（★）或玩满 3 次即可解锁下一个游戏</p><div class="grid-hall">';
-  for(var i=0;i<GAMES.length;i++){var g=GAMES[i];var open=gameOpen(g.id);
+  for(var i=0;i<GAMES.length;i++){var g=GAMES[i];if(g.id===5)continue;var open=gameOpen(g.id);
     html+='<div class="gcard'+(open?"":" locked")+'" onclick="'+(open?"enterGame("+g.id+")":"")+'"'+(open?"":' data-lock="1"')+' style="border-top:4px solid '+g.color+'">';
     html+='<div class="ico">'+g.icon+"</div><div class=\"nm\">"+g.name+"</div><div class=\"ds\">"+g.desc+"</div>";
     if(!open)html+='<div class="lock-tag">🔒 未解锁</div>';
@@ -436,6 +641,23 @@ function renderHall(){var el=document.getElementById("view-hall");
       html+='<div class="lvl-dot'+(any?(any.stars===3?" full":" ok"):"")+freeCls+'"'+clickAttr+' title="'+lvlDesc(g.id,L)+(any?" · 最佳"+any.stars+"星":" · "+(op?"未玩":"未解锁"))+'">'+(any?any.stars:(op?"·":"🔒"))+"</div>";}
     html+="</div>";
     html+='<div class="best">'+(gameTotalStars(g.id)>0?"⭐ 累计 "+gameTotalStars(g.id)+" 星":"挑战开始")+"</div></div>";}
+  html+="</div></div>";
+  /* 超市小掌柜 · 角色扮演独立入口 */
+  var ROLE5=[{name:"理货员",icon:"📦",desc:"数一数 · 摆货架",color:"#0f8a6d",ls:[0,1]},
+    {name:"收银员",icon:"💰",desc:"认人民币 · 找零结账",color:"#d85a30",ls:[2,3]},
+    {name:"店长",icon:"⏰",desc:"看钟表 · 记账本",color:"#ba7517",ls:[4,5]},
+    {name:"顾客",icon:"🛍️",desc:"做计划 · 去采购",color:"#7f77dd",ls:[6,7]}];
+  html+='<div class="card" style="margin-top:12px;border-top:4px solid #7f77dd"><p class="h2">🛒 超市小掌柜 · 角色扮演</p><p class="sub">挑一个角色开始经营超市，每个角色 2 个等级，通过第 1 级解锁第 2 级</p><div class="grid-hall">';
+  for(var r5=0;r5<ROLE5.length;r5++){var ro=ROLE5[r5];
+    html+='<div class="gcard" style="border-top:4px solid '+ro.color+';cursor:default">';
+    html+='<div class="ico">'+ro.icon+'</div><div class="nm">'+ro.name+'</div><div class="ds">'+ro.desc+"</div>";
+    html+='<div class="lvl-row">';
+    for(var t5=0;t5<ro.ls.length;t5++){var L5=ro.ls[t5];var op5=levelOpen(5,L5);var any5=bestFor(5,L5,CUR);
+      var fc5=(op5?" free":"");var ca5=(op5?' onclick="event.stopPropagation();enterGameLevel(5,'+L5+')"':"");
+      html+='<div class="lvl-dot'+(any5?(any5.stars===3?" full":" ok"):"")+fc5+'"'+ca5+' title="'+ro.name+" "+LEVELS[L5]+" "+lvlDesc(5,L5)+(any5?" · 最佳"+any5.stars+"星":" · "+(op5?"未玩":"未解锁"))+'">'+(any5?any5.stars:(op5?"·":"🔒"))+"</div>";}
+    html+="</div>";
+    var rs5=0;for(var t6=0;t6<ro.ls.length;t6++){var b5=bestFor(5,ro.ls[t6],CUR);if(b5)rs5+=b5.stars;}
+    html+='<div class="best">'+(rs5>0?"⭐ 累计 "+rs5+" 星":"挑战开始")+"</div></div>";}
   html+="</div></div>";
   html+='<div class="card" style="margin-top:12px"><p class="h2">本周小贴士</p><div class="muted" style="font-size:14px;line-height:1.8">每天 10 分钟，到点就停 · 先玩会的方法，再比速度 · 错题只说“再想想”，不批评 · 家长每周故意算错一次，让孩子当老师</div></div>';
   el.innerHTML=html;}
@@ -481,10 +703,10 @@ function classTab(i){classIdx=i;classStepIdx=-1;renderClass();}
 function renderAchieve(){var el=document.getElementById("view-achieve");
   var html='<div class="card"><p class="h2">成就墙 · '+CUR+'</p><p class="sub">点亮 = 该难度首次达标（≥1 星），记录首达日期与最佳星级</p>';
   html+='<div class="ach-grid"><div></div>';
-  for(var L=0;L<4;L++)html+='<div class="hd" style="text-align:center">'+LEVELS[L]+"</div>";
+  for(var L=0;L<6;L++)html+='<div class="hd" style="text-align:center">'+LEVELS[L]+"</div>";
   for(var i=0;i<GAMES.length;i++){var g=GAMES[i];
     html+='<div style="align-self:center;font-weight:600;font-size:13px">'+g.icon+" "+g.name+"</div>";
-    for(var L2=0;L2<4;L2++){
+    for(var L2=0;L2<6;L2++){
       if(L2>=GLEV[g.id]){html+='<div class="ach-cell" style="opacity:.3;color:var(--mut)">—</div>';continue;}
       var b=bestFor(g.id,L2,CUR);var op=levelOpen(g.id,L2);
       if(b&&b.stars>=1){var d=new Date(b.ts);var ds=(d.getMonth()+1)+"月"+d.getDate()+"日";
@@ -629,12 +851,17 @@ function doLogout(){try{localStorage.removeItem(SESS_KEY);}catch(e){}
 var R=null;
 function enterGame(g){if(!gameOpen(g))return;var L=0;for(var i=0;i<GLEV[g];i++){if(levelOpen(g,i))L=i;}startRound(g,L);}
 function enterGameLevel(g,l){if(!gameOpen(g)||!levelOpen(g,l))return;startRound(g,l);}
-function startRound(g,l){var n=S.perRound;var qs=[];for(var i=0;i<n;i++){qs.push(genQ(g,l));}
+function startRound(g,l){var cust=(g===5&&l>=6),led=(g===5&&(l===4||l===5));var n=cust?3:(led?3:S.perRound);var qs=[];
+  if(g===5&&l===5){/* 店长②：连续三天记账，最后一道总账 */var days=genStockDays();
+    for(var d=0;d<days.length;d++){qs.push({kind:"ledger",day:d+1,total3:true,rows:days[d].rows,ask:"第 "+(d+1)+" 天 · 看钟表把这一天的账记好"});}
+    qs.push(genStockQ(days));n=qs.length;}
+  else{for(var i=0;i<n;i++){qs.push(cust?(l===6?genShopL6(i):genShopL7(i)):genQ(g,l));}}
   R={g:g,l:l,qs:qs,idx:0,ans:new Array(n),start:Date.now(),flash:null,chain:0,bestChain:0,answers:0,shown:0};
   if(g===4){R.flashLeft=30;R.flashTimer=setInterval(function(){R.flashLeft--;var el=document.getElementById("timer4");if(el)el.textContent=Math.max(0,R.flashLeft);if(R.flashLeft<=0){clearInterval(R.flashTimer);endFlash();}},1000);}
   go("game");renderGame();}
 function renderGame(){var el=document.getElementById("view-game");var g=R.g,l=R.l;
-  var html='<div class="flowbar">🏠 <b>'+GAMES[g-1].name+"</b> · "+LEVELS[l]+" "+lvlDesc(g,l)+" · 第 <b id=\"qNo\">1</b>/"+R.qs.length+" 题 · 对 <b id=\"okNo\">0</b> 题</div>";
+  var unit=isL6Round()?" 轮":" 题";
+  var html='<div class="flowbar">🏠 <b>'+GAMES[g-1].name+"</b> · "+LEVELS[l]+" "+lvlDesc(g,l)+" · 第 <b id=\"qNo\">1</b>/"+R.qs.length+unit+" · "+(isL6Round()?"达标 <b id=\"okNo\">0</b> 轮":"对 <b id=\"okNo\">0</b> 题")+"</div>";
   html+='<div class="progress"><i id="pbar" style="width:0%"></i></div>';
   html+='<div id="gameBody"></div>';
   html+='<div class="row center" style="margin-top:10px"><button class="btn ghost" onclick="quitRound()">退出本局</button></div>';
@@ -900,6 +1127,10 @@ function makeOpts(ans){var set={};set[ans]=1;var tries=0;
   var arr=Object.keys(set).map(Number);while(arr.length<3){arr.push(arr[arr.length-1]+1);}
   for(var i=arr.length-1;i>0;i--){var j=ri(0,i);var z=arr[i];arr[i]=arr[j];arr[j]=z;}
   return arr.slice(0,3);}
+/* 游戏2/3 的交互由 game2HTML/game3HTML 里的内联 onclick（pickRoute / doBorrow）触发，
+   绑定在各自流程内部完成，这里保留空实现以免 renderQuestion 调用时报错 */
+function bindGame2(q){}
+function bindGame3(q){}
 function bindGame4(q){R4=R4?{chain:R4.chain,bestChain:R4.bestChain,over:false}:{chain:0,bestChain:0,over:false};
   var ch0=document.getElementById("chain4");if(ch0)ch0.textContent=R4.chain;
   document.getElementById("opt4").addEventListener("click",function(ev){if(R4.over)return;var b=ev.target.closest("button");if(!b)return;var v=parseInt(b.getAttribute("data-v"),10);
@@ -911,37 +1142,283 @@ function endFlash(){R4.over=true;if(R.flashTimer)clearInterval(R.flashTimer);
   finishRoundExtra(R.answers,30);}
 
 /* ---------- 游戏5 超市小掌柜 ---------- */
-function game5HTML(q,turn){var shelf="";var shown={};
-  var html='<div class="qbox"><div class="qstep">'+" 顾客来买东西</div>";
-  html+='<div class="shop-shelf" id="shelf5">';
-  for(var i=0;i<q.items.length;i++){var it=q.items[i];var icons=(it.qty&&it.qty>1)?it.icon.repeat(it.qty):it.icon;var qtyText=(it.qty&&it.qty>1)?" "+it.qty+"个":"";shelf+='<div class="shop-item"><div class="pico">'+icons+'</div><div class="pnm">'+it.name+qtyText+'</div><div class="ppr">每个 ¥'+it.price+'</div></div>';}
-  html+=shelf+"</div>";
-  html+='<div class="receipt"><div class="rline"><span>🛒 顾客买了</span></div>';
-  for(var j=0;j<q.items.length;j++){var it2=q.items[j];var qtyText2=(it2.qty&&it2.qty>1)?" "+it2.qty+"个":"";html+='<div class="rline"><span>'+it2.icon+" "+it2.name+qtyText2+'</span><span>¥'+it2.price+'/个</span></div>';}
-  html+='<div class="rsep"></div>';
-  if(q.mode==="change"){html+='<div class="rline"><span>顾客付了</span><span style="font-weight:700">¥'+q.pay+"</span></div>";}
+var G5_STEP={count:"🧮 数一数",shape:"🔷 认形状",odd:"🧺 分类",compare:"⚖️ 比多少",place:"📦 摆货架",num:"💰 收银台",money:"💵 认人民币",clock:"🕐 看钟表",ledger:"📒 店长记账",stock:"🧾 三天总账",pattern:"🎯 找规律",stat:"📊 统计",budget:"🛍️ 自由选购"};
+/* 仿真人民币渲染：1元=硬币，5/10/20/50/100=纸币（主色调贴近真实） */
+function moneyHTML5(b){var b2=parseInt(b,10);
+  if(b2===1){return '<span class="rm-coin" title="1元硬币">1元<small>中国人民银行</small></span>';}
+  return '<span class="rm-note n'+b2+'" title="'+b2+'元纸币"><span class="rm-wm">'+b2+'</span><span class="rm-den">'+b2+'</span><span class="rm-txt">中国人民银行</span></span>';}
+function moneyRowHTML5(bills){var parts=[];for(var i=0;i<bills.length;i++){parts.push(moneyHTML5(bills[i]));}
+  return parts.join('<span style="font-weight:800;font-size:22px;color:var(--ink)">+</span>');}
+function repeatStr5(s,n){var o="";for(var i=0;i<n;i++){o+=s;}return o;}
+function pileIcons5(ic,n){var o="";for(var i=0;i<n;i++){o+="<span>"+ic+"</span>";}return o;}
+function clockSVG5(h,min){var cx=66,cy=66;
+  function pt(ang,len){var a=(ang-90)*Math.PI/180;return [cx+len*Math.cos(a),cy+len*Math.sin(a)];}
+  var hAng=(h%12)*30+min*0.5,mAng=min*6,hp=pt(hAng,32),mp=pt(mAng,46);
+  var s='<svg class="clock-face" viewBox="0 0 132 132">';
+  s+='<circle cx="66" cy="66" r="58" fill="#fffdf6" stroke="#cfd8e3" stroke-width="2"/>';
+  for(var i=1;i<=12;i++){var p1=pt(i*30,51),p2=pt(i*30,45),tp=pt(i*30,37);
+    s+='<line x1="'+p1[0].toFixed(1)+'" y1="'+p1[1].toFixed(1)+'" x2="'+p2[0].toFixed(1)+'" y2="'+p2[1].toFixed(1)+'" stroke="#8b96a5" stroke-width="2"/>';
+    s+='<text x="'+tp[0].toFixed(1)+'" y="'+(tp[1]+4).toFixed(1)+'" font-size="11" text-anchor="middle" fill="#5b6673" font-weight="700">'+i+"</text>";}
+  s+='<line x1="66" y1="66" x2="'+hp[0].toFixed(1)+'" y2="'+hp[1].toFixed(1)+'" stroke="#2f6fd0" stroke-width="5" stroke-linecap="round"/>';
+  s+='<line x1="66" y1="66" x2="'+mp[0].toFixed(1)+'" y2="'+mp[1].toFixed(1)+'" stroke="#d85a30" stroke-width="3" stroke-linecap="round"/>';
+  s+='<circle cx="66" cy="66" r="3.5" fill="#2f6fd0"/></svg>';
+  return s;}
+function game5HTML(q,turn){
+  var html='<div class="qbox"><div class="qstep">'+(G5_STEP[q.kind]||"🛒 超市")+"</div>";
+  if(q.ask){html+='<div class="qtext" style="font-size:24px;letter-spacing:0;line-height:1.5;margin:8px 0">'+q.ask+"</div>";}
+  if(q.kind==="count"||q.kind==="stat"){
+    var arr=q.kind==="count"?repeatStr5("<span>"+q.icon+"</span>",q.n):q.grid.map(function(x){return "<span>"+x+"</span>";}).join("");
+    html+='<div class="count-grid">'+arr+"</div>";
+    html+='<div class="ansline">'+(q.kind==="count"?"一共 <span id=\"inpA\"></span> 个":q.target+" 有 <span id=\"inpA\"></span> 个")+"</div>";
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="pattern"){
+    var N=q.seq.length+1,hid=(typeof q.hidden==="number")?q.hidden:N-1,jp=0;
+    html+='<div class="seq-row">';
+    for(var s1=0;s1<N;s1++){if(s1===hid){html+='<div class="seq-q">?</div>';}
+      else{html+='<div class="seq-cell">'+q.seq[jp++]+"</div>";}}
+    html+="</div>";
+    html+='<div class="opt-row" id="pickBox">'+q.opts.map(function(o,i){return '<button type="button" class="opt" data-i="'+i+'" style="font-size:32px">'+o.icon+"</button>";}).join("")+"</div>";}
+  else if(q.kind==="shape"){
+    html+='<div class="opt-row" id="pickBox">'+q.opts.map(function(o,i){return '<button type="button" class="opt" data-i="'+i+'" style="font-size:34px">'+o.icon+"</button>";}).join("")+"</div>";}
+  else if(q.kind==="odd"){
+    html+='<div class="opt-row4" id="pickBox">'+q.opts.map(function(o,i){return '<button type="button" class="opt-icon" data-i="'+i+'">'+o.icon+"</button>";}).join("")+"</div>";}
+  else if(q.kind==="compare"){
+    html+='<div class="row center" style="gap:12px;flex-wrap:wrap">';
+    html+='<div class="pile-box"><div class="pile">'+pileIcons5(q.ia,q.a)+'</div><div class="plabel">A 堆</div></div>';
+    html+='<div class="pile-box"><div class="pile">'+pileIcons5(q.ib,q.b)+'</div><div class="plabel">B 堆</div></div></div>';
+    html+='<div class="ansline">多的比少的多 <span id="inpA"></span> 个</div>';
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="place"){
+    var cells="";
+    for(var r=1;r<=q.rows;r++){for(var c=1;c<=q.cols;c++){cells+='<div class="shelf-cell" data-i="'+((r-1)*q.cols+(c-1))+'"></div>';}}
+    html+='<div class="shelf-grid" id="shelfGrid">'+cells+"</div>";
+    html+='<div style="font-size:13px;color:var(--mut);margin:6px">从上往下数第 '+q.row+" 层，从左往右第 "+q.col+" 格</div>";}
+  else if(q.kind==="money"){
+    html+='<div style="font-size:13px;color:var(--mut);margin:4px">圆的是硬币，长方形的是纸币，认一认上面的数字</div>';
+    html+='<div class="rm-money" style="margin:10px 0">'+moneyRowHTML5(q.bills)+"</div>";
+    html+='<div class="ansline">一共 ¥<span id="inpA"></span></div>';
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="clock"){
+    html+=clockSVG5(q.h,q.half?30:0);
+    html+='<div style="font-size:13px;color:var(--mut);margin:4px">蓝色粗针是时针，红色细针是分针</div>';
+    html+='<div class="ansline">'+(q.half?"现在是 <span id=\"inpA\"></span> 点半":"现在是 <span id=\"inpA\"></span> 点")+"</div>";
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="ledger"){
+    html+='<div style="font-size:13px;color:var(--mut);margin:2px 0 6px">先看钟表认时间，把所有空格都填完，再点「确定」统一检查</div>';
+    if(q.day){html+='<div class="day-note">📅 <b>第 '+q.day+" 天</b> · 记完想一想：今天<b>进了多少货</b>、<b>卖出多少</b>、<b>收了多少钱</b> —— 三天后要算总账哦</div>";}
+    html+='<div class="ledger" id="ledgerBook">';
+    for(var i3=0;i3<q.rows.length;i3++){var r3=q.rows[i3];
+      html+='<div class="led-row"><div class="led-clock">'+clockSVG5(r3.h,r3.m)+"</div>";
+      var desc3="";
+      if(r3.type==="in"){for(var t3=0;t3<r3.goods.length;t3++){var gd3=r3.goods[t3];
+        var ics3="";for(var c3=0;c3<gd3.qty;c3++)ics3+=gd3.icon;
+        desc3+=(t3?" ":"")+ics3+" "+gd3.name;}
+        desc3="📦 进货：数一数每种到了多少 → "+desc3;}
+      else{desc3="🛒 卖出："+r3.icon+" "+r3.name+" "+r3.qty+" "+r3.unit+"，每件 ¥"+r3.price;}
+      html+='<div class="led-info"><div class="led-desc">'+desc3+"</div>";
+      var lf=ledFields(r3);
+      html+='<div class="led-fields">';
+      for(var j3=0;j3<lf.length;j3++){html+='<span class="led-fwrap">'+lf[j3].pre+'<span class="led-f" data-r="'+i3+'" data-f="'+j3+'">·</span>'+lf[j3].suf+"</span>";}
+      if(r3.type==="in"){html+='<span style="font-size:12px;color:var(--mut)">（先填时间，再数一数每种到货数量）</span>';}
+      html+="</div></div></div>";}
+    html+="</div>";
+    html+='<div id="ledFb"></div>';
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="stock"){
+    html+='<div class="stock-tbl">';
+    html+='<div class="str st-head"><span>日期</span><span>进货</span><span>卖出</span><span>收钱</span></div>';
+    for(var i4=0;i4<q.days.length;i4++){var d4=q.days[i4];
+      html+='<div class="str"><span>第 '+d4.day+' 天</span><span class="in">+'+d4.inN+' 件</span><span class="out">-'+d4.outN+' 件</span><span class="money">¥'+d4.earn+"</span></div>";}
+    html+="</div>";
+    html+='<div style="font-size:13px;color:var(--mut);margin:6px 0">进货合起来减去卖出合起来＝店里还剩的库存；三天的收钱加起来＝一共赚的钱</div>';
+    html+='<div class="ledger" id="ledgerBook"><div class="led-row"><div class="led-info"><div class="led-fields">';
+    for(var j4=0;j4<q.fields.length;j4++){html+='<span class="led-fwrap">'+q.fields[j4].pre+'<span class="led-f" data-r="0" data-f="'+j4+'">·</span>'+q.fields[j4].suf+"</span>";}
+    html+="</div></div></div></div>";
+    html+='<div id="ledFb"></div>';
+    html+='<div class="pad" id="shopPad"></div>';}
+  else if(q.kind==="budget"){
+    var need=Math.ceil(q.budget*0.6);
+    html+='<div class="buy-grid" id="buyGrid">'+q.goods.map(function(g,i){return '<div class="buy-item" data-i="'+i+'"><div class="bico">'+g.icon+'</div><div class="bnm">'+g.name+'</div><div class="bpr">¥'+g.price+'</div><div class="blim">限购'+(g.cap||3)+'件</div><div class="bqty" data-q="'+i+'"></div></div>';}).join("")+"</div>";
+    html+='<div class="budget-bar"><div class="rline"><span>💰 预算</span><b>¥'+q.budget+"</b></div>";
+    html+='<div class="rline"><span>🛒 已选 <span id="cntT" style="font-weight:700">0</span> 件</span><span style="font-size:12px;color:var(--mut)">花了多少、还剩多少，自己算一算</span></div>';
+    html+='<div class="rsep"></div>';
+    if(q.mission){html+='<div style="font-size:13px;color:#a87800;font-weight:700">📋 任务：'+q.mission.txt+"（记得别超支）</div></div>";}
+    else{html+='<div style="font-size:13px;color:var(--mut)">目标：不超支，并尽量花掉 ≥ ¥'+need+"（越多越划算）</div></div>";}
+    html+='<div id="buyTip"></div>';
+    html+='<div class="row center" style="gap:10px;margin-top:6px"><button type="button" class="btn ghost" id="buyReset">↺ 重新选</button><button type="button" class="btn orange" id="buyOk">🛒 结账</button></div>';}
+  else{
+    var shelf="";
+    html+='<div class="shop-shelf" id="shelf5">';
+    for(var i2=0;i2<q.items.length;i2++){var it=q.items[i2];var icons=(it.qty&&it.qty>1)?repeatStr5(it.icon,it.qty):it.icon;var qtyText=(it.qty&&it.qty>1)?" ×"+it.qty:"";
+      shelf+='<div class="shop-item"><div class="pico">'+icons+'</div><div class="pnm">'+it.name+qtyText+'</div><div class="ppr">¥'+it.price+"</div></div>";}
+    html+=shelf+"</div>";
+    html+='<div class="receipt"><div class="rline"><span>🛒 顾客买了</span></div>';
+    for(var j=0;j<q.items.length;j++){var it2=q.items[j];var qtyText2=(it2.qty&&it2.qty>1)?" ×"+it2.qty:"";
+      html+='<div class="rline"><span>'+it2.icon+" "+it2.name+qtyText2+'</span><span>¥'+it2.price+"</span></div>";}
+    html+='<div class="rsep"></div>';
+    if(q.mode==="change"){
+      html+='<div class="rline"><span>顾客付了</span><span style="font-weight:700">¥'+q.pay+"</span></div></div>";
+      html+='<div class="ansline">要找零 ¥<span id="rmSum" style="color:var(--c2)">0</span></div>';
+      html+='<div class="rm-tray" id="rmTray"><span class="empty">从下面点钱，放进钱箱</span></div>';
+      html+='<div class="rm-palette" id="rmPal">'+(q.dens||[1,5,10]).map(function(d){return '<button type="button" class="rm-pick" data-d="'+d+'" title="'+d+'元">'+moneyHTML5(d)+"</button>";}).join("")+"</div>";
+      html+='<div class="row center" style="gap:8px;margin:4px 0"><button type="button" class="btn ghost" id="rmUndo">↩ 撤销一张</button><button type="button" class="btn ghost" id="rmClear">🗑 清空</button><button type="button" class="btn orange" id="rmOk">✅ 找零完成</button></div>';
+      html+='<div style="font-size:13px;color:var(--mut)">先点大面额，再点硬币凑零头，凑够要找的钱</div>';}
+    else{
+      html+='<div class="rline"><span>顾客付了</span><span style="font-weight:700">¥'+q.pay+"</span></div></div>";
+      html+='<div class="ansline">一共要付 ¥<span id="inpA"></span></div>';
+      html+='<div class="pad" id="shopPad"></div>';}}
   html+="</div>";
-  html+='<div class="ansline">'+(q.mode==="sum"?"总价是 ¥<span id=\"inpA\"></span>":"要找零 ¥<span id=\"inpA\"></span>")+"</div>";
-  html+='<div class="pad" id="shopPad"></div></div>';
   return html;}
-function bindGame5(q){var val5="";
-  var pad=document.getElementById("shopPad");
+function g5RightMsg(q){if(q.kind==="count"){return q.ans+" 个，数得真准！";}
+  if(q.kind==="compare"){return "多 "+q.ans+" 个，比得对！";}
+  if(q.kind==="money"){return "一共 ¥"+q.ans+"，认得真快！";}
+  if(q.kind==="clock"){return "是 "+q.ans+" 点"+(q.half?"半":"")+"，看对了！";}
+  if(q.kind==="ledger"){return "账本记得又对又清楚，真是个好店长！";}
+  if(q.kind==="stock"){return "还剩 "+(q.totIn-q.totOut)+" 件库存，一共赚了 ¥"+q.totEarn+"，总账算得真清楚！";}
+  if(q.kind==="pattern"){return "规律找对了，下一个应该摆它！";}
+  if(q.kind==="stat"){return q.ans+" 个，统计正确！";}
+  return q.mode==="sum"?"算得又快又准！":"找零正确！";}
+function g5Wrong(q){var el=document.getElementById("gameBody");
+  el.innerHTML=noLine("正确答案是 "+q.ans)+'<div style="text-align:center;padding:10px">再来一次…</div>';advance(false);}
+function bindNum5(q){var val5="";
+  var pad=document.getElementById("shopPad");if(!pad)return;
   pad.innerHTML=["1","2","3","4","5","6","7","8","9","0","⌫","确定"].map(function(k){return '<button type="button" data-k="'+k+'">'+k+"</button>";}).join("");
   pad.addEventListener("click",function(ev){var k=ev.target.getAttribute("data-k");if(!k)return;
     var disp=document.getElementById("inpA");
     if(k==="⌫"){val5=val5.slice(0,-1);}
     else if(k==="确定"){if(val5==="")return;var v=parseInt(val5,10);
-      if(v===q.ans){answerOk(q.mode==="sum"?"算得又快又准！":"找零正确！");}
-      else{var el=document.getElementById("gameBody");el.innerHTML=noLine(q.mode==="sum"?"总价是 "+q.ans+" 元":"应该找 "+q.ans+" 元")+"<div style=\"text-align:center;padding:10px\">再来一次…</div>";advance(false);}return;}
+      if(v===q.ans){answerOk(g5RightMsg(q));}
+      else{g5Wrong(q);}return;}
     else{val5=(val5+k).slice(0,3);}
-    if(disp)disp.textContent=val5||"·";});}
+    if(disp){disp.textContent=val5||"·";}});}
+function bindPick5(q){var box=document.getElementById("pickBox");if(!box)return;
+  box.addEventListener("click",function(ev){
+    var btn=ev.target.closest?ev.target.closest("[data-i]"):null;if(!btn)return;
+    var i=parseInt(btn.getAttribute("data-i"),10);
+    if(i===q.ans){btn.className+=" good";answerOk(g5RightMsg(q)||"选对啦！");}
+    else{btn.className+=" bad";g5Wrong(q);}});}
+function bindPlace5(q){var grid=document.getElementById("shelfGrid");if(!grid)return;
+  grid.addEventListener("click",function(ev){
+    var cell=ev.target.closest?ev.target.closest(".shelf-cell"):null;if(!cell)return;
+    var i=parseInt(cell.getAttribute("data-i"),10);
+    if(i===q.ans){cell.className+=" picked";cell.textContent=q.icon;answerOk("摆对啦！第 "+q.row+" 层第 "+q.col+" 格");}
+    else{cell.className+=" bad";cell.textContent="✗";g5Wrong(q);}});}
+var R6Cart=null;
+function bindBudget5(q){R6Cart=[];
+  function upd(){var spent=0,cnt={};
+    for(var i=0;i<R6Cart.length;i++){cnt[R6Cart[i]]=(cnt[R6Cart[i]]||0)+1;spent+=q.goods[R6Cart[i]].price;}
+    for(var j=0;j<q.goods.length;j++){
+      var capJ=q.goods[j].cap||99;
+      var qt=document.querySelector('.bqty[data-q="'+j+'"]');if(qt){qt.textContent=cnt[j]?"已选 ×"+cnt[j]+"（限购"+capJ+"）":"";}
+      var it=document.querySelector('.buy-item[data-i="'+j+'"]');if(it){if(cnt[j]){it.className="buy-item sel";}else{it.className="buy-item";}}}
+    var ct=document.getElementById("cntT");
+    if(ct){ct.textContent=R6Cart.length;}
+    return spent;}
+  var grid=document.getElementById("buyGrid");
+  if(grid){grid.addEventListener("click",function(ev){
+    var it=ev.target.closest?ev.target.closest(".buy-item"):null;if(!it)return;
+    var gi=parseInt(it.getAttribute("data-i"),10),g=q.goods[gi];
+    var cnt2={};for(var c2=0;c2<R6Cart.length;c2++){cnt2[R6Cart[c2]]=(cnt2[R6Cart[c2]]||0)+1;}
+    var cap=g.cap||99;
+    if((cnt2[gi]||0)>=cap){var tip0=document.getElementById("buyTip");
+      if(tip0){tip0.innerHTML='<div style="text-align:center;font-size:14px;color:var(--no);margin:4px">🚫 「'+g.name+'」限购 '+cap+' 件，换别的一样试试</div>';}
+      return;}
+    R6Cart.push(gi);upd();
+    var tip=document.getElementById("buyTip");if(tip){tip.innerHTML="";}});}
+  var rst=document.getElementById("buyReset");
+  if(rst){rst.addEventListener("click",function(){R6Cart=[];upd();var tip=document.getElementById("buyTip");if(tip){tip.innerHTML="";}});}
+  var okb=document.getElementById("buyOk");
+  if(okb){okb.addEventListener("click",function(){
+    var spent=upd(),need=Math.ceil(q.budget*0.6),tip=document.getElementById("buyTip");
+    if(spent>q.budget){if(tip){tip.innerHTML='<div class="hint-bar" style="margin-top:8px">钱不够啦（超出 ¥'+(spent-q.budget)+"），去掉一样再试试～</div>";}return;}
+    if(spent===0){if(tip){tip.innerHTML='<div class="hint-bar" style="margin-top:8px">还没选东西呢，先挑几样吧～</div>';}return;}
+    if(q.mission){var pass2=true,msg2="";
+      if(q.mission.type==="minN"&&R6Cart.length<q.mission.n){pass2=false;msg2="任务：至少买 "+q.mission.n+" 件，现在才 "+R6Cart.length+" 件，再挑一点吧～";}
+      if(q.mission.type==="maxN"&&R6Cart.length>q.mission.n){pass2=false;msg2="任务：最多买 "+q.mission.n+" 件，现在选了 "+R6Cart.length+" 件，去掉一些吧～";}
+      if(q.mission.type==="share"){var cnt3={};for(var c3=0;c3<R6Cart.length;c3++){cnt3[R6Cart[c3]]=(cnt3[R6Cart[c3]]||0)+1;}
+        var has=false;for(var kk in cnt3){if(cnt3[kk]>=q.mission.n&&cnt3[kk]%q.mission.n===0)has=true;}
+        if(!has){pass2=false;msg2="任务：要有一种商品买到 "+q.mission.n+" 的倍数个（比如 "+q.mission.n+" 个、"+(q.mission.n*2)+" 个），才能平均分给 "+q.mission.n+" 个小伙伴哦～";}}
+      if(!pass2){if(tip){tip.innerHTML='<div class="hint-bar" style="margin-top:8px">'+msg2+"</div>";}return;}
+      answerOk("任务完成！花了 ¥"+spent+"，还剩 ¥"+(q.budget-spent)+"，规划得真棒！");return;}
+    if(spent>=need){answerOk("花了 ¥"+spent+"，还剩 ¥"+(q.budget-spent)+"，规划得真棒！");}
+    else{answerNo("没超支，但只花了 ¥"+spent+"（预算 ¥"+q.budget+"），还能再多买点～");}});}
+  upd();}
+function bindChange5(q){var cart=[];
+  function upd(){var s=0;for(var i=0;i<cart.length;i++)s+=cart[i];
+    var sum=document.getElementById("rmSum");if(sum)sum.textContent=String(s);
+    var tr=document.getElementById("rmTray");
+    if(tr){tr.innerHTML=cart.length?cart.map(function(d){return moneyHTML5(d);}).join(""):'<span class="empty">从下面点钱，放进钱箱</span>';}
+    return s;}
+  var pal=document.getElementById("rmPal");
+  if(pal){pal.addEventListener("click",function(ev){
+    var b=ev.target.closest?ev.target.closest(".rm-pick"):null;if(!b)return;
+    cart.push(parseInt(b.getAttribute("data-d"),10));upd();});}
+  var un=document.getElementById("rmUndo");
+  if(un){un.addEventListener("click",function(){cart.pop();upd();});}
+  var cl=document.getElementById("rmClear");
+  if(cl){cl.addEventListener("click",function(){cart=[];upd();});}
+  var okb=document.getElementById("rmOk");
+  if(okb){okb.addEventListener("click",function(){
+    if(!cart.length)return;
+    var s=0;for(var i=0;i<cart.length;i++)s+=cart[i];
+    if(s===q.ans){answerOk("找零正确！你点出 ¥"+s+"，找得很准！");}
+    else{g5Wrong(q);}});}}
+/* 通用填格交互：所有空格填完后统一按「确定」检查——对的锁绿，错的标红清空，改完再点确定，全对过关 */
+function bindFieldsFill(rows,q){var ri2=0,fi=0,done=0,totalF=0;for(var a=0;a<rows.length;a++)totalF+=rows[a].length;
+  function firstOpen(){for(var r=0;r<rows.length;r++)for(var f=0;f<rows[r].length;f++){if(!rows[r][f].ok){ri2=r;fi=f;return;}}}
+  firstOpen();
+  var fb=document.getElementById("ledFb");
+  function say(msg){if(fb)fb.innerHTML='<div class="hint-bar" style="margin-top:8px">'+msg+"</div>";}
+  function paint(){var els=document.querySelectorAll(".led-f");
+    for(var e=0;e<els.length;e++){var r=parseInt(els[e].getAttribute("data-r"),10),f=parseInt(els[e].getAttribute("data-f"),10);
+      var st=rows[r]&&rows[r][f];if(!st)continue;
+      els[e].className="led-f"+(st.ok?" ok":(st.bad?" bad":(r===ri2&&f===fi?" on":"")));
+      els[e].textContent=st.v||"·";}}
+  paint();
+  var book=document.getElementById("ledgerBook");
+  if(book){book.addEventListener("click",function(ev){
+    var t=ev.target.closest?ev.target.closest(".led-f"):null;if(!t)return;
+    var r=parseInt(t.getAttribute("data-r"),10),f=parseInt(t.getAttribute("data-f"),10);
+    if(!rows[r]||!rows[r][f]||rows[r][f].ok)return;ri2=r;fi=f;paint();});}
+  var pad=document.getElementById("shopPad");if(!pad)return;
+  pad.innerHTML=["1","2","3","4","5","6","7","8","9","0","⌫","确定"].map(function(k){return '<button type="button" data-k="'+k+'">'+k+"</button>";}).join("");
+  pad.addEventListener("click",function(ev){var k=ev.target.getAttribute("data-k");if(!k)return;
+    var cur=rows[ri2][fi];
+    if(cur.ok){firstOpen();cur=rows[ri2][fi];}
+    if(k==="⌫"){cur.v=cur.v.slice(0,-1);cur.bad=false;paint();return;}
+    if(k==="确定"){var empt=0,wrong=0;
+      for(var r=0;r<rows.length;r++)for(var f=0;f<rows[r].length;f++){var st=rows[r][f];
+        if(st.ok)continue;
+        if(st.v===""){empt++;continue;}
+        if(parseInt(st.v,10)===st.ans){st.ok=true;st.bad=false;done++;}
+        else{st.bad=true;wrong++;st.v="";}}
+      if(done>=totalF){paint();say("");answerOk(g5RightMsg(q));return;}
+      firstOpen();
+      if(wrong>0)say("有 "+wrong+" 个格子不对（已标红擦掉），改一改再点「确定」");
+      else if(empt>0)say("还有 "+empt+" 个空格没填，填完再点「确定」哦");
+      paint();return;}
+    cur.v=(cur.v+k).slice(0,3);cur.bad=false;paint();});}
+function bindLedger5(q){var rows=[];
+  for(var i=0;i<q.rows.length;i++){var fs=ledFields(q.rows[i]);
+    rows.push(fs.map(function(f){return {ans:f.ans,v:"",ok:false,bad:false};}));}
+  bindFieldsFill(rows,q);}
+/* 总账题：只有两个空格（剩余库存 / 赚钱总数），交互与账本一致 */
+function bindStock5(q){bindFieldsFill([q.fields.map(function(f){return {ans:f.ans,v:"",ok:false,bad:false};})],q);}
+function bindGame5(q){
+  if(q.kind==="budget"){bindBudget5(q);return;}
+  if(q.kind==="ledger"){bindLedger5(q);return;}
+  if(q.kind==="stock"){bindStock5(q);return;}
+  if(q.kind==="shape"||q.kind==="odd"||q.kind==="pattern"){bindPick5(q);return;}
+  if(q.kind==="place"){bindPlace5(q);return;}
+  if(q.kind==="num"&&q.mode==="change"){bindChange5(q);return;}
+  bindNum5(q);}
 
 /* ============ 结算 ============ */
 function finishRound(){if(R.flashTimer)clearInterval(R.flashTimer);var secs=Math.max(1,Math.round((Date.now()-R.start)/1000));
   var groups={};for(var i=0;i<R.qs.length;i++){var a=R.ans[i];if(!a)continue;if(!groups[a.p])groups[a.p]={ok:0,total:0};groups[a.p].total++;if(a.ok)groups[a.p].ok++;}
   var list=[];for(var p in groups){list.push({p:p,ok:groups[p].ok,total:groups[p].total});}
   if(!list.length)list=[{p:CUR,ok:R.answers,total:R.qs.length}];
-  for(var k=0;k<list.length;k++){var st=starsOf(list[k].ok,list[k].total);
+  for(var k=0;k<list.length;k++){var st=g5Stars(list[k].ok,list[k].total);
     profileRec(list[k].p).push({g:R.g,l:R.l,p:list[k].p,correct:list[k].ok,total:list[k].total,seconds:secs,stars:st,ts:Date.now()});
     if(st>=1)addSticker(list[k].p);}
   save();saveProfiles();
@@ -956,11 +1433,11 @@ function finishRoundExtra(correct,secs){if(R.flashTimer)clearInterval(R.flashTim
   var unlocks=[];for(var m=0;m<before.length;m++){if(gameOpen(before[m]))unlocks.push(before[m]);}
   showResult(list,secs,unlocks);}
 function showResult(list,secs,unlocks){var g=GAMES[R.g-1];var first=list[0];
-  var st=starsOf(first.ok,first.total);
+  var st=g5Stars(first.ok,first.total);
   var html='<div class="congrats">'+(st>=3?"太厉害了！":st>=2?"很不错！":st>=1?"达标啦！":"继续加油！")+"</div>";
   html+='<div class="stars-big">'+("★".repeat(st)+"☆".repeat(3-st))+"</div>";
   html+='<div class="stat-line">'+g.icon+" "+g.name+" · "+LEVELS[R.l]+" · "+first.p+"</div>";
-  html+='<div class="stat-line">答对 '+first.ok+" / "+first.total+" 题 · 用时 "+(secs<60?secs+" 秒":Math.floor(secs/60)+" 分"+(secs%60))+"</div>";
+  html+='<div class="stat-line">'+(isL6Round()?(R.l===7?("3 轮任务采购里有 "+first.ok+" 轮达标（不超支 + 完成任务）"):("3 轮采购里有 "+first.ok+" 轮规划达标（不超支且花得值）")):("答对 "+first.ok+" / "+first.total+" 题"))+" · 用时 "+(secs<60?secs+" 秒":Math.floor(secs/60)+" 分"+(secs%60))+"</div>";
   if(st>=1)html+='<div class="stat-line">⭐ 获得 1 颗贴纸星（累计 '+stickersOf(first.p)+" 颗）</div>";
   if(unlocks.length){html+='<div class="unlock-tip">🎉 新游戏解锁：'+unlocks.map(function(u){return GAMES[u-1].icon+GAMES[u-1].name;}).join("、")+"！去大厅试试吧</div>";}
   html+='<div class="row center" style="margin-top:16px"><button class="btn ghost grow" onclick="closeModal();go(\'hall\')">回大厅</button><button class="btn orange grow" onclick="again()">再来一局</button></div>';
