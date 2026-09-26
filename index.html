@@ -859,11 +859,24 @@ function statOf(recs,g,l){
   return {n:f.length,ok:ok,total:tt,acc:tt?ok/tt:0,sec:sec,best:best,last:last,spt:tt?sec/tt:0};
 }
 function gameStat(g,recs){
-  var st={g:g,n:0,ok:0,total:0,sec:0,star:0,lv:[]},i;
+  var st={g:g,n:0,ok:0,total:0,sec:0,star:0,lv:[],rn:0,rok:0,rtotal:0},i;
   for(i=0;i<GLEV[g];i++){var s=statOf(recs,g,i);st.lv.push(s);
-    if(s){st.n+=s.n;st.ok+=s.ok;st.total+=s.total;st.sec+=s.sec;st.star+=s.best;}}
+    if(s){st.n+=s.n;st.sec+=s.sec;st.star+=s.best;
+      if(isRoundLv(g,i)){st.rn+=s.n;st.rok+=s.ok;st.rtotal+=s.total;}   /* 采购轮次单独算，不混进题目正确率 */
+      else{st.ok+=s.ok;st.total+=s.total;}}}
   st.acc=st.total?st.ok/st.total:0;st.spt=st.total?st.sec/st.total:0;
   return st;
+}
+/* 该档「最好的一次」（星级高优先，再看正确率，再看快） */
+function bestRecOf(recs,g,l){
+  var f=[],i;
+  for(i=0;i<recs.length;i++){var r=recs[i];if(r&&r.g===g&&r.l===l)f.push(r);}
+  if(!f.length)return null;
+  return f.reduce(function(b,r){
+    var br=(b.total?b.correct/b.total:0),rr=(r.total?r.correct/r.total:0);
+    if((r.stars||0)!==(b.stars||0))return (r.stars||0)>(b.stars||0)?r:b;
+    if(rr!==br)return rr>br?r:b;
+    return ((r.seconds||9999)<(b.seconds||9999))?r:b;},f[0]);
 }
 function accWord(a){return a>=0.95?"扎实":a>=0.85?"比较稳":a>=0.7?"还有提升空间":"需要多练";}
 function accShort(a){return a>=0.95?"很稳":a>=0.85?"稳":a>=0.7?"要练":"加油";}
@@ -871,12 +884,12 @@ function accCls(a){return a>=0.9?"pp-good":a>=0.7?"pp-mid":"pp-low";}
 function ppCell(v,t){return '<div class="pp-cell"><b>'+v+"</b><span>"+t+"</span></div>";}
 /* 一档的小徽章 */
 function parentLvChip(g,l,recs){
-  var s=statOf(recs,g,l),op=levelOpen(g,l);
-  if(!s)return "<div>"+LEVELS[l]+" "+(op?"未玩":"🔒 未解锁")+"</div>";
+  var s=statOf(recs,g,l),b=bestRecOf(recs,g,l);
+  if(!s||!b)return "<div>"+LEVELS[l]+" 未玩</div>";
   var cls=s.best>=3?"full":"on";
-  var txt=isRoundLv(g,l)?("达标 "+s.ok+" 轮"):pctTxt(s.ok,s.total);
-  return '<div class="'+cls+'" title="'+lvlDesc(g,l)+" · 最佳 "+s.best+" 星 · 玩了 "+s.n+' 局">'+
-    LEVELS[l]+" "+("★".repeat(s.best)+"☆".repeat(3-s.best))+" "+txt+"</div>";
+  var txt=isRoundLv(g,l)?("达标 "+b.correct+"/"+b.total+" 轮"):(b.correct+"/"+b.total);
+  return '<div class="'+cls+'" title="'+lvlDesc(g,l)+" · 最佳 "+s.best+" 星 · 玩了 "+s.n+" 局 · 累计正确率 "+
+    pctTxt(s.ok,s.total)+'">'+LEVELS[l]+" "+("★".repeat(s.best)+"☆".repeat(3-s.best))+" "+txt+"</div>";
 }
 /* 单个游戏卡 */
 function parentGameHTML(g,recs){
@@ -890,9 +903,15 @@ function parentGameHTML(g,recs){
   h+=st.n?('<span class="pp-tag '+accCls(st.acc)+'">'+accShort(st.acc)+" "+pctTxt(st.ok,st.total)+"</span>")
         :'<span class="pp-tag" style="background:#f1f4f9;color:#8d99a8">还没玩过</span>';
   h+="</div>";
-  h+=st.n?('<div class="muted" style="font-size:13px;margin-top:8px">练了 <b>'+st.n+"</b> 局 · 答对 "+st.ok+" / "+st.total+
-     " · 平均 "+st.spt.toFixed(1)+" 秒/题 · 累计 "+st.star+" 星</div>")
-     :'<div class="muted" style="font-size:13px;margin-top:8px">一局都还没玩，先去大厅挑战 '+LEVELS[0]+" 吧</div>";
+  if(st.n){
+    var line="练了 <b>"+st.n+"</b> 局";
+    if(st.total)line+=" · 答对 "+st.ok+" / "+st.total+" · 平均 "+st.spt.toFixed(1)+" 秒/题";
+    if(st.rn)line+=" · 🛍️ 采购任务达标 "+st.rok+" / "+st.rtotal+" 轮";
+    line+=" · 累计 "+st.star+" 星";
+    h+='<div class="muted" style="font-size:13px;margin-top:8px">'+line+"</div>";
+  }else{
+    h+='<div class="muted" style="font-size:13px;margin-top:8px">一局都还没玩，先去大厅挑战 '+LEVELS[0]+" 吧</div>";
+  }
   h+='<div class="pp-lv">';
   if(g===5){
     for(var r=0;r<G5_ROLES.length;r++){var ro=G5_ROLES[r];
@@ -906,11 +925,11 @@ function parentGameHTML(g,recs){
 /* 👍 哪里做得好 */
 function parentGood(recs){
   var out=[],g,l,i,three=[];
-  for(g=1;g<=5;g++)for(l=0;l<GLEV[g];l++){var s=statOf(recs,g,l);if(s&&s.best>=3)three.push({g:g,l:l,s:s});}
+  for(g=1;g<=5;g++)for(l=0;l<GLEV[g];l++){var s=statOf(recs,g,l);if(s&&s.best>=3)three.push({g:g,l:l,s:s,b:bestRecOf(recs,g,l)});}
   three.sort(function(a,b){return b.s.acc-a.s.acc||a.s.spt-b.s.spt;});
   for(i=0;i<Math.min(2,three.length);i++){var t=three[i];
     out.push(gIcon(t.g)+" <b>"+gName(t.g)+" "+LEVELS[t.l]+"</b>（"+lvlDesc(t.g,t.l)+"）：拿到 <b>3 星</b>，"+
-      (isRoundLv(t.g,t.l)?("3 轮里 "+t.s.ok+" 轮达标"):("正确率 "+pctTxt(t.s.ok,t.s.total)+"，平均 "+t.s.spt.toFixed(1)+" 秒/题")));}
+      (isRoundLv(t.g,t.l)?("采购任务 "+t.b.correct+"/"+t.b.total+" 轮全部达标"):("正确率 "+pctTxt(t.s.ok,t.s.total)+"，平均 "+t.s.spt.toFixed(1)+" 秒/题")));}
   var best=null;
   for(g=1;g<=5;g++){var st=gameStat(g,recs);if(st.n>=2&&(!best||st.acc>best.acc))best=st;}
   if(best&&best.acc>=0.85)out.push("正确率最高的是 "+gIcon(best.g)+" <b>"+gName(best.g)+"</b>：练了 "+best.n+" 局，"+
@@ -932,17 +951,20 @@ function parentTodo(recs){
     if(g<=4){var st=gameStat(g,recs);if(st.n>=1&&st.spt>7)slow.push({g:g,st:st});}
   }
   weak.sort(function(a,b){return a.s.acc-b.s.acc;});
-  for(i=0;i<Math.min(2,weak.length);i++){var w=weak[i],why;
-    if(isRoundLv(w.g,w.l))why=w.s.best===0?"一轮都没达标":"3 轮里只有 "+w.s.best+" 轮达标，3 轮全达标才有 3 星";
+  /* 已经在「正确率不够」里点过名的游戏，不再重复说它慢 */
+  var named={};for(i=0;i<Math.min(2,weak.length);i++)named[weak[i].g]=1;
+  slow=slow.filter(function(x){return !named[x.g];});
+  for(i=0;i<Math.min(2,weak.length);i++){var w=weak[i],why,b2=bestRecOf(recs,w.g,w.l);
+    if(isRoundLv(w.g,w.l))why=w.s.best===0?"采购任务一轮都没达标":"还差 "+(b2.total-b2.correct)+" 轮就能拿 3 星（3 轮全达标）";
     else why=w.s.best===0?"还没拿到 1 星（正确率要到 70%）":w.s.best===1?"现在是 1 星，85% 才有 2 星":"现在是 2 星，全对才有 3 星";
     out.push(gIcon(w.g)+" <b>"+gName(w.g)+" "+LEVELS[w.l]+"</b>（"+lvlDesc(w.g,w.l)+"）：玩了 "+w.s.n+" 局，"+
-      (isRoundLv(w.g,w.l)?("3 轮里达标 "+w.s.ok+" 轮"):("正确率 "+pctTxt(w.s.ok,w.s.total)))+" —— "+why+"。");}
-  if(slow.length)
-    out.push(gIcon(slow[0].g)+" <b>"+gName(slow[0].g)+"</b> 平均 "+slow[0].st.spt.toFixed(1)+
-      " 秒/题，比其它项目慢 —— 建议每天加一局 ⚡ 口算闪电战（30 秒限时）练速度。");
+      (isRoundLv(w.g,w.l)?("采购任务最好 "+b2.correct+"/"+b2.total+" 轮达标"):("正确率 "+pctTxt(w.s.ok,w.s.total)))+" —— "+why+"。");}
+  for(i=0;i<Math.min(1,slow.length);i++){var sl=slow[i];
+    var tip=sl.g===4?"每天固定练一局，先把每道题算稳，再回头比 30 秒速度":("每天加一局 ⚡ 口算闪电战（30 秒限时）练速度");
+    out.push(gIcon(sl.g)+" <b>"+gName(sl.g)+"</b> 平均 "+sl.st.spt.toFixed(1)+" 秒/题，比其它项目慢 —— "+tip+"。");}
   if(never.length){var x=never[0];
     out.push(gIcon(x.g)+" <b>"+gName(x.g)+" "+LEVELS[x.l]+"</b>（"+lvlDesc(x.g,x.l)+"）已经解锁但<b>还没玩过</b>，可以先试一局。");}
-  for(g=2;g<=5;g++){if(!gameOpen(g)){
+  for(g=2;g<=5;g++){if(!gameOpen(g)&&gameStat(g,recs).n===0){
     out.push(gIcon(g)+" <b>"+gName(g)+"</b> 还没解锁：在 "+gIcon(g-1)+" "+gName(g-1)+" 拿到 1 星（或玩满 3 次）就能打开。");break;}}
   return out;
 }
@@ -963,7 +985,7 @@ function parentRecentHTML(recs){
   for(i=0;i<f.length;i++){var r=f[i];
     h+='<tr><td>'+dayTxt(r.ts)+'</td><td>'+gIcon(r.g)+" "+gName(r.g)+" "+LEVELS[r.l]+'</td>'+
       '<td style="text-align:center;color:#a87800">'+("★".repeat(r.stars||0)+"☆".repeat(3-(r.stars||0)))+"</td>"+
-      '<td style="text-align:right">'+(isRoundLv(r.g,r.l)?("达标 "+r.correct+" 轮"):(r.correct+"/"+r.total))+"</td>"+
+      '<td style="text-align:right">'+(isRoundLv(r.g,r.l)?("达标 "+r.correct+"/"+r.total+" 轮"):(r.correct+"/"+r.total))+"</td>"+
       '<td style="text-align:right" class="muted">'+secTxt(r.seconds)+"</td></tr>";}
   return h+"</tbody></table>";
 }
