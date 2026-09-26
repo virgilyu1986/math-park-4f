@@ -6,13 +6,15 @@
 <title>数学四法闯关乐园</title>
 <style>
 :root{
-  --bg:#f3f6fb; --card:#ffffff; --line:#e3e9f2; --ink:#22314d; --mut:#7b89a3;
-  --c1:#2f6fd0; --c2:#0f8a6d; --c3:#d85a30; --c4:#ba7517; --c5:#7f77dd;
-  --ok:#1d9e75; --no:#e24b4a; --gold:#f2a90a; --soft:#eef3fb;
+  /* 海洋岛屿色系（与计算乐园第二层「乘法小岛」统一） */
+  --bg:#e9f5fc; --card:#ffffff; --line:#d9e9f3; --ink:#173a4d; --mut:#6b8399;
+  --c1:#1B7FA8; --c2:#0f8a6d; --c3:#FF8A3D; --c4:#c07d12; --c5:#7f77dd;
+  --ok:#1d9e75; --no:#e24b4a; --gold:#f2a90a; --soft:#e3f2fb;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#8ED8F8 0%,#BDE9FF 18%,#e9f5fc 55%,#e9f5fc 100%);background-attachment:fixed;color:var(--ink);font-size:16px}
+@keyframes islfloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
 #app{max-width:900px;margin:0 auto;padding:12px 14px 60px}
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 2px 12px}
 .logo{font-size:20px;font-weight:700;letter-spacing:.5px}
@@ -659,8 +661,38 @@ function renderHall(){var el=document.getElementById("view-hall");
     var rs5=0;for(var t6=0;t6<ro.ls.length;t6++){var b5=bestFor(5,ro.ls[t6],CUR);if(b5)rs5+=b5.stars;}
     html+='<div class="best">'+(rs5>0?"⭐ 累计 "+rs5+" 星":"挑战开始")+"</div></div>";}
   html+="</div></div>";
+  /* ---- 第二层入口：乘法小岛 ---- */
+  html+=islandCardHTML();
   html+='<div class="card" style="margin-top:12px"><p class="h2">本周小贴士</p><div class="muted" style="font-size:14px;line-height:1.8">每天 10 分钟，到点就停 · 先玩会的方法，再比速度 · 错题只说“再想想”，不批评 · 家长每周故意算错一次，让孩子当老师</div></div>';
   el.innerHTML=html;}
+
+/* ============ 第二层入口：乘法小岛 ============ */
+var ISLAND_STAGES=14;   /* 第二层关卡数（双人争夺战并入岛屿争夺战后为 14 关） */
+function islandProg(){
+  try{
+    var key="mp_l2_progress_"+(CUR||"guest");
+    var raw=localStorage.getItem(key);if(!raw)return null;
+    var d=JSON.parse(raw),s=d.stars||{},done=0,st=0;
+    for(var k in s){if(s[k]>=1)done++;st+=s[k];}
+    return {done:done,total:ISLAND_STAGES,stars:st,days:d.days||1};
+  }catch(e){return null;}
+}
+function islandCardHTML(){
+  var f=islandProg();
+  var prog=f?("已点亮 "+f.done+" / "+f.total+" 个地方 · ⭐"+f.stars+" · 第 "+f.days+" 天上岛"):"还没上过岛，今天去看看吧";
+  return '<div class="card" style="margin-top:12px;border-top:4px solid #FF8A3D;background:linear-gradient(135deg,#eaf7ff 0%,#fff7e8 100%)">'+
+    '<p class="h2">🏝️ 第二层 · 乘法小岛</p>'+
+    '<p class="sub">把「一样多的几份」合起来就是乘法 —— 上岛检查、分草莓、掷骰子占地盘、开港口当掌柜</p>'+
+    '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px">'+
+    '<div style="font-size:46px;animation:islfloat 3s ease-in-out infinite">🏝️</div>'+
+    '<div style="flex:1;min-width:170px;font-size:14px;color:var(--mut);line-height:1.7">'+
+      '<div style="font-weight:700;color:var(--ink)">'+prog+'</div>'+
+      '<div style="margin-top:2px">进度和当前账号（'+(CUR||'游客')+'）绑定，换设备也能接着玩</div>'+
+    '</div>'+
+    '<button class="btn" style="background:linear-gradient(180deg,#FFB63D,#FF8A3D);border:none;color:#fff;font-weight:800;padding:12px 26px;border-radius:999px;box-shadow:0 4px 0 #D96A1B" onclick="goIsland()">出发 ✈️</button>'+
+    "</div></div>";
+}
+function goIsland(){location.href="multiplication-island.html";}
 
 /* ============ 四法课堂 ============ */
 var CLASSES=[
