@@ -841,8 +841,10 @@ function dayTxt(ts){var d=new Date(ts||0);return (d.getMonth()+1)+"月"+d.getDat
 /* 游戏5 的 L7/L8（下标 6/7）是「3 轮采购」，分数是达标轮数不是题数 */
 function isRoundLv(g,l){return g===5&&l>=6;}
 function parentRecs(){
-  var rs=(PROFILES[CUR]&&PROFILES[CUR].records)||[],out=[],i;
-  for(i=0;i<rs.length;i++){var r=rs[i];if(!r)continue;if(r.p&&r.p!==CUR)continue;if(!r.g||!r.total)continue;out.push(r);}
+  var rs=(PROFILES[CUR]&&PROFILES[CUR].records)||[],out=[],seen={},i;
+  for(i=0;i<rs.length;i++){var r=rs[i];if(!r)continue;if(r.p&&r.p!==CUR)continue;if(!r.g||!r.total)continue;
+    var k=JSON.stringify(r);if(seen[k])continue;seen[k]=1;   /* 老数据里有完全重复的一局，只算一次 */
+    out.push(r);}
   return out;
 }
 function parentDays(recs){var seen={},n=0,i;
